@@ -15,8 +15,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ news, onClose }) => {
   };
 
   return (
-    <div
-      className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-navyBlue/70 backdrop-blur-sm transition-all"
+    <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm transition-all"
       onClick={onClose}
     >
       <div
@@ -50,13 +49,13 @@ const NewsModal: React.FC<NewsModalProps> = ({ news, onClose }) => {
 
           <div className="p-6 sm:p-8">
             {/* Title & Metadata */}
-            <h1 className="text-2xl sm:text-3xl font-bold text-navyBlue mb-4 leading-tight">
+            <h1 className="text-2xl sm:text-3xl font-bold text-indiaGreen mb-4 leading-tight">
               {news.title}
             </h1>
             
             <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-8 pb-6 border-b border-gray-100">
                <div className="flex items-center gap-1.5">
-                 <Calendar size={16} className="text-skyBlue" />
+                 <Calendar size={16} className="text-saffron" />
                  <span>{news.date}</span>
                </div>
                {news.source && (
@@ -67,7 +66,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ news, onClose }) => {
                )}
                {news.author && (
                  <div className="flex items-center gap-1.5">
-                   <User size={16} className="text-navyBlue" />
+                   <User size={16} className="text-indiaGreen" />
                    <span>By {news.author}</span>
                  </div>
                )}
@@ -92,7 +91,7 @@ const NewsModal: React.FC<NewsModalProps> = ({ news, onClose }) => {
         <div className="p-6 border-t border-gray-100 bg-gray-50 rounded-b-xl flex justify-end">
            <button 
              onClick={onClose}
-             className="px-6 py-2 bg-navyBlue text-white font-semibold rounded-lg hover:bg-blue-900 transition-colors"
+             className="px-6 py-2 bg-saffron text-white font-semibold rounded-lg hover:bg-orange-600 transition-colors"
            >
              Close Article
            </button>

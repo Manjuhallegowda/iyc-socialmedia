@@ -10,7 +10,7 @@ import React, { useEffect, useReducer, useState } from 'react';
   - Reset + ability to submit another volunteer
   - Replace `/api/volunteers` with your real endpoint
 
-  Styling: keeps your Tailwind utility classes. Tailwind color tokens like `bg-navyBlue` and `bg-skyBlue`
+  Styling: keeps your Tailwind utility classes. Tailwind color tokens like `bg-navyBlue` and `bg-sky-400`
   are presumed to exist from your design system. If not, replace them with standard classes.
 */
 
@@ -237,7 +237,7 @@ export default function JoinFormEnhanced() {
     <div>
       <form
         onSubmit={onSubmit}
-        className="bg-navyBlue p-8 rounded-xl shadow-lg border-t-4 border-skyBlue max-w-3xl mx-auto"
+        className="bg-white p-8 rounded-xl shadow-lg border-t-4 border-saffron max-w-3xl mx-auto"
         noValidate
       >
         {/* Honeypot - hidden from users but visible to bots */}
@@ -289,7 +289,7 @@ export default function JoinFormEnhanced() {
               aria-describedby={
                 errors.fullName ? `${ids.fullName}-error` : undefined
               }
-              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-skyBlue outline-none transition-shadow"
+              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-saffron outline-none transition-shadow"
               placeholder="Enter your name"
             />
             {errors.fullName && (
@@ -322,7 +322,7 @@ export default function JoinFormEnhanced() {
               }
               required
               autoComplete="address-level2"
-              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-skyBlue outline-none transition-shadow"
+              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-saffron outline-none transition-shadow"
               placeholder="e.g. Bangalore Urban"
             />
           </div>
@@ -346,7 +346,7 @@ export default function JoinFormEnhanced() {
                 })
               }
               required
-              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-skyBlue outline-none transition-shadow"
+              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-saffron outline-none transition-shadow"
               placeholder="e.g. Jayanagar"
             />
           </div>
@@ -377,7 +377,7 @@ export default function JoinFormEnhanced() {
               aria-describedby={
                 errors.whatsapp ? `${ids.whatsapp}-error` : undefined
               }
-              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-skyBlue outline-none transition-shadow"
+              className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-saffron outline-none transition-shadow"
             />
             {errors.whatsapp && (
               <p
@@ -411,7 +411,7 @@ export default function JoinFormEnhanced() {
                     value: e.target.value,
                   })
                 }
-                className="w-full pl-8 pr-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-skyBlue outline-none transition-shadow"
+                className="w-full pl-8 pr-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-saffron outline-none transition-shadow"
                 placeholder="username"
                 autoComplete="username"
                 aria-describedby="twitter-help"
@@ -444,7 +444,7 @@ export default function JoinFormEnhanced() {
                     value: e.target.value,
                   })
                 }
-                className="w-full pl-8 pr-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-skyBlue outline-none transition-shadow"
+                className="w-full pl-8 pr-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-saffron outline-none transition-shadow"
                 placeholder="username"
                 autoComplete="username"
               />
@@ -503,7 +503,7 @@ export default function JoinFormEnhanced() {
             aria-describedby={
               errors.motivation ? `${ids.motivation}-error` : undefined
             }
-            className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-skyBlue outline-none transition-shadow"
+            className="w-full px-4 py-2 bg-white border border-gray-300 rounded-md text-black placeholder-gray-800 focus:ring-2 focus:ring-saffron outline-none transition-shadow"
             placeholder="I want to help verify information..."
           />
           {errors.motivation && (
@@ -556,7 +556,7 @@ export default function JoinFormEnhanced() {
           <button
             type="submit"
             disabled={submitting}
-            className={`bg-skyBlue text-white px-8 py-3 rounded-full font-bold hover:bg-sky-600 transition-colors shadow-md w-full md:w-auto border border-white/20 ${
+            className={`bg-saffron text-white px-8 py-3 rounded-full font-bold hover:bg-orange-600 transition-colors shadow-md w-full md:w-auto border border-white/20 ${
               submitting ? 'opacity-60 cursor-not-allowed' : ''
             }`}
           >
@@ -580,7 +580,7 @@ export default function JoinFormEnhanced() {
             <div className="mt-4 text-right">
               <button
                 onClick={() => setShowPrivacy(false)}
-                className="px-4 py-2 rounded bg-skyBlue text-white font-semibold"
+                className="px-4 py-2 rounded bg-saffron text-white font-semibold"
               >
                 Close
               </button>

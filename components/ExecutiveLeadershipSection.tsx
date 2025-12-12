@@ -17,7 +17,7 @@ const ExecutiveLeadershipSection: React.FC = () => {
             whileInView={{ y: 0, opacity: 1 }}
             transition={transition}
             viewport={{ once: true }}
-            className="text-3xl font-bold text-navyBlue uppercase tracking-wide"
+            className="text-3xl font-bold text-indiaGreen uppercase tracking-wide"
           >
             Meet Our Executive Leadership
           </motion.h2>
@@ -30,7 +30,7 @@ const ExecutiveLeadershipSection: React.FC = () => {
           >
             Driving the vision and strategy for Indian Youth Congress at National and State levels.
           </motion.p>
-          <div className="w-24 h-1 bg-gradient-to-r from-skyBlue via-white to-indiaGreen mx-auto mt-6 rounded-full"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-6 rounded-full"></div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
@@ -48,8 +48,8 @@ const ExecutiveLeadershipSection: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
               </div>
               <div className="p-6 flex-grow flex flex-col">
-                <h3 className="text-xl font-bold text-navyBlue mb-1">{leader.name}</h3>
-                <p className="text-skyBlue text-sm font-semibold mb-4">{leader.title}</p>
+                <h3 className="text-xl font-bold text-indiaGreen mb-1">{leader.name}</h3>
+                <p className="text-saffron text-sm font-semibold mb-4">{leader.title}</p>
                 {leader.description && <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">{leader.description}</p>}
                 
                 {leader.socialMedia && (

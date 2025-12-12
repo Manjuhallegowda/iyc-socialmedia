@@ -23,11 +23,11 @@ const LeadershipSection: React.FC = () => {
     <section id="leadership" className="py-20 bg-gray-50 scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-navyBlue uppercase tracking-wide">SM Team Leadership</h2>
+          <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">SM Team Leadership</h2>
           <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
             Meet the digital architects behind our campaigns in Karnataka.
           </p>
-          <div className="w-24 h-1 bg-gradient-to-r from-skyBlue via-white to-indiaGreen mx-auto mt-6 rounded-full"></div>
+          <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-6 rounded-full"></div>
         </div>
 
         {/* Tabs */}
@@ -43,8 +43,8 @@ const LeadershipSection: React.FC = () => {
                 onClick={() => setActiveTab(tab.id as TabType)}
                 className={`px-4 sm:px-6 py-2 rounded-full text-sm font-semibold transition-all duration-300 whitespace-nowrap ${
                   activeTab === tab.id
-                    ? 'bg-navyBlue text-white shadow-sm'
-                    : 'text-gray-500 hover:text-navyBlue'
+                    ? 'bg-saffron text-white shadow-sm'
+                    : 'text-gray-500 hover:text-indiaGreen'
                 }`}
               >
                 {tab.label}
@@ -62,7 +62,7 @@ const LeadershipSection: React.FC = () => {
               className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group border border-gray-100"
             >
               <div className="h-48 overflow-hidden relative">
-                <div className="absolute inset-0 bg-navyBlue/10 group-hover:bg-transparent transition-all z-10"></div>
+                <div className="absolute inset-0 bg-white/10 group-hover:bg-transparent transition-all z-10"></div>
                 <img
                   src={leader.imageUrl}
                   alt={leader.name}
@@ -70,10 +70,10 @@ const LeadershipSection: React.FC = () => {
                 />
               </div>
               <div className="p-5">
-                <h3 className="text-xl font-bold text-gray-800 mb-1 group-hover:text-skyBlue transition-colors">
+                <h3 className="text-xl font-bold text-gray-800 mb-1 group-hover:text-saffron transition-colors">
                   {leader.name}
                 </h3>
-                <p className="text-sm font-semibold text-navyBlue uppercase tracking-wider text-xs mb-3">
+                <p className="text-sm font-semibold text-indiaGreen uppercase tracking-wider text-xs mb-3">
                   {leader.designation}
                 </p>
 
@@ -92,7 +92,7 @@ const LeadershipSection: React.FC = () => {
                    <div className="flex gap-2">
                       {leader.social.twitter && <Hash size={14} className="text-gray-400" />}
                    </div>
-                   <span className="text-skyBlue text-sm font-medium flex items-center gap-1 group-hover:underline">
+                   <span className="text-saffron text-sm font-medium flex items-center gap-1 group-hover:underline">
                       View Profile <ChevronRight size={14} />
                    </span>
                 </div>

@@ -26,13 +26,13 @@ const JoinPage: React.FC = () => {
       >
         {' '}
         {/* Added pt-40 to push content below fixed navbar */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-skyBlue/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+        <div className="absolute top-0 right-0 w-64 h-64 bg-sky-400/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-indiaGreen/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
         <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
           {' '}
           {/* Using w-full as per previous changes */}
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-navyBlue uppercase tracking-wide">
+            <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
               Join The Digital Army
             </h2>
             <p className="mt-4 text-gray-600">

@@ -115,7 +115,7 @@ const Navbar: React.FC = () => {
     <nav
       role="navigation"
       aria-label="Main"
-      className="fixed top-0 left-0 w-full z-50 bg-white shadow-md border-t-4 border-skyBlue"
+      className="fixed top-0 left-0 w-full z-50 bg-white shadow-md border-t-4 border-saffron"
     >
       {/* Top Bar with Leaders - Hidden on Mobile */}
       <div className="hidden md:flex bg-gray-50 border-b border-gray-200 py-2">
@@ -129,7 +129,7 @@ const Navbar: React.FC = () => {
               <img
                 src={leader.img}
                 alt={leader.name}
-                className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 group-hover:border-skyBlue transition-colors bg-gray-200 shrink-0"
+                className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 group-hover:border-saffron transition-colors bg-gray-200 shrink-0"
                 loading="lazy"
                 referrerPolicy="no-referrer"
                 onError={(e) => {
@@ -140,7 +140,7 @@ const Navbar: React.FC = () => {
                 }}
               />
               <div className="flex flex-col leading-tight">
-                <span className="text-xs font-bold text-navyBlue whitespace-nowrap min-w-0">
+                <span className="text-xs font-bold text-indiaGreen whitespace-nowrap min-w-0">
                   {leader.name}
                 </span>
 
@@ -171,7 +171,7 @@ const Navbar: React.FC = () => {
                 window.location.hash = '#home';
                 setActive('/#home');
               }}
-              className="flex-shrink-0 flex items-center gap-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-skyBlue rounded"
+              className="flex-shrink-0 flex items-center gap-3 cursor-pointer focus:outline-none focus:ring-2 focus:ring-saffron rounded"
               aria-label="Go to home"
             >
               <img
@@ -180,7 +180,7 @@ const Navbar: React.FC = () => {
                 className="h-16 w-auto object-contain drop-shadow-sm"
               />
               <div className="flex flex-col text-left">
-                <span className="font-bold text-xl text-navyBlue leading-none">
+                <span className="font-bold text-xl text-indiaGreen leading-none">
                   IYC Karnataka
                 </span>
                 <span className="text-xs font-semibold text-gray-600 tracking-wider">
@@ -196,8 +196,8 @@ const Navbar: React.FC = () => {
                   key={link.name}
                   href={link.href}
                   onClick={() => handleNavClick(link.href)}
-                  className={`text-gray-700 hover:text-skyBlue font-medium transition-colors duration-200 text-sm uppercase tracking-wide ${
-                    active === link.href ? 'text-skyBlue' : ''
+                  className={`text-gray-700 hover:text-saffron font-medium transition-colors duration-200 text-sm uppercase tracking-wide ${
+                    active === link.href ? 'text-saffron' : ''
                   }`}
                 >
                   {link.name}
@@ -205,7 +205,7 @@ const Navbar: React.FC = () => {
               ))}
               <a
                 href="/join"
-                className="bg-skyBlue text-white px-5 py-2 rounded-full font-bold hover:bg-sky-600 transition-colors shadow-sm whitespace-nowrap"
+                className="bg-saffron text-white px-5 py-2 rounded-full font-bold hover:bg-orange-600 transition-colors shadow-sm whitespace-nowrap"
               >
                 Join Team
               </a>
@@ -215,7 +215,7 @@ const Navbar: React.FC = () => {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsOpen((prev) => !prev)}
-                className="text-navyBlue hover:text-skyBlue focus:outline-none focus:ring-2 focus:ring-skyBlue p-2 rounded"
+                className="text-indiaGreen hover:text-saffron focus:outline-none focus:ring-2 focus:ring-saffron p-2 rounded"
                 aria-label={isOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={isOpen}
                 aria-controls="mobile-menu"
@@ -241,8 +241,8 @@ const Navbar: React.FC = () => {
                   href={link.href}
                   ref={i === 0 ? firstLinkRef : undefined}
                   onClick={() => handleNavClick(link.href)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-skyBlue hover:bg-sky-50 focus:outline-none focus:ring-2 focus:ring-skyBlue ${
-                    active === link.href ? 'bg-sky-50 text-skyBlue' : ''
+                  className={`block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-saffron hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-saffron ${
+                    active === link.href ? 'bg-orange-50 text-saffron' : ''
                   }`}
                 >
                   {link.name}
@@ -252,7 +252,7 @@ const Navbar: React.FC = () => {
               <a
                 href="/join"
                 onClick={() => setIsOpen(false)}
-                className="block w-full text-center mt-4 px-5 py-3 rounded-md font-bold bg-skyBlue text-white hover:bg-sky-600"
+                className="block w-full text-center mt-4 px-5 py-3 rounded-md font-bold bg-saffron text-white hover:bg-orange-600"
               >
                 Join Team
               </a>

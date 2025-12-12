@@ -28,7 +28,6 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
-
 // Polished PublicHome with micro-interactions, framer-motion entrances,
 // enhanced hover states, focus-visible outlines, lightweight skeletons
 // and improved visual affordances. Frontend-only changes; no backend.
@@ -231,8 +230,8 @@ const PublicHome: React.FC = () => {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-skyBlue animate-spin mx-auto mb-4" />
-          <p className="text-navyBlue font-bold">
+          <Loader2 className="w-12 h-12 text-saffron animate-spin mx-auto mb-4" />
+          <p className="text-indiaGreen font-bold">
             Loading IYC Karnataka Portal...
           </p>
           <div className="mt-6 grid gap-3">
@@ -316,7 +315,7 @@ const PublicHome: React.FC = () => {
               transition={{ ...transition, delay: 0.25 }}
               className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-md"
             >
-              IYC <span className="text-skyBlue">Karnataka</span>
+              IYC <span className="text-saffron">Karnataka</span>
               <br />
               <span className="text-3xl md:text-5xl text-gray-200 mt-2 block">
                 Social Media
@@ -342,7 +341,7 @@ const PublicHome: React.FC = () => {
             >
               <a
                 href="#join"
-                className="px-8 py-3 bg-skyBlue text-white rounded-full font-bold text-lg hover:bg-sky-600 transition-all shadow-lg hover:shadow-sky-500/30 transform hover:-translate-y-1 hover:scale-102 focus:outline-none focus-visible:ring-2 focus-visible:ring-white flex items-center justify-center gap-2"
+                className="px-8 py-3 bg-saffron text-white rounded-full font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-saffron/30 transform hover:-translate-y-1 hover:scale-102 focus:outline-none focus-visible:ring-2 focus-visible:ring-white flex items-center justify-center gap-2"
                 aria-label="Join Digital Army"
               >
                 <Share2 size={20} />
@@ -350,7 +349,7 @@ const PublicHome: React.FC = () => {
               </a>
               <a
                 href="#leadership"
-                className="px-8 py-3 bg-white text-navyBlue rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-lg transform hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="px-8 py-3 bg-white text-indiaGreen rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-lg transform hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label="View Leadership"
               >
                 View Leadership
@@ -412,10 +411,11 @@ const PublicHome: React.FC = () => {
         <section id="about" className="py-20 bg-white scroll-mt-24">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-navyBlue uppercase tracking-wide">
-                About Social Media
+              <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
+                <span>What We Do</span>
+                <span className="block h-1 w-20 bg-saffron mt-2"></span>
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-skyBlue via-white to-indiaGreen mx-auto mt-4 rounded-full"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-4 rounded-full"></div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
@@ -437,14 +437,16 @@ const PublicHome: React.FC = () => {
                 </p>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                  <div className="p-4 bg-sky-50 rounded-lg border-l-4 border-skyBlue hover:shadow-md transition-shadow transform hover:-translate-y-1">
-                    <h4 className="font-bold text-navyBlue">War Room Ops</h4>
+                  <div className="p-4 bg-orange-50 rounded-lg border-l-4 border-saffron hover:shadow-md transition-shadow transform hover:-translate-y-1">
+                    <h4 className="font-bold text-indiaGreen">War Room Ops</h4>
                     <p className="text-sm text-gray-600">
                       24/7 monitoring and rapid response.
                     </p>
                   </div>
                   <div className="p-4 bg-green-50 rounded-lg border-l-4 border-indiaGreen hover:shadow-md transition-shadow transform hover:-translate-y-1">
-                    <h4 className="font-bold text-navyBlue">Grassroots Tech</h4>
+                    <h4 className="font-bold text-indiaGreen">
+                      Grassroots Tech
+                    </h4>
                     <p className="text-sm text-gray-600">
                       Empowering booth-level workers.
                     </p>
@@ -459,7 +461,7 @@ const PublicHome: React.FC = () => {
                 viewport={{ once: true }}
                 className="relative"
               >
-                <div className="absolute -inset-4 bg-gradient-to-tr from-skyBlue to-indiaGreen opacity-20 rounded-xl blur-lg" />
+                <div className="absolute -inset-4 bg-gradient-to-tr from-saffron to-indiaGreen opacity-20 rounded-xl blur-lg" />
                 <picture>
                   <img
                     src={
@@ -483,10 +485,11 @@ const PublicHome: React.FC = () => {
         <section id="activities" className="py-20 bg-white scroll-mt-24">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-navyBlue uppercase tracking-wide">
-                Campaigns & Activities
+              <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
+                <span>Join the Movement</span>
+                <span className="block h-1 w-20 bg-saffron mt-2"></span>
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-skyBlue via-white to-indiaGreen mx-auto mt-4 rounded-full"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-4 rounded-full"></div>
             </div>
 
             <div className="space-y-12">
@@ -510,14 +513,14 @@ const PublicHome: React.FC = () => {
                         loading="lazy"
                         className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-500"
                       />
-                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-navyBlue shadow-sm">
+                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-indiaGreen shadow-sm">
                         {activity.type}
                       </div>
                     </div>
                   </div>
 
                   <div className="w-full md:w-1/2 space-y-4">
-                    <div className="flex items-center gap-2 text-skyBlue font-bold text-sm">
+                    <div className="flex items-center gap-2 text-saffron font-bold text-sm">
                       <span>{activity.date}</span>
                       <span className="w-1 h-1 bg-gray-400 rounded-full" />
                       <span>{activity.location}</span>
@@ -534,7 +537,7 @@ const PublicHome: React.FC = () => {
                     <div className="flex gap-3 items-center">
                       <button
                         onClick={() => setSelectedActivity(activity)}
-                        className="flex items-center text-navyBlue font-semibold hover:text-skyBlue transition-colors group focus:outline-none focus-visible:ring-2 focus-visible:ring-skyBlue"
+                        className="flex items-center text-indiaGreen font-semibold hover:text-saffron transition-colors group focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
                         aria-label={`Open details for ${activity.title}`}
                       >
                         View Campaign{' '}
@@ -560,7 +563,7 @@ const PublicHome: React.FC = () => {
                               ?.writeText(window.location.href)
                               .then(() => alert('Link copied'));
                         }}
-                        className="px-3 py-1 bg-sky-50 rounded-full text-skyBlue text-sm font-semibold"
+                        className="px-3 py-1 bg-orange-50 rounded-full text-saffron text-sm font-semibold"
                         aria-label={`Share ${activity.title}`}
                       >
                         <Share2 size={14} />
@@ -579,10 +582,10 @@ const PublicHome: React.FC = () => {
         <section id="gallery" className="py-20 bg-white scroll-mt-24">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-navyBlue uppercase tracking-wide">
+              <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
                 Gallery
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-skyBlue via-white to-indiaGreen mx-auto mt-4 rounded-full"></div>
+              <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-4 rounded-full"></div>
             </div>
 
             {standardGalleryItems.length === 0 ? (
@@ -595,7 +598,7 @@ const PublicHome: React.FC = () => {
                   <button
                     key={item.id}
                     onClick={() => setSelectedGalleryIndex(index)}
-                    className={`relative group overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-skyBlue transform transition-transform hover:scale-103`}
+                    className={`relative group overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-saffron transform transition-transform hover:scale-103`}
                     aria-label={`Open gallery image ${index + 1}`}
                   >
                     <div className="aspect-[4/3] w-full bg-gray-100">
@@ -607,7 +610,7 @@ const PublicHome: React.FC = () => {
                       />
                     </div>
                     <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="bg-white/90 text-navyBlue text-xs font-bold px-3 py-1 rounded-full shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform">
+                      <span className="bg-white/90 text-indiaGreen text-xs font-bold px-3 py-1 rounded-full shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform">
                         View
                       </span>
                     </div>
@@ -623,12 +626,12 @@ const PublicHome: React.FC = () => {
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="flex justify-between items-end mb-12">
               <div>
-                <h2 className="text-3xl font-bold text-navyBlue uppercase tracking-wide">
+                <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
                   Press & Updates
                 </h2>
-                <div className="w-24 h-1 bg-gradient-to-r from-skyBlue via-white to-indiaGreen mt-4 rounded-full"></div>
+                <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mt-4 rounded-full"></div>
               </div>
-              <span className="hidden sm:inline-block text-skyBlue font-bold">
+              <span className="hidden sm:inline-block text-saffron font-bold">
                 Latest Updates
               </span>
             </div>
@@ -658,7 +661,7 @@ const PublicHome: React.FC = () => {
                     </span>
                     <h3
                       id={`news-${n.id}`}
-                      className="text-xl font-bold text-navyBlue mb-3 line-clamp-2"
+                      className="text-xl font-bold text-indiaGreen mb-3 line-clamp-2"
                     >
                       {n.title}
                     </h3>
@@ -668,7 +671,7 @@ const PublicHome: React.FC = () => {
                     <div className="flex gap-2 items-center mt-auto">
                       <button
                         onClick={() => setSelectedNews(n)}
-                        className="text-skyBlue font-semibold text-sm hover:text-sky-600 flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-skyBlue"
+                        className="text-saffron font-semibold text-sm hover:text-orange-600 flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
                         aria-label={`Read full story: ${n.title}`}
                       >
                         Read Full Story <FileText size={14} />
@@ -691,7 +694,7 @@ const PublicHome: React.FC = () => {
                                 .then(() => alert('Link copied to clipboard'));
                             }
                           }}
-                          className="px-2 py-1 rounded-full bg-sky-50 text-skyBlue text-xs"
+                          className="px-2 py-1 rounded-full bg-orange-50 text-saffron text-xs"
                           aria-label={`Share ${n.title}`}
                         >
                           <Share2 size={14} />

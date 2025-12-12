@@ -16,7 +16,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ activity, onClose }) => {
 
   return (
     <div
-      className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-navyBlue/70 backdrop-blur-sm transition-all"
+      className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm transition-all"
       onClick={onClose}
     >
       <div
@@ -40,7 +40,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ activity, onClose }) => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
           <div className="absolute bottom-6 left-6 right-6">
-            <span className={`inline-block px-3 py-1 mb-3 text-xs font-bold text-white rounded uppercase tracking-wider ${activity.type === 'Protest' ? 'bg-red-600' : 'bg-skyBlue'}`}>
+            <span className={`inline-block px-3 py-1 mb-3 text-xs font-bold text-white rounded uppercase tracking-wider ${activity.type === 'Protest' ? 'bg-red-600' : 'bg-saffron'}`}>
               {activity.type}
             </span>
             <h2 className="text-3xl sm:text-4xl font-bold text-white shadow-sm leading-tight">
@@ -55,7 +55,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ activity, onClose }) => {
           {/* Metadata Row */}
           <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 pb-6 border-b border-gray-100 text-sm text-gray-600 font-medium">
              <div className="flex items-center gap-2">
-               <Calendar size={18} className="text-navyBlue" />
+               <Calendar size={18} className="text-indiaGreen" />
                <span>{activity.date}</span>
              </div>
              {activity.location && (
@@ -68,7 +68,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ activity, onClose }) => {
 
           {/* Description */}
           <div className="space-y-4">
-             <h3 className="text-xl font-bold text-navyBlue">About the Campaign</h3>
+             <h3 className="text-xl font-bold text-indiaGreen">About the Campaign</h3>
              <p className="text-gray-700 leading-relaxed text-lg">
                {activity.fullDescription || activity.description}
              </p>
@@ -78,8 +78,8 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ activity, onClose }) => {
           {activity.stats && activity.stats.length > 0 && (
             <div className="bg-gray-50 rounded-xl p-6 border border-gray-100">
                <div className="flex items-center gap-2 mb-4">
-                 <BarChart3 size={20} className="text-skyBlue" />
-                 <h3 className="text-lg font-bold text-navyBlue">Impact Highlights</h3>
+                 <BarChart3 size={20} className="text-saffron" />
+                 <h3 className="text-lg font-bold text-indiaGreen">Impact Highlights</h3>
                </div>
                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                  {activity.stats.map((stat, idx) => (

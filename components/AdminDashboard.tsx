@@ -134,6 +134,16 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     e.preventDefault();
     const isEditing = !!formData.id;
 
+    // Manual validation for image upload on new entries
+    if (!isEditing && !formData.imageUrl) {
+      // Find the active tab that requires an image
+      const imageTabs = ['leaders', 'executiveLeaders', 'news', 'activities', 'gallery'];
+      if (imageTabs.includes(activeTab)) {
+        alert('Please upload an image.');
+        return;
+      }
+    }
+
     if (activeTab === 'leaders') {
       const { twitter, facebook, instagram, ...rest } = formData;
       const leaderData: Partial<Leader> = {
@@ -202,38 +212,38 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
   // --- RENDERERS ---
 
   const renderSidebar = () => (
-    <div className="w-64 bg-navyBlue text-white h-screen fixed left-0 top-0 flex flex-col shadow-2xl z-20">
-      <div className="p-6 border-b border-white/10">
+    <div className="w-64 bg-white text-indiaGreen h-screen fixed left-0 top-0 flex flex-col shadow-2xl z-20">
+      <div className="p-6 border-b border-gray-200">
         <h1 className="text-xl font-bold flex items-center gap-2">
-            <span className="bg-skyBlue p-1 rounded">IYC</span> CRM
+            <span className="bg-saffron p-1 rounded">IYC</span> CRM
         </h1>
-        <p className="text-xs text-gray-400 mt-1">Cloudflare D1/R2 Admin</p>
+        <p className="text-xs text-gray-500 mt-1">Cloudflare D1/R2 Admin</p>
       </div>
       <nav className="flex-1 p-4 space-y-2">
-        <button onClick={() => setActiveTab('leaders')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'leaders' ? 'bg-skyBlue text-white' : 'hover:bg-white/10 text-gray-300'}`}>
+        <button onClick={() => setActiveTab('leaders')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'leaders' ? 'bg-saffron text-white' : 'hover:bg-gray-100 text-indiaGreen'}`}>
           <Users size={18} /> Leaders
         </button>
-        <button onClick={() => setActiveTab('executiveLeaders')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'executiveLeaders' ? 'bg-skyBlue text-white' : 'hover:bg-white/10 text-gray-300'}`}>
+        <button onClick={() => setActiveTab('executiveLeaders')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'executiveLeaders' ? 'bg-saffron text-white' : 'hover:bg-gray-100 text-indiaGreen'}`}>
           <Users size={18} /> Executive Leaders
         </button>
-        <button onClick={() => setActiveTab('news')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'news' ? 'bg-skyBlue text-white' : 'hover:bg-white/10 text-gray-300'}`}>
+        <button onClick={() => setActiveTab('news')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'news' ? 'bg-saffron text-white' : 'hover:bg-gray-100 text-indiaGreen'}`}>
           <Newspaper size={18} /> News
         </button>
-        <button onClick={() => setActiveTab('activities')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'activities' ? 'bg-skyBlue text-white' : 'hover:bg-white/10 text-gray-300'}`}>
+        <button onClick={() => setActiveTab('activities')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'activities' ? 'bg-saffron text-white' : 'hover:bg-gray-100 text-indiaGreen'}`}>
           <Calendar size={18} /> Campaigns
         </button>
-        <button onClick={() => setActiveTab('videos')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'videos' ? 'bg-skyBlue text-white' : 'hover:bg-white/10 text-gray-300'}`}>
+        <button onClick={() => setActiveTab('videos')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'videos' ? 'bg-saffron text-white' : 'hover:bg-gray-100 text-indiaGreen'}`}>
           <Video size={18} /> Videos
         </button>
-        <button onClick={() => setActiveTab('gallery')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'gallery' ? 'bg-skyBlue text-white' : 'hover:bg-white/10 text-gray-300'}`}>
+        <button onClick={() => setActiveTab('gallery')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'gallery' ? 'bg-saffron text-white' : 'hover:bg-gray-100 text-indiaGreen'}`}>
           <GalleryIcon size={18} /> Gallery
         </button>
       </nav>
-      <div className="p-4 border-t border-white/10">
-        <button onClick={() => setActiveTab('settings')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'settings' ? 'bg-skyBlue text-white' : 'hover:bg-white/10 text-gray-300'}`}>
+      <div className="p-4 border-t border-gray-200">
+        <button onClick={() => setActiveTab('settings')} className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${activeTab === 'settings' ? 'bg-saffron text-white' : 'hover:bg-gray-100 text-indiaGreen'}`}>
           <Settings size={18} /> Settings
         </button>
-        <button onClick={onLogout} className="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-red-600/20 text-red-300 transition-colors">
+        <button onClick={onLogout} className="flex items-center gap-3 w-full p-3 rounded-lg hover:bg-red-100 text-red-500 transition-colors">
           <LogOut size={18} /> Logout
         </button>
       </div>
@@ -257,10 +267,10 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               {activeTab === 'leaders' && leaders.map(item => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4"><img src={item.imageUrl} className="w-10 h-10 rounded-full object-cover" alt="" /></td>
-                  <td className="px-6 py-4 font-bold text-navyBlue">{item.name}</td>
+                  <td className="px-6 py-4 font-bold text-indiaGreen">{item.name}</td>
                   <td className="px-6 py-4">{item.position}</td>
                   <td className="px-6 py-4 text-right">
-                    <button onClick={() => handleEdit(item)} className="text-skyBlue hover:bg-sky-50 p-2 rounded mr-2"><Edit size={16} /></button>
+                    <button onClick={() => handleEdit(item)} className="text-saffron hover:bg-orange-50 p-2 rounded mr-2"><Edit size={16} /></button>
                     <button onClick={() => deleteLeader(item.id)} className="text-red-500 hover:bg-red-50 p-2 rounded"><Trash2 size={16} /></button>
                   </td>
                 </tr>
@@ -268,10 +278,10 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               {activeTab === 'executiveLeaders' && executiveLeaders.map(item => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4"><img src={item.imageUrl} className="w-10 h-10 rounded-full object-cover" alt="" /></td>
-                  <td className="px-6 py-4 font-bold text-navyBlue">{item.name}</td>
+                  <td className="px-6 py-4 font-bold text-indiaGreen">{item.name}</td>
                   <td className="px-6 py-4">{item.title}</td>
                   <td className="px-6 py-4 text-right">
-                    <button onClick={() => handleEdit(item)} className="text-skyBlue hover:bg-sky-50 p-2 rounded mr-2"><Edit size={16} /></button>
+                    <button onClick={() => handleEdit(item)} className="text-saffron hover:bg-orange-50 p-2 rounded mr-2"><Edit size={16} /></button>
                     <button onClick={() => deleteExecutiveLeader(item.id)} className="text-red-500 hover:bg-red-50 p-2 rounded"><Trash2 size={16} /></button>
                   </td>
                 </tr>
@@ -279,10 +289,10 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               {activeTab === 'news' && news.map(item => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4"><img src={item.imageUrl} className="w-12 h-8 rounded object-cover" alt="" /></td>
-                  <td className="px-6 py-4 font-bold text-navyBlue">{item.title}</td>
+                  <td className="px-6 py-4 font-bold text-indiaGreen">{item.title}</td>
                   <td className="px-6 py-4">{item.date}</td>
                   <td className="px-6 py-4 text-right">
-                    <button onClick={() => handleEdit(item)} className="text-skyBlue hover:bg-sky-50 p-2 rounded mr-2"><Edit size={16} /></button>
+                    <button onClick={() => handleEdit(item)} className="text-saffron hover:bg-orange-50 p-2 rounded mr-2"><Edit size={16} /></button>
                     <button onClick={() => deleteNews(item.id)} className="text-red-500 hover:bg-red-50 p-2 rounded"><Trash2 size={16} /></button>
                   </td>
                 </tr>
@@ -290,10 +300,10 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               {activeTab === 'activities' && activities.map(item => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4"><img src={item.imageUrl} className="w-12 h-8 rounded object-cover" alt="" /></td>
-                  <td className="px-6 py-4 font-bold text-navyBlue">{item.title}</td>
+                  <td className="px-6 py-4 font-bold text-indiaGreen">{item.title}</td>
                   <td className="px-6 py-4">{item.description}</td>
                   <td className="px-6 py-4 text-right">
-                    <button onClick={() => handleEdit(item)} className="text-skyBlue hover:bg-sky-50 p-2 rounded mr-2"><Edit size={16} /></button>
+                    <button onClick={() => handleEdit(item)} className="text-saffron hover:bg-orange-50 p-2 rounded mr-2"><Edit size={16} /></button>
                     <button onClick={() => deleteActivity(item.id)} className="text-red-500 hover:bg-red-50 p-2 rounded"><Trash2 size={16} /></button>
                   </td>
                 </tr>
@@ -301,10 +311,10 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               {activeTab === 'videos' && videos.map(item => (
                 <tr key={item.id} className="hover:bg-gray-50">
                    <td className="px-6 py-4"><div className="w-12 h-8 bg-gray-200 flex items-center justify-center rounded"><Video size={16} /></div></td>
-                  <td className="px-6 py-4 font-bold text-navyBlue">{item.title}</td>
+                  <td className="px-6 py-4 font-bold text-indiaGreen">{item.title}</td>
                   <td className="px-6 py-4">{item.youtubeId}</td>
                   <td className="px-6 py-4 text-right">
-                    <button onClick={() => handleEdit(item)} className="text-skyBlue hover:bg-sky-50 p-2 rounded mr-2"><Edit size={16} /></button>
+                    <button onClick={() => handleEdit(item)} className="text-saffron hover:bg-orange-50 p-2 rounded mr-2"><Edit size={16} /></button>
                     <button onClick={() => deleteVideo(item.id)} className="text-red-500 hover:bg-red-50 p-2 rounded"><Trash2 size={16} /></button>
                   </td>
                 </tr>
@@ -312,10 +322,10 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               {activeTab === 'gallery' && galleryItems.map(item => (
                 <tr key={item.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4"><img src={item.thumbnailUrl || item.imageUrl} className="w-12 h-8 rounded object-cover" alt={item.alt} /></td>
-                  <td className="px-6 py-4 font-bold text-navyBlue">{item.alt || 'No alt text'}</td>
+                  <td className="px-6 py-4 font-bold text-indiaGreen">{item.alt || 'No alt text'}</td>
                   <td className="px-6 py-4"><span className="bg-gray-100 text-gray-600 text-xs font-bold px-2 py-1 rounded-full">{item.tag || 'gallery'}</span></td>
                   <td className="px-6 py-4 text-right">
-                    <button onClick={() => handleEdit(item)} className="text-skyBlue hover:bg-sky-50 p-2 rounded mr-2"><Edit size={16} /></button>
+                    <button onClick={() => handleEdit(item)} className="text-saffron hover:bg-orange-50 p-2 rounded mr-2"><Edit size={16} /></button>
                     <button onClick={() => deleteGalleryItem(item.id)} className="text-red-500 hover:bg-red-50 p-2 rounded"><Trash2 size={16} /></button>
                   </td>
                 </tr>
@@ -333,7 +343,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             {/* Change Password Section */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="p-6">
-                    <h3 className="text-xl font-bold text-navyBlue mb-4">Change Admin Password</h3>
+                    <h3 className="text-xl font-bold text-indiaGreen mb-4">Change Admin Password</h3>
                     <form onSubmit={handlePasswordChangeSubmit} className="space-y-4 max-w-md">
                         <div>
                             <label className="block text-sm font-bold text-gray-700 mb-1">Current Password</label>
@@ -341,7 +351,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                               type="password" 
                               value={currentPassword}
                               onChange={e => setCurrentPassword(e.target.value)}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyBlue outline-none"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-saffron outline-none"
                               placeholder="Enter your current password"
                             />
                         </div>
@@ -351,7 +361,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                               type="password" 
                               value={newPassword}
                               onChange={e => setNewPassword(e.target.value)}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyBlue outline-none"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-saffron outline-none"
                               placeholder="Enter a strong new password"
                             />
                         </div>
@@ -361,15 +371,15 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                               type="password" 
                               value={confirmPassword}
                               onChange={e => setConfirmPassword(e.target.value)}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyBlue outline-none"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-saffron outline-none"
                               placeholder="Confirm your new password"
                             />
                         </div>
                         {error && <p className="text-red-500 text-sm font-bold">{error}</p>}
-                        {success && <p className="text-green-600 text-sm font-bold">{success}</p>}
+                        {success && <p className="text-indiaGreen text-sm font-bold">{success}</p>}
                         <button 
                           type="submit" 
-                          className="w-full bg-navyBlue text-white py-3 rounded-lg font-bold hover:bg-blue-900 transition-colors"
+                          className="w-full bg-saffron text-white py-3 rounded-lg font-bold hover:bg-orange-600 transition-colors"
                         >
                           Update Password
                         </button>
@@ -380,7 +390,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             {/* Manage Users Section */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="p-6">
-                    <h3 className="text-xl font-bold text-navyBlue mb-4">Manage Admin Users</h3>
+                    <h3 className="text-xl font-bold text-indiaGreen mb-4">Manage Admin Users</h3>
                     
                     {/* Add New User Form */}
                     <form onSubmit={handleNewUserSubmit} className="space-y-4 max-w-md mb-8 p-4 border rounded-lg bg-gray-50">
@@ -391,7 +401,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                               type="text" 
                               value={newUsername}
                               onChange={e => setNewUsername(e.target.value)}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyBlue outline-none"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-saffron outline-none"
                               placeholder="Enter username"
                             />
                         </div>
@@ -401,7 +411,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                               type="password" 
                               value={newUserPassword}
                               onChange={e => setNewUserPassword(e.target.value)}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyBlue outline-none"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-saffron outline-none"
                               placeholder="Enter password"
                             />
                         </div>
@@ -411,15 +421,15 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                               type="password" 
                               value={newUserConfirmPassword}
                               onChange={e => setNewUserConfirmPassword(e.target.value)}
-                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-skyBlue outline-none"
+                              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-saffron outline-none"
                               placeholder="Confirm password"
                             />
                         </div>
                         {userMgmtError && <p className="text-red-500 text-sm font-bold">{userMgmtError}</p>}
-                        {userMgmtSuccess && <p className="text-green-600 text-sm font-bold">{userMgmtSuccess}</p>}
+                        {userMgmtSuccess && <p className="text-indiaGreen text-sm font-bold">{userMgmtSuccess}</p>}
                         <button 
                           type="submit" 
-                          className="w-full bg-skyBlue text-white py-2 rounded-lg font-bold hover:bg-sky-600 transition-colors"
+                          className="w-full bg-indiaGreen text-white py-2 rounded-lg font-bold hover:bg-green-700 transition-colors"
                         >
                           Add User
                         </button>
@@ -438,7 +448,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                             <tbody className="divide-y divide-gray-100">
                                 {users.map((user) => (
                                     <tr key={user.id} className="hover:bg-gray-50">
-                                        <td className="px-6 py-4 font-bold text-navyBlue">{user.username}</td>
+                                        <td className="px-6 py-4 font-bold text-indiaGreen">{user.username}</td>
                                         <td className="px-6 py-4 text-right">
                                             <button 
                                                 onClick={() => handleDeleteUser(user.id)} 
@@ -463,7 +473,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-xl shadow-xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-navyBlue uppercase">{formData.id ? 'Edit' : 'Add New'} {activeTab.slice(0, -1)}</h2>
+          <h2 className="text-xl font-bold text-indiaGreen uppercase">{formData.id ? 'Edit' : 'Add New'} {activeTab.slice(0, -1)}</h2>
           <button onClick={() => {setShowModal(false); setFormData({});}}><X className="text-gray-400 hover:text-red-500" /></button>
         </div>
         
@@ -481,11 +491,11 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               
               <div className="border-2 border-dashed border-gray-300 p-4 rounded text-center">
                  <label className="cursor-pointer block">
-                    <span className="text-skyBlue font-bold flex items-center justify-center gap-2"><Upload size={16} /> Upload Photo (R2)</span>
+                    <span className="text-saffron font-bold flex items-center justify-center gap-2"><Upload size={16} /> Upload Photo (R2)</span>
                     <input type="file" className="hidden" onChange={e => handleImageUpload(e, 'imageUrl')} />
                  </label>
                  {uploading && <p className="text-xs text-gray-500 mt-2">Uploading...</p>}
-                 {formData.imageUrl && !uploading && <p className="text-xs text-green-600 mt-2">Image Uploaded!</p>}
+                 {formData.imageUrl && !uploading && <p className="text-xs text-indiaGreen mt-2">Image Uploaded!</p>}
               </div>
             </>
           )}
@@ -499,21 +509,24 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 <option value="District SM Coordinator">District SM Coordinator</option>
                 <option value="Assembly SM Coordinator">Assembly SM Coordinator</option>
               </select>
-              <textarea placeholder="Bio" value={formData.bio || ''} className="w-full p-3 border rounded" rows={3} onChange={e => setFormData({...formData, bio: e.target.value})} />
-              <input placeholder="Education" value={formData.education || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, education: e.target.value})} />
-              <input placeholder="Email" type="email" value={formData.email || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, email: e.target.value})} />
-              <input placeholder="Phone Number" type="tel" value={formData.phone || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, phone: e.target.value})} />
+              <input required placeholder="State" value={formData.state || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, state: e.target.value})} />
+              <input required type="number" placeholder="Age" value={formData.age || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, age: e.target.value})} />
+              <input required type="number" placeholder="Start Year" value={formData.startYear || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, startYear: e.target.value})} />
+              <textarea required placeholder="Bio" value={formData.bio || ''} className="w-full p-3 border rounded" rows={3} onChange={e => setFormData({...formData, bio: e.target.value})} />
+              <input required placeholder="Education" value={formData.education || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, education: e.target.value})} />
+              <input required placeholder="Email" type="email" value={formData.email || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, email: e.target.value})} />
+              <input required placeholder="Phone Number" type="tel" value={formData.phone || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, phone: e.target.value})} />
               <input placeholder="Twitter URL" value={formData.twitter || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, twitter: e.target.value})} />
               <input placeholder="Facebook URL" value={formData.facebook || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, facebook: e.target.value})} />
               <input placeholder="Instagram URL" value={formData.instagram || ''} className="w-full p-3 border rounded" onChange={e => setFormData({...formData, instagram: e.target.value})} />
               
               <div className="border-2 border-dashed border-gray-300 p-4 rounded text-center">
                  <label className="cursor-pointer block">
-                    <span className="text-skyBlue font-bold flex items-center justify-center gap-2"><Upload size={16} /> Upload Photo (R2)</span>
+                    <span className="text-saffron font-bold flex items-center justify-center gap-2"><Upload size={16} /> Upload Photo (R2)</span>
                     <input type="file" className="hidden" onChange={e => handleImageUpload(e, 'imageUrl')} />
                  </label>
                  {uploading && <p className="text-xs text-gray-500 mt-2">Uploading...</p>}
-                 {formData.imageUrl && !uploading && <p className="text-xs text-green-600 mt-2">Image Uploaded!</p>}
+                 {formData.imageUrl && !uploading && <p className="text-xs text-indiaGreen mt-2">Image Uploaded!</p>}
               </div>
             </>
           )}
@@ -526,11 +539,11 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               <textarea required placeholder="News Description" value={formData.description || ''} className="w-full p-3 border rounded" rows={3} onChange={e => setFormData({...formData, description: e.target.value})} />
               <div className="border-2 border-dashed border-gray-300 p-4 rounded text-center">
                  <label className="cursor-pointer block">
-                    <span className="text-skyBlue font-bold flex items-center justify-center gap-2"><Upload size={16} /> Upload News Image (R2)</span>
+                    <span className="text-saffron font-bold flex items-center justify-center gap-2"><Upload size={16} /> Upload News Image (R2)</span>
                     <input type="file" className="hidden" onChange={e => handleImageUpload(e, 'imageUrl')} />
                  </label>
                  {uploading && <p className="text-xs text-gray-500 mt-2">Uploading...</p>}
-                 {formData.imageUrl && !uploading && <p className="text-xs text-green-600 mt-2">Image Uploaded!</p>}
+                 {formData.imageUrl && !uploading && <p className="text-xs text-indiaGreen mt-2">Image Uploaded!</p>}
               </div>
             </>
           )}
@@ -558,11 +571,11 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 <textarea placeholder="Full Description" value={formData.fullDescription || ''} className="w-full p-3 border rounded" rows={5} onChange={e => setFormData({...formData, fullDescription: e.target.value})} />
                <div className="border-2 border-dashed border-gray-300 p-4 rounded text-center">
                  <label className="cursor-pointer block">
-                    <span className="text-skyBlue font-bold flex items-center justify-center gap-2"><Upload size={16} /> Upload Banner (R2)</span>
-                    <input type="file" required={!formData.id} className="hidden" onChange={e => handleImageUpload(e, 'imageUrl')} />
+                    <span className="text-saffron font-bold flex items-center justify-center gap-2"><Upload size={16} /> Upload Banner (R2)</span>
+                    <input type="file" className="hidden" onChange={e => handleImageUpload(e, 'imageUrl')} />
                  </label>
                  {uploading && <p className="text-xs text-gray-500 mt-2">Uploading...</p>}
-                 {formData.imageUrl && !uploading && <p className="text-xs text-green-600 mt-2">Image Uploaded!</p>}
+                 {formData.imageUrl && !uploading && <p className="text-xs text-indiaGreen mt-2">Image Uploaded!</p>}
               </div>
              </>
           )}
@@ -577,16 +590,16 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                </select>
                <div className="border-2 border-dashed border-gray-300 p-4 rounded text-center">
                  <label className="cursor-pointer block">
-                    <span className="text-skyBlue font-bold flex items-center justify-center gap-2"><Upload size={16} /> Upload Image (R2)</span>
-                    <input type="file" required={!formData.id} className="hidden" onChange={e => handleImageUpload(e, 'imageUrl')} />
+                    <span className="text-saffron font-bold flex items-center justify-center gap-2"><Upload size={16} /> Upload Image (R2)</span>
+                    <input type="file" className="hidden" onChange={e => handleImageUpload(e, 'imageUrl')} />
                  </label>
                  {uploading && <p className="text-xs text-gray-500 mt-2">Uploading...</p>}
-                 {formData.imageUrl && !uploading && <p className="text-xs text-green-600 mt-2">Image Uploaded!</p>}
+                 {formData.imageUrl && !uploading && <p className="text-xs text-indiaGreen mt-2">Image Uploaded!</p>}
               </div>
              </>
           )}
 
-          <button disabled={uploading} type="submit" className="w-full bg-navyBlue text-white font-bold py-3 rounded hover:bg-blue-900 transition-colors disabled:opacity-50">
+          <button disabled={uploading} type="submit" className="w-full bg-saffron text-white font-bold py-3 rounded hover:bg-orange-600 transition-colors disabled:opacity-50">
             {uploading ? 'Uploading...' : (formData.id ? 'Save Changes' : 'Create New')}
           </button>
         </form>
@@ -603,7 +616,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             <h2 className="text-2xl font-bold text-gray-800">Dashboard</h2>
             <p className="text-gray-500">Welcome back, Admin.</p>
           </div>
-          {activeTab !== 'settings' && <button onClick={handleAddNew} className="flex items-center gap-2 bg-skyBlue text-white px-6 py-2 rounded-full font-bold shadow-lg hover:bg-sky-600 transition-colors">
+          {activeTab !== 'settings' && <button onClick={handleAddNew} className="flex items-center gap-2 bg-saffron text-white px-6 py-2 rounded-full font-bold shadow-lg hover:bg-orange-600 transition-colors">
             <Plus size={20} /> Add New
           </button>}
         </header>

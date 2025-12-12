@@ -184,7 +184,7 @@ const Footer: React.FC = () => {
               />
               <button
                 type="submit"
-                className="px-4 py-2 rounded-md bg-navyBlue hover:bg-navyBlueDark text-white text-sm transition"
+                className="px-4 py-2 rounded-md bg-indiaGreen hover:bg-green-700 text-white text-sm transition"
               >
                 Subscribe
               </button>
