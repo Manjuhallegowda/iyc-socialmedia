@@ -1,0 +1,17 @@
+{
+  "name": "iyc-portfolio-worker",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev"
+  },
+  "dependencies": {
+    "hono": "^4.4.12"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240722.0",
+    "typescript": "^5.5.3",
+    "wrangler": "^4.53.0"
+  }
+}

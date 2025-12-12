@@ -1,0 +1,20 @@
+name = "iyc-portfolio-api"
+main = "src/index.ts"
+compatibility_date = "2024-07-25"
+compatibility_flags = ["nodejs_compat"]
+
+# Cloudflare D1 Database
+[[d1_databases]]
+binding = "DB"
+database_name = "iyc-portfolio-db"
+database_id = "841a13d3-709a-40b4-94e0-db34ddfaf3df"
+migrations_dir = "migrations"
+
+# Cloudflare R2 Bucket
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "iyc-portfolio-images"
+
+[vars]
+CORS_ALLOWED_ORIGIN = "*"
+JWT_SECRET = "jx1VeP/ZOPFkp9fWjDa9uee9x1hrxda7NWvYwFfJnAM="
