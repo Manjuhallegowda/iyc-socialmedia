@@ -8,7 +8,7 @@ import React, {
   useId,
 } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import Navbar from './Navbar';
 import ActivityModal from './ActivityModal';
 import NewsModal from './NewsModal';
@@ -227,6 +227,34 @@ const PublicHome: React.FC = () => {
   const emailId = useId();
   const msgId = useId();
 
+  const newsControls = useAnimation();
+  const [isHoveringNews, setIsHoveringNews] = useState(false);
+
+  useEffect(() => {
+    if (news.length <= 3 || prefersReducedMotion.current) {
+      newsControls.stop();
+      return;
+    }
+
+    if (isHoveringNews) {
+      newsControls.stop();
+    } else {
+      // Each card is w-96 (24rem = 384px) and gap is gap-8 (2rem = 32px)
+      const itemWidth = 384 + 32;
+      const totalWidth = itemWidth * news.length;
+
+      newsControls.start({
+        x: [0, -totalWidth],
+        transition: {
+          ease: 'linear',
+          duration: news.length * 7, // Adjust duration for speed
+          repeat: Infinity,
+          repeatType: 'loop',
+        },
+      });
+    }
+  }, [isHoveringNews, news.length, newsControls, prefersReducedMotion]);
+
   if (loading) {
     return (
       <div className="h-screen w-full flex items-center justify-center bg-gray-50">
@@ -409,136 +437,80 @@ const PublicHome: React.FC = () => {
         </section>
 
         {/* About */}
-        <section id="about" className="py-24 bg-white scroll-mt-24">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            {/* Heading */}
+        <section
+          id="about-preview"
+          className="py-20 bg-white scroll-mt-24 border-b border-gray-200"
+        >
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
+              initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-20"
+              className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
             >
-              <span className="text-sm font-bold tracking-widest text-saffron uppercase">
-                Indian Youth Congress
-              </span>
+              {/* Text */}
+              <div>
+                <span className="text-sm font-bold tracking-widest text-saffron uppercase">
+                  About Us
+                </span>
 
-              <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-indiaGreen">
-                What We Do
-              </h2>
+                <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-indiaGreen leading-tight">
+                  Voice of Young India
+                </h2>
 
-              <div className="w-28 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-6 rounded-full" />
+                <p className="mt-6 text-lg text-gray-700 leading-relaxed">
+                  Indian Youth Congress is the youth wing of the Indian National
+                  Congress, committed to nurturing young leadership, defending
+                  constitutional values, and empowering the youth to actively
+                  participate in nation-building.
+                </p>
 
-              <p className="mt-8 max-w-3xl mx-auto text-lg text-gray-700 leading-relaxed">
-                The Indian Youth Congress is the ideological, organisational,
-                and digital force of young India — fighting misinformation,
-                strengthening democracy, and taking the Congress vision to every
-                citizen.
-              </p>
-            </motion.div>
+                <p className="mt-4 text-gray-600 leading-relaxed">
+                  From grassroots movements to digital advocacy, IYC stands at
+                  the forefront of social justice, democracy, and inclusive
+                  development — led by the energy, courage, and ideas of India’s
+                  youth.
+                </p>
 
-            {/* Mission Blocks */}
-            <div className="space-y-14">
-              {/* Mission 1 */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center"
-              >
-                <div className="relative">
-                  <div className="absolute -left-4 top-0 h-full w-1 bg-saffron rounded-full" />
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                    Defend Truth & Democratic Values
-                  </h3>
-                  <p className="text-gray-600 text-lg leading-relaxed">
-                    We counter fake news, hate politics, and propaganda with
-                    facts, constitutional values, and the ideology of the Indian
-                    National Congress.
-                  </p>
+                <div className="mt-8">
+                  <Link
+                    to="/about-iyc"
+                    className="inline-flex items-center px-8 py-3 bg-saffron text-white rounded-full font-bold text-lg shadow-lg hover:bg-orange-600 hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  >
+                    Know More
+                    <ArrowRight className="ml-3 w-5 h-5" />
+                  </Link>
                 </div>
+              </div>
 
-                <div className="bg-orange-50 rounded-2xl p-8 border border-orange-100">
-                  <ul className="space-y-4 font-medium text-gray-700">
-                    <li>• Rapid digital response teams</li>
-                    <li>• Fact-based political communication</li>
-                    <li>• Countering misinformation at scale</li>
+              {/* Visual / Accent */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="relative"
+              >
+                <div className="absolute inset-0 bg-gradient-to-tr from-saffron/20 via-white to-indiaGreen/20 rounded-2xl blur-2xl" />
+                <div className="relative bg-gray-50 p-10 rounded-2xl shadow-xl border-l-8 border-saffron">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                    Why Indian Youth Congress?
+                  </h3>
+                  <ul className="space-y-3 text-gray-700">
+                    <li className="flex items-start gap-3">
+                      <span className="w-2 h-2 mt-2 bg-saffron rounded-full" />
+                      Platform for young leaders and changemakers
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="w-2 h-2 mt-2 bg-saffron rounded-full" />
+                      Commitment to democracy & constitutional values
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <span className="w-2 h-2 mt-2 bg-saffron rounded-full" />
+                      Active participation in social & political movements
+                    </li>
                   </ul>
                 </div>
               </motion.div>
-
-              {/* Mission 2 */}
-              <motion.div
-                initial={{ opacity: 0, x: 20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center"
-              >
-                <div className="order-2 md:order-1 bg-green-50 rounded-2xl p-8 border border-green-100">
-                  <ul className="space-y-4 font-medium text-gray-700">
-                    <li>• Booth-level digital training</li>
-                    <li>• Statewide volunteer mobilisation</li>
-                    <li>• Campaign-driven outreach</li>
-                  </ul>
-                </div>
-
-                <div className="order-1 md:order-2 relative">
-                  <div className="absolute -left-4 top-0 h-full w-1 bg-indiaGreen rounded-full" />
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                    Organise & Mobilise Youth Power
-                  </h3>
-                  <p className="text-gray-600 text-lg leading-relaxed">
-                    We transform youth energy into disciplined political action
-                    — connecting students, workers, and grassroots leaders
-                    across Karnataka.
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Mission 3 */}
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center"
-              >
-                <div className="relative">
-                  <div className="absolute -left-4 top-0 h-full w-1 bg-saffron rounded-full" />
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                    Amplify People’s Issues
-                  </h3>
-                  <p className="text-gray-600 text-lg leading-relaxed">
-                    From unemployment and inflation to social justice and
-                    federalism, we bring people’s voices to the centre of
-                    political discourse.
-                  </p>
-                </div>
-
-                <div className="bg-gray-100 rounded-2xl p-8 border border-gray-200">
-                  <ul className="space-y-4 font-medium text-gray-700">
-                    <li>• Issue-based campaigns</li>
-                    <li>• Youth-led storytelling</li>
-                    <li>• Ground reports from across the state</li>
-                  </ul>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Call to Action */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="mt-24 text-center"
-            >
-              <p className="text-xl font-semibold text-gray-800 mb-6">
-                The future of India belongs to its youth.
-              </p>
-              <Link
-                to="/about-iyc"
-                className="inline-block px-10 py-4 bg-saffron text-white rounded-full font-bold text-lg shadow-lg hover:bg-orange-600 hover:-translate-y-1 transition-all"
-              >
-                Know more about Indian Youth Congress
-              </Link>
             </motion.div>
           </div>
         </section>
@@ -711,74 +683,147 @@ const PublicHome: React.FC = () => {
               </span>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {news.map((n, idx) => (
-                <motion.article
-                  key={n.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ ...transition, delay: idx * 0.04 }}
-                  viewport={{ once: true }}
-                  className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full"
-                  aria-labelledby={`news-${n.id}`}
+            <div className="overflow-hidden w-full"
+              onMouseEnter={() => setIsHoveringNews(true)}
+              onMouseLeave={() => setIsHoveringNews(false)}
+            >
+              {news.length > 3 ? (
+                <motion.div
+                  className="flex gap-8"
+                  animate={newsControls}
                 >
-                  <div className="h-48 overflow-hidden">
-                    <img
-                      src={n.imageUrl}
-                      alt={n.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover transform transition-transform hover:scale-105"
-                    />
-                  </div>
-                  <div className="p-6 flex flex-col flex-grow">
-                    <span className="text-xs font-bold text-gray-400 mb-2 block">
-                      {n.date}
-                    </span>
-                    <h3
-                      id={`news-${n.id}`}
-                      className="text-xl font-bold text-indiaGreen mb-3 line-clamp-2"
-                    >
-                      {n.title}
-                    </h3>
-                    <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
-                      {n.description}
-                    </p>
-                    <div className="flex gap-2 items-center mt-auto">
-                      <button
-                        onClick={() => setSelectedNews(n)}
-                        className="text-saffron font-semibold text-sm hover:text-orange-600 flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
-                        aria-label={`Read full story: ${n.title}`}
+                  {[...news, ...news].map((n, idx) => (
+                    <div key={`${n.id}-${idx}`} className="w-96 flex-shrink-0">
+                      <div
+                        className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full"
                       >
-                        Read Full Story <FileText size={14} />
-                      </button>
+                        <div className="h-48 overflow-hidden">
+                          <img
+                            src={n.imageUrl}
+                            alt={n.title}
+                            loading="lazy"
+                            className="w-full h-full object-cover transform transition-transform hover:scale-105"
+                          />
+                        </div>
+                        <div className="p-6 flex flex-col flex-grow">
+                          <span className="text-xs font-bold text-gray-400 mb-2 block">
+                            {n.date}
+                          </span>
+                          <h3
+                            className="text-xl font-bold text-indiaGreen mb-3 line-clamp-2"
+                          >
+                            {n.title}
+                          </h3>
+                          <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
+                            {n.description}
+                          </p>
+                          <div className="flex gap-2 items-center mt-auto">
+                            <button
+                              onClick={() => setSelectedNews(n)}
+                              className="text-saffron font-semibold text-sm hover:text-orange-600 flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+                            >
+                              Read Full Story <FileText size={14} />
+                            </button>
 
-                      <div className="ml-auto flex gap-2 items-center">
-                        <button
-                          onClick={() => {
-                            if ((navigator as any).share) {
-                              (navigator as any)
-                                .share({
-                                  title: n.title,
-                                  text: n.description,
-                                  url: window.location.href,
-                                })
-                                .catch(() => undefined);
-                            } else {
-                              navigator.clipboard
-                                ?.writeText(window.location.href)
-                                .then(() => alert('Link copied to clipboard'));
-                            }
-                          }}
-                          className="px-2 py-1 rounded-full bg-orange-50 text-saffron text-xs"
-                          aria-label={`Share ${n.title}`}
-                        >
-                          <Share2 size={14} />
-                        </button>
+                            <div className="ml-auto flex gap-2 items-center">
+                              <button
+                                onClick={() => {
+                                  if ((navigator as any).share) {
+                                    (navigator as any)
+                                      .share({
+                                        title: n.title,
+                                        text: n.description,
+                                        url: window.location.href,
+                                      })
+                                      .catch(() => undefined);
+                                  } else {
+                                    navigator.clipboard
+                                      ?.writeText(window.location.href)
+                                      .then(() => alert('Link copied to clipboard'));
+                                  }
+                                }}
+                                className="px-2 py-1 rounded-full bg-orange-50 text-saffron text-xs"
+                              >
+                                <Share2 size={14} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </motion.article>
-              ))}
+                  ))}
+                </motion.div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                  {news.map((n, idx) => (
+                    <motion.article
+                      key={n.id}
+                      initial={{ opacity: 0, y: 8 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ ...transition, delay: idx * 0.04 }}
+                      viewport={{ once: true }}
+                      className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full"
+                      aria-labelledby={`news-${n.id}`}
+                    >
+                      <div className="h-48 overflow-hidden">
+                        <img
+                          src={n.imageUrl}
+                          alt={n.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover transform transition-transform hover:scale-105"
+                        />
+                      </div>
+                      <div className="p-6 flex flex-col flex-grow">
+                        <span className="text-xs font-bold text-gray-400 mb-2 block">
+                          {n.date}
+                        </span>
+                        <h3
+                          id={`news-${n.id}`}
+                          className="text-xl font-bold text-indiaGreen mb-3 line-clamp-2"
+                        >
+                          {n.title}
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
+                          {n.description}
+                        </p>
+                        <div className="flex gap-2 items-center mt-auto">
+                          <button
+                            onClick={() => setSelectedNews(n)}
+                            className="text-saffron font-semibold text-sm hover:text-orange-600 flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+                            aria-label={`Read full story: ${n.title}`}
+                          >
+                            Read Full Story <FileText size={14} />
+                          </button>
+
+                          <div className="ml-auto flex gap-2 items-center">
+                            <button
+                              onClick={() => {
+                                if ((navigator as any).share) {
+                                  (navigator as any)
+                                    .share({
+                                      title: n.title,
+                                      text: n.description,
+                                      url: window.location.href,
+                                    })
+                                    .catch(() => undefined);
+                                } else {
+                                  navigator.clipboard
+                                    ?.writeText(window.location.href)
+                                    .then(() => alert('Link copied to clipboard'));
+                                }
+                              }}
+                              className="px-2 py-1 rounded-full bg-orange-50 text-saffron text-xs"
+                              aria-label={`Share ${n.title}`}
+                            >
+                              <Share2 size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.article>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </section>
