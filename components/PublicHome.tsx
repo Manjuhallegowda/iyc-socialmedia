@@ -409,73 +409,137 @@ const PublicHome: React.FC = () => {
         </section>
 
         {/* About */}
-        <section id="about" className="py-20 bg-white scroll-mt-24">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
-                <span>What We Do</span>
-                <span className="block h-1 w-20 bg-saffron mt-2"></span>
+        <section id="about" className="py-24 bg-white scroll-mt-24">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            {/* Heading */}
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-20"
+            >
+              <span className="text-sm font-bold tracking-widest text-saffron uppercase">
+                Indian Youth Congress
+              </span>
+
+              <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-indiaGreen">
+                What We Do
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-4 rounded-full"></div>
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <div className="w-28 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-6 rounded-full" />
+
+              <p className="mt-8 max-w-3xl mx-auto text-lg text-gray-700 leading-relaxed">
+                The Indian Youth Congress is the ideological, organisational,
+                and digital force of young India — fighting misinformation,
+                strengthening democracy, and taking the Congress vision to every
+                citizen.
+              </p>
+            </motion.div>
+
+            {/* Mission Blocks */}
+            <div className="space-y-14">
+              {/* Mission 1 */}
               <motion.div
-                initial={{ x: -10, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                transition={{ ...transition }}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="space-y-6"
+                className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center"
               >
-                <h3 className="text-2xl font-bold text-gray-800">
-                  Defending Truth in the Digital Age
-                </h3>
-                <p className="text-gray-600 leading-relaxed text-lg">
-                  The IYC Karnataka Social Media is the digital backbone of the
-                  Congress movement in the state. Our mission is to counter
-                  false narratives, spread awareness about pro-people policies,
-                  and give a voice to the unheard.
-                </p>
+                <div className="relative">
+                  <div className="absolute -left-4 top-0 h-full w-1 bg-saffron rounded-full" />
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                    Defend Truth & Democratic Values
+                  </h3>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                    We counter fake news, hate politics, and propaganda with
+                    facts, constitutional values, and the ideology of the Indian
+                    National Congress.
+                  </p>
+                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-                  <div className="p-4 bg-orange-50 rounded-lg border-l-4 border-saffron hover:shadow-md transition-shadow transform hover:-translate-y-1">
-                    <h4 className="font-bold text-indiaGreen">War Room Ops</h4>
-                    <p className="text-sm text-gray-600">
-                      24/7 monitoring and rapid response.
-                    </p>
-                  </div>
-                  <div className="p-4 bg-green-50 rounded-lg border-l-4 border-indiaGreen hover:shadow-md transition-shadow transform hover:-translate-y-1">
-                    <h4 className="font-bold text-indiaGreen">
-                      Grassroots Tech
-                    </h4>
-                    <p className="text-sm text-gray-600">
-                      Empowering booth-level workers.
-                    </p>
-                  </div>
+                <div className="bg-orange-50 rounded-2xl p-8 border border-orange-100">
+                  <ul className="space-y-4 font-medium text-gray-700">
+                    <li>• Rapid digital response teams</li>
+                    <li>• Fact-based political communication</li>
+                    <li>• Countering misinformation at scale</li>
+                  </ul>
                 </div>
               </motion.div>
 
+              {/* Mission 2 */}
               <motion.div
-                initial={{ x: 10, opacity: 0 }}
-                whileInView={{ x: 0, opacity: 1 }}
-                transition={{ ...transition }}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="relative"
+                className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center"
               >
-                <div className="absolute -inset-4 bg-gradient-to-tr from-saffron to-indiaGreen opacity-20 rounded-xl blur-lg" />
-                <picture>
-                  <img
-                    src={
-                      aboutImage?.imageUrl ||
-                      'https://picsum.photos/seed/iyc_meeting/600/400'
-                    }
-                    alt={aboutImage?.alt || 'IYC Meeting'}
-                    loading="lazy"
-                    className="relative rounded-xl shadow-2xl max-w-md mx-auto object-cover transform transition-transform hover:scale-102"
-                  />
-                </picture>
+                <div className="order-2 md:order-1 bg-green-50 rounded-2xl p-8 border border-green-100">
+                  <ul className="space-y-4 font-medium text-gray-700">
+                    <li>• Booth-level digital training</li>
+                    <li>• Statewide volunteer mobilisation</li>
+                    <li>• Campaign-driven outreach</li>
+                  </ul>
+                </div>
+
+                <div className="order-1 md:order-2 relative">
+                  <div className="absolute -left-4 top-0 h-full w-1 bg-indiaGreen rounded-full" />
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                    Organise & Mobilise Youth Power
+                  </h3>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                    We transform youth energy into disciplined political action
+                    — connecting students, workers, and grassroots leaders
+                    across Karnataka.
+                  </p>
+                </div>
+              </motion.div>
+
+              {/* Mission 3 */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center"
+              >
+                <div className="relative">
+                  <div className="absolute -left-4 top-0 h-full w-1 bg-saffron rounded-full" />
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                    Amplify People’s Issues
+                  </h3>
+                  <p className="text-gray-600 text-lg leading-relaxed">
+                    From unemployment and inflation to social justice and
+                    federalism, we bring people’s voices to the centre of
+                    political discourse.
+                  </p>
+                </div>
+
+                <div className="bg-gray-100 rounded-2xl p-8 border border-gray-200">
+                  <ul className="space-y-4 font-medium text-gray-700">
+                    <li>• Issue-based campaigns</li>
+                    <li>• Youth-led storytelling</li>
+                    <li>• Ground reports from across the state</li>
+                  </ul>
+                </div>
               </motion.div>
             </div>
+
+            {/* Call to Action */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="mt-24 text-center"
+            >
+              <p className="text-xl font-semibold text-gray-800 mb-6">
+                The future of India belongs to its youth.
+              </p>
+              <Link
+                to="/about-iyc"
+                className="inline-block px-10 py-4 bg-saffron text-white rounded-full font-bold text-lg shadow-lg hover:bg-orange-600 hover:-translate-y-1 transition-all"
+              >
+                Know more about Indian Youth Congress
+              </Link>
+            </motion.div>
           </div>
         </section>
 

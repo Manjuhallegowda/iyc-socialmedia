@@ -1,49 +1,74 @@
-import React, { useState, FormEvent } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { ArrowLeft } from 'lucide-react';
+
 import JoinForm from './JoinForm';
 import Navbar from './Navbar';
-import Footer from './Footer'; // Assuming you'll extract the footer later
+import Footer from './Footer';
 
+/* -------------------------------------------------------
+   Brand & Theme Constants
+------------------------------------------------------- */
+const COLORS = {
+  saffron: 'text-orange-600',
+  saffronHover: 'hover:text-orange-800',
+  indiaGreen: 'text-green-700',
+  background: 'bg-gray-50',
+};
+
+const FORM_BG = '/assets/ppl.png';
+
+/* -------------------------------------------------------
+   Component
+------------------------------------------------------- */
 const JoinPage: React.FC = () => {
-  const [contactSent, setContactSent] = useState(false); // This state might need to be lifted if contact form is separate
-
-  // This handleContactSubmit is currently for the general contact form.
-  // If JoinForm has its own submit logic, this might not be needed here.
-  const handleContactSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    setContactSent(true);
-    setTimeout(() => setContactSent(false), 3000);
-    // Add actual form submission logic here
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
+    <div
+      className={`min-h-screen ${COLORS.background} text-gray-800 font-sans`}
+    >
       <Navbar />
 
-      {/* Join Us Section - This will be the main content of the new page */}
-      <section
-        id="join"
-        className="py-20 bg-gray-50 relative overflow-hidden scroll-mt-24 pt-40"
-      >
-        {' '}
-        {/* Added pt-40 to push content below fixed navbar */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-sky-400/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-        <div className="absolute bottom-0 left-0 w-64 h-64 bg-indiaGreen/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-        <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
-          {' '}
-          {/* Using w-full as per previous changes */}
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
-              Join The Digital Army
-            </h2>
-            <p className="mt-4 text-gray-600">
-              Be the voice of Karnataka. Join the social media revolution.
-            </p>
-          </div>
-          <JoinForm />
+      <main id="main-content" className="pt-20">
+        {/* Back Navigation */}
+        <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-6 pt-4">
+          <Link
+            to="/"
+            aria-label="Back to Home"
+            className={`inline-flex items-center gap-2 font-semibold transition-colors ${COLORS.saffron} ${COLORS.saffronHover}`}
+          >
+            <ArrowLeft size={16} />
+            Back to Home
+          </Link>
         </div>
-      </section>
 
-      {/* Assuming a footer might be desired on this page as well */}
+        {/* Join Form Section */}
+        <section
+          id="join-form"
+          className="relative py-16 bg-cover bg-center"
+          style={{ backgroundImage: `url(${FORM_BG})` }}
+        >
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/60" />
+
+          {/* Content Container */}
+          <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
+            {/* Hero Content */}
+            <div className="max-w-6xl mx-auto px-6 lg:px-12 text-center mb-12">
+              <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-4">
+                Join the Digital Force
+              </h1>
+              <p className="text-base md:text-xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                Be the voice of young India in the digital space. Your keyboard
+                is your most powerful tool for democracy and change.
+              </p>
+            </div>
+
+            <JoinForm />
+          </div>
+        </section>
+      </main>
+
       <Footer />
     </div>
   );
