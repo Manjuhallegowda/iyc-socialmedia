@@ -83,3 +83,8 @@ export interface ExecutiveLeader {
     youtube?: string;
   };
 }
+
+export interface User {
+  id: string;
+  username: string;
+}

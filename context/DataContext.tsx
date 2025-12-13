@@ -1,7 +1,22 @@
-
 import * as React from 'react';
-import { Leader, ExecutiveLeader, NewsItem, Activity, VideoItem, GalleryItem, User } from '../types';
-import { apiLeaders, apiExecutiveLeaders, apiNews, apiActivities, apiVideos, apiGalleryItems, apiUsers } from '../services/api';
+import {
+  Leader,
+  ExecutiveLeader,
+  NewsItem,
+  Activity,
+  VideoItem,
+  GalleryItem,
+  User,
+} from '../types';
+import {
+  apiLeaders,
+  apiExecutiveLeaders,
+  apiNews,
+  apiActivities,
+  apiVideos,
+  apiGalleryItems,
+  apiUsers,
+} from '../services/api';
 
 interface DataContextType {
   leaders: Leader[];
@@ -39,9 +54,14 @@ interface DataContextType {
 
 const DataContext = React.createContext<DataContextType | undefined>(undefined);
 
-export const DataProvider: React.FC<{ children: React.ReactNode, isAuthenticated: boolean }> = ({ children, isAuthenticated }) => {
+export const DataProvider: React.FC<{
+  children: React.ReactNode;
+  isAuthenticated: boolean;
+}> = ({ children, isAuthenticated }) => {
   const [leaders, setLeaders] = React.useState<Leader[]>([]);
-  const [executiveLeaders, setExecutiveLeaders] = React.useState<ExecutiveLeader[]>([]); // New: Executive Leaders state
+  const [executiveLeaders, setExecutiveLeaders] = React.useState<
+    ExecutiveLeader[]
+  >([]); // New: Executive Leaders state
   const [news, setNews] = React.useState<NewsItem[]>([]);
   const [activities, setActivities] = React.useState<Activity[]>([]);
   const [videos, setVideos] = React.useState<VideoItem[]>([]);
@@ -74,7 +94,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode, isAuthenticated
       setActivities(a as Activity[]);
       setVideos(v as VideoItem[]);
       setGalleryItems(g as GalleryItem[]);
-      
+
       if (isAuthenticated) {
         const u = results[results.length - 1];
         setUsers(u as User[]);
@@ -82,7 +102,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode, isAuthenticated
         setUsers([]); // Clear users if not authenticated
       }
     } catch (error) {
-      console.error("Failed to fetch data", error);
+      console.error('Failed to fetch data', error);
     } finally {
       setLoading(false);
     }
@@ -124,7 +144,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode, isAuthenticated
     await apiNews.create(item);
     await refreshData();
   };
-   const updateNews = async (item: NewsItem) => {
+  const updateNews = async (item: NewsItem) => {
     await apiNews.update(item);
     await refreshData();
   };
@@ -183,18 +203,40 @@ export const DataProvider: React.FC<{ children: React.ReactNode, isAuthenticated
     await refreshData();
   };
 
-
   return (
-    <DataContext.Provider value={{
-      leaders, executiveLeaders, news, activities, videos, galleryItems, users, loading, refreshData, // Added executiveLeaders
-      addLeader, updateLeader, deleteLeader,
-      addExecutiveLeader, updateExecutiveLeader, deleteExecutiveLeader, // New: Executive Leader CRUD actions
-      addNews, updateNews, deleteNews,
-      addActivity, updateActivity, deleteActivity,
-      addVideo, updateVideo, deleteVideo,
-      addGalleryItem, updateGalleryItem, deleteGalleryItem,
-      addUser, deleteUser // Added user management actions
-    }}>
+    <DataContext.Provider
+      value={{
+        leaders,
+        executiveLeaders,
+        news,
+        activities,
+        videos,
+        galleryItems,
+        users,
+        loading,
+        refreshData, // Added executiveLeaders
+        addLeader,
+        updateLeader,
+        deleteLeader,
+        addExecutiveLeader,
+        updateExecutiveLeader,
+        deleteExecutiveLeader, // New: Executive Leader CRUD actions
+        addNews,
+        updateNews,
+        deleteNews,
+        addActivity,
+        updateActivity,
+        deleteActivity,
+        addVideo,
+        updateVideo,
+        deleteVideo,
+        addGalleryItem,
+        updateGalleryItem,
+        deleteGalleryItem,
+        addUser,
+        deleteUser, // Added user management actions
+      }}
+    >
       {children}
     </DataContext.Provider>
   );

@@ -7,7 +7,7 @@
  * You must deploy the worker in the `/worker` directory and set the correct URL below.
  */
 
-import { Leader, NewsItem, Activity, VideoItem, GalleryItem, ExecutiveLeader } from '../types';
+import { Leader, NewsItem, Activity, VideoItem, GalleryItem, ExecutiveLeader, User } from '../types';
 
 // --- CONFIGURATION ---
 
@@ -26,6 +26,13 @@ const R2_PUBLIC_URL =
 
 const handleResponse = async <T>(response: Response): Promise<T> => {
   if (!response.ok) {
+    if (response.status === 401) {
+      localStorage.removeItem('authToken');
+      // Redirect to the login page to force re-authentication.
+      if (typeof window !== 'undefined') {
+        window.location.href = '/admin';
+      }
+    }
     const error = await response
       .json()
       .catch(() => ({ message: 'An unknown error occurred' }));
@@ -146,10 +153,7 @@ const createApiCrud = <T extends { id: string }>(
 
 // --- API ENDPOINTS ---
 
-export interface User {
-  id: string;
-  username: string;
-}
+
 
 const createApiCrudForUsers = <T extends { id: string }>(
   resource: string

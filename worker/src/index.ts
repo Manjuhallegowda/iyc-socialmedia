@@ -1,5 +1,6 @@
 // worker/src/index.ts
 import { Hono } from 'hono';
+import { HTTPException } from 'hono/http-exception';
 import { cors } from 'hono/cors';
 import { jwt, sign } from 'hono/jwt';
 import type { Context, Next } from 'hono';
@@ -525,6 +526,11 @@ app.get('/', (c) => c.text('IYC Portfolio API is running!'));
 
 app.onError((err, c) => {
   console.error(`${err}`);
+  if (err instanceof HTTPException) {
+    // Use the status from the HTTP exception, but return a JSON response
+    return c.json({ error: err.message }, err.status);
+  }
+  // For all other errors, it's a true 500
   return c.json({ error: 'Internal Server Error' }, 500);
 });
 
