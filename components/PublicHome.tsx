@@ -7,6 +7,7 @@ import React, {
   useRef,
   useId,
 } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from './Navbar';
 import ActivityModal from './ActivityModal';
@@ -493,7 +494,7 @@ const PublicHome: React.FC = () => {
             </div>
 
             <div className="space-y-12">
-              {activities.map((activity, index) => (
+              {activities.slice(0, 3).map((activity, index) => (
                 <motion.article
                   key={activity.id}
                   initial={{ opacity: 0, y: 8 }}
@@ -573,6 +574,16 @@ const PublicHome: React.FC = () => {
                 </motion.article>
               ))}
             </div>
+            {activities.length > 3 && (
+              <div className="text-center mt-12">
+                <Link
+                  to="/activities"
+                  className="inline-block px-8 py-3 bg-saffron text-white rounded-full font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-saffron/30 transform hover:-translate-y-1 hover:scale-102 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                >
+                  More Movement
+                </Link>
+              </div>
+            )}
           </div>
         </section>
 

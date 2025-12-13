@@ -6,6 +6,7 @@ import AdminDashboard from './components/AdminDashboard';
 import AdminLogin from './components/AdminLogin';
 import JoinPage from './components/JoinPage';
 import TeamPage from './components/TeamPage'; // Import the new TeamPage component
+import ActivityPage from './components/ActivityPage';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('authToken'));
@@ -31,6 +32,9 @@ const App: React.FC = () => {
 
           {/* New Team Page Route */}
           <Route path="/team" element={<TeamPage />} />
+          
+          {/* New Activity Page Route */}
+          <Route path="/activities" element={<ActivityPage />} />
           
           {/* Admin Route - Protected */}
           <Route 
