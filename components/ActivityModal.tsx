@@ -34,7 +34,7 @@ const ActivityModal: React.FC<ActivityModalProps> = ({ activity, onClose }) => {
         {/* Hero Image */}
         <div className="h-64 sm:h-80 w-full relative shrink-0">
           <img
-            src={activity.image}
+            src={activity.imageUrl}
             alt={activity.title}
             className="w-full h-full object-cover"
           />
