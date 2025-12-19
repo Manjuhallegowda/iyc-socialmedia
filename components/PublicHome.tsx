@@ -14,6 +14,7 @@ import ActivityModal from './ActivityModal';
 import NewsModal from './NewsModal';
 import VideoSection from './VideoSection';
 import Footer from './Footer';
+import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
 import ExecutiveLeadershipSection from './ExecutiveLeadershipSection'; // Import the new executive leadership section
 import { useData } from '../context/DataContext';
 import { Activity, NewsItem, GalleryItem } from '../types';
@@ -36,7 +37,7 @@ import {
 const transition = { duration: 0.5, ease: 'easeOut' };
 
 const PublicHome: React.FC = () => {
-  const { news, activities, galleryItems, loading } = useData();
+  const { news, activities, galleryItems, loading, stateLeaders } = useData();
   const [contactSent, setContactSent] = useState(false);
   const [contactSending, setContactSending] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
@@ -283,7 +284,7 @@ const PublicHome: React.FC = () => {
 
       <Navbar />
 
-      <main id="main">
+      <main id="main" className="pt-20">
         {/* Hero */}
         <section
           id="home"
@@ -518,6 +519,111 @@ const PublicHome: React.FC = () => {
         {/* Executive Leadership Section */}
         <ExecutiveLeadershipSection />
 
+        {/* Detailed Leadership Profiles */}
+        <section
+          id="leadership-profiles"
+          className="py-20 bg-gray-50 border-t border-gray-200"
+        >
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
+                State Leadership
+              </h2>
+              <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-4 rounded-full" />
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              {stateLeaders.map((leader) => (
+                <article
+                  key={leader.id}
+                  className="bg-white rounded-2xl shadow-lg p-8 border-l-8 border-saffron"
+                >
+                  <div className="flex items-start justify-between gap-6 mb-6">
+                    {/* Left: Text */}
+                    <div>
+                      <h3 className="text-2xl font-bold text-gray-800">
+                        {leader.name}
+                      </h3>
+                      <p className="text-saffron font-semibold text-lg">
+                        {leader.designation}
+                      </p>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {leader.state}
+                      </p>
+                    </div>
+
+                    {/* Right: Image */}
+                    <img
+                      src={leader.imageUrl}
+                      alt={leader.name}
+                      className="w-32 h-32 rounded-lg object-cover border-4 border-saffron flex-shrink-0"
+                    />
+                  </div>
+
+                  <p className="text-gray-700 leading-relaxed line-clamp-3">
+                    {leader.bio}
+                  </p>
+
+                  {leader.socialMedia && (
+                    <div className="flex space-x-4 mt-4">
+                      {leader.socialMedia.twitter && (
+                        <a
+                          href={leader.socialMedia.twitter}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-400 hover:text-blue-400 transition-colors"
+                        >
+                          <FaTwitter size={20} />
+                        </a>
+                      )}
+                      {leader.socialMedia.facebook && (
+                        <a
+                          href={leader.socialMedia.facebook}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-400 hover:text-blue-600 transition-colors"
+                        >
+                          <FaFacebookF size={20} />
+                        </a>
+                      )}
+                      {leader.socialMedia.instagram && (
+                        <a
+                          href={leader.socialMedia.instagram}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-400 hover:text-pink-500 transition-colors"
+                        >
+                          <FaInstagram size={20} />
+                        </a>
+                      )}
+                      {leader.socialMedia.youtube && (
+                        <a
+                          href={leader.socialMedia.youtube}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-gray-400 hover:text-red-500 transition-colors"
+                        >
+                          <FaYoutube size={20} />
+                        </a>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="mt-8">
+                    <Link
+                      to={`/state-leader/${leader.id}`}
+                      className="inline-flex items-center font-semibold text-saffron hover:text-orange-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+                    >
+                      Read More
+                      <ArrowRight className="ml-2 w-4 h-4" />
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* Activities */}
         <section id="activities" className="py-20 bg-white scroll-mt-24">
           <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -530,7 +636,7 @@ const PublicHome: React.FC = () => {
             </div>
 
             <div className="space-y-12">
-              {activities.slice(0, 3).map((activity, index) => (
+              {(activities || []).slice(0, 3).map((activity, index) => (
                 <motion.article
                   key={activity.id}
                   initial={{ opacity: 0, y: 8 }}
@@ -610,7 +716,7 @@ const PublicHome: React.FC = () => {
                 </motion.article>
               ))}
             </div>
-            {activities.length > 3 && (
+            {(activities || []).length > 3 && (
               <div className="text-center mt-12">
                 <Link
                   to="/activities"
@@ -683,20 +789,16 @@ const PublicHome: React.FC = () => {
               </span>
             </div>
 
-            <div className="overflow-hidden w-full"
+            <div
+              className="overflow-hidden w-full"
               onMouseEnter={() => setIsHoveringNews(true)}
               onMouseLeave={() => setIsHoveringNews(false)}
             >
               {news.length > 3 ? (
-                <motion.div
-                  className="flex gap-8"
-                  animate={newsControls}
-                >
+                <motion.div className="flex gap-8" animate={newsControls}>
                   {[...news, ...news].map((n, idx) => (
                     <div key={`${n.id}-${idx}`} className="w-96 flex-shrink-0">
-                      <div
-                        className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full"
-                      >
+                      <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full">
                         <div className="h-48 overflow-hidden">
                           <img
                             src={n.imageUrl}
@@ -709,9 +811,7 @@ const PublicHome: React.FC = () => {
                           <span className="text-xs font-bold text-gray-400 mb-2 block">
                             {n.date}
                           </span>
-                          <h3
-                            className="text-xl font-bold text-indiaGreen mb-3 line-clamp-2"
-                          >
+                          <h3 className="text-xl font-bold text-indiaGreen mb-3 line-clamp-2">
                             {n.title}
                           </h3>
                           <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
@@ -739,7 +839,9 @@ const PublicHome: React.FC = () => {
                                   } else {
                                     navigator.clipboard
                                       ?.writeText(window.location.href)
-                                      .then(() => alert('Link copied to clipboard'));
+                                      .then(() =>
+                                        alert('Link copied to clipboard')
+                                      );
                                   }
                                 }}
                                 className="px-2 py-1 rounded-full bg-orange-50 text-saffron text-xs"
@@ -809,7 +911,9 @@ const PublicHome: React.FC = () => {
                                 } else {
                                   navigator.clipboard
                                     ?.writeText(window.location.href)
-                                    .then(() => alert('Link copied to clipboard'));
+                                    .then(() =>
+                                      alert('Link copied to clipboard')
+                                    );
                                 }
                               }}
                               className="px-2 py-1 rounded-full bg-orange-50 text-saffron text-xs"

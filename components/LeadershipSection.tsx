@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import { Leader } from '../types';
@@ -14,8 +13,10 @@ const LeadershipSection: React.FC = () => {
 
   const filteredLeaders = leaders.filter((leader) => {
     if (activeTab === 'State') return leader.designation === 'State SM Chair';
-    if (activeTab === 'District') return leader.designation === 'District SM Coordinator';
-    if (activeTab === 'Assembly') return leader.designation === 'Assembly SM Coordinator';
+    if (activeTab === 'District')
+      return leader.designation === 'District SM Coordinator';
+    if (activeTab === 'Assembly')
+      return leader.designation === 'Assembly SM Coordinator';
     return false;
   });
 
@@ -23,7 +24,9 @@ const LeadershipSection: React.FC = () => {
     <section id="leadership" className="py-20 bg-gray-50 scroll-mt-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">SM Team Leadership</h2>
+          <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
+            SM Team Leadership
+          </h2>
           <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
             Meet the digital architects behind our campaigns in Karnataka.
           </p>
@@ -36,7 +39,7 @@ const LeadershipSection: React.FC = () => {
             {[
               { id: 'State', label: 'State Team' },
               { id: 'District', label: 'District Coordinators' },
-              { id: 'Assembly', label: 'Assembly Coordinators' }
+              { id: 'Assembly', label: 'Assembly Coordinators' },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -89,26 +92,31 @@ const LeadershipSection: React.FC = () => {
                 </div>
 
                 <div className="flex items-center justify-between border-t border-gray-100 pt-3">
-                   <div className="flex gap-2">
-                      {leader.social.twitter && <Hash size={14} className="text-gray-400" />}
-                   </div>
-                   <span className="text-saffron text-sm font-medium flex items-center gap-1 group-hover:underline">
-                      View Profile <ChevronRight size={14} />
-                   </span>
+                  <div className="flex gap-2">
+                    {leader.social.twitter && (
+                      <Hash size={14} className="text-gray-400" />
+                    )}
+                  </div>
+                  <span className="text-saffron text-sm font-medium flex items-center gap-1 group-hover:underline">
+                    View Profile <ChevronRight size={14} />
+                  </span>
                 </div>
               </div>
             </div>
           ))}
           {filteredLeaders.length === 0 && (
-             <div className="col-span-full text-center py-10 text-gray-400">
-                No leaders found in this category.
-             </div>
+            <div className="col-span-full text-center py-10 text-gray-400">
+              No leaders found in this category.
+            </div>
           )}
         </div>
       </div>
 
       {selectedLeader && (
-        <LeaderModal leader={selectedLeader} onClose={() => setSelectedLeader(null)} />
+        <LeaderModal
+          leader={selectedLeader}
+          onClose={() => setSelectedLeader(null)}
+        />
       )}
     </section>
   );

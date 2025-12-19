@@ -1,76 +1,136 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { useData } from '../context/DataContext';
 import { Leader } from '../types';
-import LeaderModal from './LeaderModal';
 import { MapPin, ChevronRight, Hash } from 'lucide-react';
 
 const TeamPage: React.FC = () => {
   const { leaders } = useData();
-  const [selectedLeader, setSelectedLeader] = useState<Leader | null>(null);
+  const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
+
+  const districts = useMemo(() => {
+    const districtSet = new Set<string>();
+    leaders.forEach((leader) => {
+      if (leader.district) {
+        districtSet.add(leader.district);
+      }
+    });
+    return Array.from(districtSet);
+  }, [leaders]);
+
+  const selectedDistrictData = useMemo(() => {
+    if (!selectedDistrict) return null;
+
+    const districtLeaders = leaders.filter(
+      (leader) => leader.district === selectedDistrict
+    );
+    const president = districtLeaders.find(
+      (leader) => leader.designation === 'District SM Coordinator'
+    );
+    const assemblyCoordinators = districtLeaders.filter(
+      (leader) => leader.designation === 'Assembly SM Coordinator'
+    );
+    const blockCoordinators = districtLeaders.filter((leader) =>
+      leader.designation.includes('Block')
+    ); // Assuming block might have different names
+
+    return {
+      president,
+      counts: {
+        district: president ? 1 : 0,
+        assembly: assemblyCoordinators.length,
+        block: blockCoordinators.length,
+      },
+    };
+  }, [selectedDistrict, leaders]);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
       <Navbar />
-      <main className="pt-32 pb-20 container mx-auto px-4">
-        <h1 className="text-4xl font-bold text-center text-indiaGreen mb-4">Our Team</h1>
+      <main className="pt-40 pb-20 container mx-auto px-4">
+        <h1 className="text-4xl font-bold text-center text-indiaGreen mb-4">
+          Our Team
+        </h1>
         <p className="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Meet the dedicated individuals who form the backbone of our social media presence across Karnataka.
+          Explore our team across the districts of Karnataka.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {leaders.map((leader) => (
-            <div
-              key={leader.id}
-              onClick={() => setSelectedLeader(leader)}
-              className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group border border-gray-100"
-            >
-              <div className="h-48 overflow-hidden relative">
-                <img
-                  src={leader.imageUrl}
-                  alt={leader.name}
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Left Column: Profile and Counts */}
+          <div className="md:col-span-1 bg-white p-6 rounded-lg shadow-sm">
+            {selectedDistrictData && selectedDistrictData.president ? (
+              <div>
+                <h2 className="text-2xl font-bold text-indiaGreen mb-4">
+                  {selectedDistrict}
+                </h2>
+                <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group border border-gray-100">
+                  <div className="h-48 overflow-hidden relative">
+                    <img
+                      src={selectedDistrictData.president.imageUrl}
+                      alt={selectedDistrictData.president.name}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-5">
+                    <h3 className="text-xl font-bold text-gray-800 mb-1">
+                      {selectedDistrictData.president.name}
+                    </h3>
+                    <p className="text-sm font-semibold text-indiaGreen uppercase tracking-wider text-xs mb-3">
+                      {selectedDistrictData.president.designation}
+                    </p>
+                  </div>
+                </div>
+                <div className="mt-4">
+                  <h3 className="text-lg font-bold">Member Counts</h3>
+                  <ul className="mt-2 space-y-1">
+                    <li>
+                      District Coordinators:{' '}
+                      {selectedDistrictData.counts.district}
+                    </li>
+                    <li>
+                      Assembly Coordinators:{' '}
+                      {selectedDistrictData.counts.assembly}
+                    </li>
+                    <li>
+                      Block Coordinators: {selectedDistrictData.counts.block}
+                    </li>
+                  </ul>
+                </div>
               </div>
-              <div className="p-5">
-                <h3 className="text-xl font-bold text-gray-800 mb-1 group-hover:text-saffron transition-colors">
-                  {leader.name}
-                </h3>
-                <p className="text-sm font-semibold text-indiaGreen uppercase tracking-wider text-xs mb-3">
-                  {leader.designation}
-                </p>
+            ) : (
+              <div className="text-center text-gray-500">
+                <p>Select a district from the map to view details.</p>
+              </div>
+            )}
+          </div>
 
-                <div className="flex items-center text-gray-500 text-sm mb-4">
-                  <MapPin size={16} className="mr-1 text-indiaGreen" />
-                  <span>
-                    {leader.district ? `${leader.district} Dist` : leader.state}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between border-t border-gray-100 pt-3">
-                   <div className="flex gap-2">
-                      {leader.social.twitter && <Hash size={14} className="text-gray-400" />}
-                   </div>
-                   <span className="text-saffron text-sm font-medium flex items-center gap-1 group-hover:underline">
-                      View Profile <ChevronRight size={14} />
-                   </span>
-                </div>
+          {/* Right Column: Map Placeholder and District List */}
+          <div className="md:col-span-2 bg-white p-6 rounded-lg shadow-sm">
+            <div className="w-full h-96 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
+              <p className="text-gray-500">Interactive Map Placeholder</p>
+            </div>
+            <div>
+              <h3 className="text-lg font-bold mb-2">Districts</h3>
+              <div className="flex flex-wrap gap-2">
+                {districts.map((district) => (
+                  <button
+                    key={district}
+                    onClick={() => setSelectedDistrict(district)}
+                    className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                      selectedDistrict === district
+                        ? 'bg-saffron text-white'
+                        : 'bg-gray-200 text-gray-700'
+                    }`}
+                  >
+                    {district}
+                  </button>
+                ))}
               </div>
             </div>
-          ))}
-          {leaders.length === 0 && (
-             <div className="col-span-full text-center py-10 text-gray-400">
-                Team members will be listed here soon.
-             </div>
-          )}
+          </div>
         </div>
       </main>
-
-      {selectedLeader && (
-        <LeaderModal leader={selectedLeader} onClose={() => setSelectedLeader(null)} />
-      )}
-
       <Footer />
     </div>
   );

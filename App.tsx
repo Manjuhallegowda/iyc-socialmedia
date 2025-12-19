@@ -7,11 +7,15 @@ import AdminLogin from './components/AdminLogin';
 import JoinPage from './components/JoinPage';
 import TeamPage from './components/TeamPage';
 import ActivityPage from './components/ActivityPage';
+import ProfilePage from './components/ProfilePage';
+import StateLeaderProfilePage from './components/StateLeaderProfilePage';
 import AboutIYCPage from './components/AboutIYCPage';
+import SocialMediaPage from './components/SocialMediaPage';
+import LegalPage from './components/LegalPage';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('authToken'));
-
+  
   const login = useCallback(() => {
     setIsAuthenticated(true);
   }, []);
@@ -33,12 +37,20 @@ const App: React.FC = () => {
 
           {/* New Team Page Route */}
           <Route path="/team" element={<TeamPage />} />
+          <Route path="/social-media" element={<SocialMediaPage />} />
+          <Route path="/legal" element={<LegalPage />} />
           
           {/* New Activity Page Route */}
           <Route path="/activities" element={<ActivityPage />} />
 
           {/* About IYC Page Route */}
           <Route path="/about-iyc" element={<AboutIYCPage />} />
+
+          {/* Leader Profile Page Route */}
+          <Route path="/leadership/:leaderId" element={<ProfilePage />} />
+
+          {/* State Leader Profile Page Route */}
+          <Route path="/state-leader/:leaderId" element={<StateLeaderProfilePage />} />
           
           {/* Admin Route - Protected */}
           <Route 
@@ -61,3 +73,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+

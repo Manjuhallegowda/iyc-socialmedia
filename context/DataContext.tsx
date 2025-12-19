@@ -3,53 +3,72 @@ import {
   Leader,
   ExecutiveLeader,
   NewsItem,
-  Activity,
   VideoItem,
   GalleryItem,
   User,
+  StateLeader,
+  SocialMediaTeamMember,
+  LegalTeamMember,
+  Activity,
 } from '../types';
 import {
   apiLeaders,
   apiExecutiveLeaders,
   apiNews,
-  apiActivities,
   apiVideos,
   apiGalleryItems,
   apiUsers,
+  apiStateLeaders,
+  apiSocialMediaTeam,
+  apiLegalTeam,
+  apiActivities,
 } from '../services/api';
 
 interface DataContextType {
   leaders: Leader[];
-  executiveLeaders: ExecutiveLeader[]; // New: Executive Leaders
+  executiveLeaders: ExecutiveLeader[];
+  stateLeaders: StateLeader[];
   news: NewsItem[];
-  activities: Activity[];
   videos: VideoItem[];
   galleryItems: GalleryItem[];
-  users: User[]; // Added for user management
+  users: User[];
+  socialMediaTeam: SocialMediaTeamMember[];
+  legalTeam: LegalTeamMember[];
+  activities: Activity[];
   loading: boolean;
   refreshData: () => Promise<void>;
   // CRUD Actions
   addLeader: (leader: Leader) => Promise<void>;
   updateLeader: (leader: Leader) => Promise<void>;
   deleteLeader: (id: string) => Promise<void>;
-  // New: CRUD Actions for Executive Leaders
   addExecutiveLeader: (leader: ExecutiveLeader) => Promise<void>;
   updateExecutiveLeader: (leader: ExecutiveLeader) => Promise<void>;
   deleteExecutiveLeader: (id: string) => Promise<void>;
+  addStateLeader: (leader: StateLeader) => Promise<void>;
+  updateStateLeader: (leader: StateLeader) => Promise<void>;
+  deleteStateLeader: (id: string) => Promise<void>;
   addNews: (news: Omit<NewsItem, 'id'>) => Promise<void>;
   updateNews: (news: NewsItem) => Promise<void>;
   deleteNews: (id: string) => Promise<void>;
-  addActivity: (activity: Activity) => Promise<void>;
-  updateActivity: (activity: Activity) => Promise<void>;
-  deleteActivity: (id: string) => Promise<void>;
   addVideo: (video: VideoItem) => Promise<void>;
   updateVideo: (video: VideoItem) => Promise<void>;
   deleteVideo: (id: string) => Promise<void>;
   addGalleryItem: (item: GalleryItem) => Promise<void>;
   updateGalleryItem: (item: GalleryItem) => Promise<void>;
   deleteGalleryItem: (id: string) => Promise<void>;
-  addUser: (user: { username: string; password: string }) => Promise<void>; // Added for user management
-  deleteUser: (id: string) => Promise<void>; // Added for user management
+  addUser: (user: { username: string; password: string }) => Promise<void>;
+  deleteUser: (id: string) => Promise<void>;
+  addSocialMediaTeamMember: (
+    member: Omit<SocialMediaTeamMember, 'id'>
+  ) => Promise<void>;
+  updateSocialMediaTeamMember: (member: SocialMediaTeamMember) => Promise<void>;
+  deleteSocialMediaTeamMember: (id: string) => Promise<void>;
+  addLegalTeamMember: (member: Omit<LegalTeamMember, 'id'>) => Promise<void>;
+  updateLegalTeamMember: (member: LegalTeamMember) => Promise<void>;
+  deleteLegalTeamMember: (id: string) => Promise<void>;
+  addActivity: (activity: Omit<Activity, 'id'>) => Promise<void>;
+  updateActivity: (activity: Activity) => Promise<void>;
+  deleteActivity: (id: string) => Promise<void>;
 }
 
 const DataContext = React.createContext<DataContextType | undefined>(undefined);
@@ -61,12 +80,17 @@ export const DataProvider: React.FC<{
   const [leaders, setLeaders] = React.useState<Leader[]>([]);
   const [executiveLeaders, setExecutiveLeaders] = React.useState<
     ExecutiveLeader[]
-  >([]); // New: Executive Leaders state
+  >([]);
+  const [stateLeaders, setStateLeaders] = React.useState<StateLeader[]>([]);
   const [news, setNews] = React.useState<NewsItem[]>([]);
-  const [activities, setActivities] = React.useState<Activity[]>([]);
   const [videos, setVideos] = React.useState<VideoItem[]>([]);
   const [galleryItems, setGalleryItems] = React.useState<GalleryItem[]>([]);
-  const [users, setUsers] = React.useState<User[]>([]); // Added for user management
+  const [users, setUsers] = React.useState<User[]>([]);
+  const [socialMediaTeam, setSocialMediaTeam] = React.useState<
+    SocialMediaTeamMember[]
+  >([]);
+  const [legalTeam, setLegalTeam] = React.useState<LegalTeamMember[]>([]);
+  const [activities, setActivities] = React.useState<Activity[]>([]);
   const [loading, setLoading] = React.useState(true);
 
   const refreshData = async () => {
@@ -75,10 +99,13 @@ export const DataProvider: React.FC<{
       const publicDataPromises = [
         apiLeaders.getAll(),
         apiExecutiveLeaders.getAll(),
+        apiStateLeaders.getAll(),
         apiNews.getAll(),
-        apiActivities.getAll(),
         apiVideos.getAll(),
         apiGalleryItems.getAll(),
+        apiSocialMediaTeam.getAll(),
+        apiLegalTeam.getAll(),
+        apiActivities.getAll(),
       ];
 
       const allPromises = isAuthenticated
@@ -87,19 +114,22 @@ export const DataProvider: React.FC<{
 
       const results = await Promise.all(allPromises);
 
-      const [l, el, n, a, v, g] = results;
+      const [l, el, sl, n, v, g, smt, lt, ac] = results;
       setLeaders(l as Leader[]);
       setExecutiveLeaders(el as ExecutiveLeader[]);
+      setStateLeaders(sl as StateLeader[]);
       setNews(n as NewsItem[]);
-      setActivities(a as Activity[]);
       setVideos(v as VideoItem[]);
       setGalleryItems(g as GalleryItem[]);
+      setSocialMediaTeam(smt as SocialMediaTeamMember[]);
+      setLegalTeam(lt as LegalTeamMember[]);
+      setActivities(ac as Activity[]);
 
       if (isAuthenticated) {
         const u = results[results.length - 1];
         setUsers(u as User[]);
       } else {
-        setUsers([]); // Clear users if not authenticated
+        setUsers([]);
       }
     } catch (error) {
       console.error('Failed to fetch data', error);
@@ -110,7 +140,7 @@ export const DataProvider: React.FC<{
 
   React.useEffect(() => {
     refreshData();
-  }, [isAuthenticated]); // Re-run on auth change
+  }, [isAuthenticated]);
 
   // Action Wrappers
   const addLeader = async (item: Leader) => {
@@ -126,7 +156,6 @@ export const DataProvider: React.FC<{
     await refreshData();
   };
 
-  // New: Action Wrappers for Executive Leaders
   const addExecutiveLeader = async (item: ExecutiveLeader) => {
     await apiExecutiveLeaders.create(item);
     await refreshData();
@@ -137,6 +166,19 @@ export const DataProvider: React.FC<{
   };
   const deleteExecutiveLeader = async (id: string) => {
     await apiExecutiveLeaders.delete(id);
+    await refresh.Data();
+  };
+
+  const addStateLeader = async (item: StateLeader) => {
+    await apiStateLeaders.create(item);
+    await refreshData();
+  };
+  const updateStateLeader = async (item: StateLeader) => {
+    await apiStateLeaders.update(item);
+    await refreshData();
+  };
+  const deleteStateLeader = async (id: string) => {
+    await apiStateLeaders.delete(id);
     await refreshData();
   };
 
@@ -150,19 +192,6 @@ export const DataProvider: React.FC<{
   };
   const deleteNews = async (id: string) => {
     await apiNews.delete(id);
-    await refreshData();
-  };
-
-  const addActivity = async (item: Activity) => {
-    await apiActivities.create(item);
-    await refreshData();
-  };
-  const updateActivity = async (item: Activity) => {
-    await apiActivities.update(item);
-    await refreshData();
-  };
-  const deleteActivity = async (id: string) => {
-    await apiActivities.delete(id);
     await refreshData();
   };
 
@@ -192,7 +221,6 @@ export const DataProvider: React.FC<{
     await refreshData();
   };
 
-  // User management actions
   const addUser = async (user: { username: string; password: string }) => {
     await apiUsers.create(user);
     await refreshData();
@@ -203,30 +231,76 @@ export const DataProvider: React.FC<{
     await refreshData();
   };
 
+  const addSocialMediaTeamMember = async (
+    member: Omit<SocialMediaTeamMember, 'id'>
+  ) => {
+    await apiSocialMediaTeam.create(member);
+    await refreshData();
+  };
+  const updateSocialMediaTeamMember = async (
+    member: SocialMediaTeamMember
+  ) => {
+    await apiSocialMediaTeam.update(member);
+    await refreshData();
+  };
+  const deleteSocialMediaTeamMember = async (id: string) => {
+    await apiSocialMediaTeam.delete(id);
+    await refreshData();
+  };
+
+  const addLegalTeamMember = async (member: Omit<LegalTeamMember, 'id'>) => {
+    await apiLegalTeam.create(member);
+    await refreshData();
+  };
+  const updateLegalTeamMember = async (member: LegalTeamMember) => {
+    await apiLegalTeam.update(member);
+    await refreshData();
+  };
+  const deleteLegalTeamMember = async (id: string) => {
+    await apiLegalTeam.delete(id);
+    await refreshData();
+  };
+
+  const addActivity = async (item: Omit<Activity, 'id'>) => {
+    await apiActivities.create(item);
+    await refreshData();
+  };
+  const updateActivity = async (item: Activity) => {
+    await apiActivities.update(item);
+    await refreshData();
+  };
+  const deleteActivity = async (id: string) => {
+    await apiActivities.delete(id);
+    await refreshData();
+  };
+
   return (
     <DataContext.Provider
       value={{
         leaders,
         executiveLeaders,
+        stateLeaders,
         news,
-        activities,
         videos,
         galleryItems,
         users,
+        socialMediaTeam,
+        legalTeam,
+        activities,
         loading,
-        refreshData, // Added executiveLeaders
+        refreshData,
         addLeader,
         updateLeader,
         deleteLeader,
         addExecutiveLeader,
         updateExecutiveLeader,
-        deleteExecutiveLeader, // New: Executive Leader CRUD actions
+        deleteExecutiveLeader,
+        addStateLeader,
+        updateStateLeader,
+        deleteStateLeader,
         addNews,
         updateNews,
         deleteNews,
-        addActivity,
-        updateActivity,
-        deleteActivity,
         addVideo,
         updateVideo,
         deleteVideo,
@@ -234,7 +308,16 @@ export const DataProvider: React.FC<{
         updateGalleryItem,
         deleteGalleryItem,
         addUser,
-        deleteUser, // Added user management actions
+        deleteUser,
+        addSocialMediaTeamMember,
+        updateSocialMediaTeamMember,
+        deleteSocialMediaTeamMember,
+        addLegalTeamMember,
+        updateLegalTeamMember,
+        deleteLegalTeamMember,
+        addActivity,
+        updateActivity,
+        deleteActivity,
       }}
     >
       {children}

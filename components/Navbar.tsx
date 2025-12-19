@@ -1,18 +1,54 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isTeamDropdownOpen, setTeamDropdownOpen] = useState(false);
+  const [isMobileTeamDropdownOpen, setMobileTeamDropdownOpen] = useState(false);
   const [active, setActive] = useState<string>(
     window.location.hash || '/#home'
   );
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
   const firstLinkRef = useRef<HTMLAnchorElement | null>(null);
+  const teamDropdownRef = useRef<HTMLDivElement | null>(null);
+
+  const prominentLeaders = [
+    {
+      name: 'D.K. Shivakumar',
+      role1: 'Karnataka PCC President',
+      role2: 'Deputy CM, Govt. of Karnataka',
+      img: 'https://ipcmedia.in/public/uploads/profile/1756048100_12.jpg',
+      href: '/profile/dk-shivakumar',
+    },
+    {
+      name: 'Siddaramaiah',
+      role1: 'Chief Minister',
+      role2: 'Govt. of Karnataka',
+      img: 'https://www.coorgnews.in/wp-content/uploads/2024/08/siddaramaiah-photo.jpg',
+      href: '/profile/siddaramaiah',
+    },
+
+    {
+      name: 'Manjunath Gowda',
+      role1: 'IYC Karnataka',
+      role2: 'State President',
+      img: 'https://imagesvs.oneindia.com/img/2018/04/manjunath-gowda-1524829569.jpg',
+      href: '/profile/manjunath-gowda',
+    },
+  ];
 
   const navLinks = [
     { name: 'Home', href: '/#home' },
     { name: 'About', href: '/#about' },
-    { name: 'Team', href: '/team' },
+    {
+      name: 'Leadership',
+      dropdown: [
+        { name: 'Office Bearers', href: '/team' },
+        { name: 'Legal Team', href: '/legal' },
+        { name: 'Media & Communication', href: '/social-media' },
+      ],
+    },
     { name: 'Activities', href: '/#activities' },
     { name: 'Videos', href: '/#videos' },
     { name: 'Gallery', href: '/#gallery' },
@@ -39,6 +75,12 @@ const Navbar: React.FC = () => {
       img: 'https://www.elections.in/political-leaders/images/rahul-congress.jpg',
     },
     {
+      name: 'K C Venugopal',
+      role1: 'General Secretary',
+      role2: 'Karnataka Incharge, AICC',
+      img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTOqJrlC9tzArbO14L-gCgMMGQVXtrgwJ20Qg&s',
+    },
+    {
       name: 'Manish Sharma',
       role1: 'National Incharge',
       role2: 'Indian Youth Congress',
@@ -51,25 +93,34 @@ const Navbar: React.FC = () => {
       img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjHbTMFAzU33eTPtWZ1HlLj4TxLw7smuAdxQ&s',
     },
     {
-      name: 'D.K. Shivakumar',
-      role1: 'Karnataka PCC President',
-      role2: 'Deputy CM',
-      img: 'https://ipcmedia.in/public/uploads/profile/1756048100_12.jpg',
+      name: 'Nigam Bandari',
+      role1: 'Karnataka Incharge',
+      role2: 'Indian Youth Congress',
+      img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTd84GVVYD7HguLvW9UMTivAep7FoHWLUCu5w&s',
     },
     {
-      name: 'Siddaramaiah',
-      role1: 'Chief Minister',
-      role2: 'Govt. of Karnataka',
-      img: 'https://www.coorgnews.in/wp-content/uploads/2024/08/siddaramaiah-photo.jpg',
-    },
-    
-    {
-      name: 'Manjunath Gowda',
-      role1: 'IYC Karnataka',
-      role2: 'State President',
-      img: 'https://imagesvs.oneindia.com/img/2018/04/manjunath-gowda-1524829569.jpg',
+      name: 'Manu Jain',
+      role1: 'National Secretory',
+      role2: 'Social Media Chairman, IYC',
+      img: 'https://media.licdn.com/dms/image/v2/D4E03AQHk9XtZYkZSBA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1722936165390?e=2147483647&v=beta&t=98LjAWSbdXy1Azwf9yZntJ6pmsnYK10EfW5PmK4mLFY',
     },
   ];
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        teamDropdownRef.current &&
+        !teamDropdownRef.current.contains(event.target as Node)
+      ) {
+        setTeamDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [teamDropdownRef]);
 
   // Close mobile menu on Escape, on outside click, or on hash change
   useEffect(() => {
@@ -164,7 +215,7 @@ const Navbar: React.FC = () => {
 
       {/* Main Navbar Content */}
       <div className="w-full bg-white h-20 relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div className="w-full px-2 h-full">
           <div className="flex justify-between h-full items-center">
             {/* Logo Section */}
             <button
@@ -190,26 +241,95 @@ const Navbar: React.FC = () => {
               </div>
             </button>
 
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
-              {navLinks.map((link) => (
+            {/* Prominent Leaders - Desktop Only */}
+            <div className="hidden md:flex items-center gap-4 lg:gap-6 ml-auto">
+              {prominentLeaders.map((leader, index) => (
                 <a
-                  key={link.name}
-                  href={link.href}
-                  onClick={() => handleNavClick(link.href)}
-                  className={`text-gray-700 hover:text-saffron font-medium transition-colors duration-200 text-sm uppercase tracking-wide ${
-                    active === link.href ? 'text-saffron' : ''
-                  }`}
+                  key={index}
+                  href={leader.href}
+                  className="flex items-center gap-2 group cursor-pointer focus:outline-none focus:ring-2 focus:ring-saffron rounded"
+                  onClick={() => handleNavClick(leader.href)}
                 >
-                  {link.name}
+                  <img
+                    src={leader.img}
+                    alt={leader.name}
+                    className="w-10 h-10 rounded-full object-cover border-2 border-gray-300 group-hover:border-saffron transition-colors bg-gray-200 shrink-0"
+                    loading="lazy"
+                    referrerPolicy="no-referrer"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                        leader.name
+                      )}&background=random&color=fff&size=100`;
+                    }}
+                  />
+                  <span className="flex flex-col">
+                    <span className="text-sm font-bold text-indiaGreen whitespace-nowrap group-hover:text-saffron transition-colors">
+                      {leader.name}
+                    </span>
+                    {leader.role1 && (
+                      <span className="text-[10px] text-gray-500 font-medium whitespace-nowrap min-w-0">
+                        {leader.role1}
+                      </span>
+                    )}
+                    {leader.role2 && (
+                      <span className="text-[10px] text-gray-500 font-medium whitespace-nowrap min-w-0">
+                        {leader.role2}
+                      </span>
+                    )}
+                  </span>
                 </a>
               ))}
-              {/*<a
-                href="/join"
-                className="bg-saffron text-white px-5 py-2 rounded-full font-bold hover:bg-orange-600 transition-colors shadow-sm whitespace-nowrap"
-              >
-                Join Team
-              </a>*/}
+            </div>
+
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center ml-6 space-x-4 lg:space-x-8">
+              {navLinks.map((link) =>
+                link.dropdown ? (
+                  <div
+                    key={link.name}
+                    className="relative"
+                    ref={teamDropdownRef}
+                  >
+                    <button
+                      onClick={() => setTeamDropdownOpen((prev) => !prev)}
+                      className={`flex items-center text-gray-700 hover:text-saffron font-medium transition-colors duration-200 text-sm uppercase tracking-wide ${
+                        isTeamDropdownOpen ? 'text-saffron' : ''
+                      }`}
+                    >
+                      {link.name}
+                    </button>
+                    {isTeamDropdownOpen && (
+                      <div className="absolute top-full left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
+                        {link.dropdown.map((item) => (
+                          <Link
+                            key={item.name}
+                            to={item.href}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => {
+                              handleNavClick(item.href);
+                              setTeamDropdownOpen(false);
+                            }}
+                          >
+                            {item.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => handleNavClick(link.href)}
+                    className={`text-gray-700 hover:text-saffron font-medium transition-colors duration-200 text-sm uppercase tracking-wide ${
+                      active === link.href ? 'text-saffron' : ''
+                    }`}
+                  >
+                    {link.name}
+                  </a>
+                )
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -236,19 +356,47 @@ const Navbar: React.FC = () => {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              {navLinks.map((link, i) => (
-                <a
-                  key={link.name}
-                  href={link.href}
-                  ref={i === 0 ? firstLinkRef : undefined}
-                  onClick={() => handleNavClick(link.href)}
-                  className={`block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-saffron hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-saffron ${
-                    active === link.href ? 'bg-orange-50 text-saffron' : ''
-                  }`}
-                >
-                  {link.name}
-                </a>
-              ))}
+              {navLinks.map((link, i) =>
+                link.dropdown ? (
+                  <div key={link.name}>
+                    <button
+                      onClick={() =>
+                        setMobileTeamDropdownOpen(!isMobileTeamDropdownOpen)
+                      }
+                      className="w-full flex justify-between items-center px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-saffron hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-saffron"
+                    >
+                      <span>{link.name}</span>
+                      {/* Add an arrow icon here if you want */}
+                    </button>
+                    {isMobileTeamDropdownOpen && (
+                      <div className="pl-4">
+                        {link.dropdown.map((item) => (
+                          <Link
+                            key={item.name}
+                            to={item.href}
+                            onClick={() => handleNavClick(item.href)}
+                            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-saffron hover:bg-orange-50"
+                          >
+                            {item.name}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <a
+                    key={link.name}
+                    href={link.href}
+                    ref={i === 0 ? firstLinkRef : undefined}
+                    onClick={() => handleNavClick(link.href)}
+                    className={`block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-saffron hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-saffron ${
+                      active === link.href ? 'bg-orange-50 text-saffron' : ''
+                    }`}
+                  >
+                    {link.name}
+                  </a>
+                )
+              )}
 
               <a
                 href="/join"

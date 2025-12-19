@@ -6,7 +6,7 @@ export interface Protest {
 }
 
 export interface Leader {
-  id: string;
+  id:string;
   name: string;
   designation:
     | 'State SM Chair'
@@ -43,18 +43,6 @@ export interface NewsItem {
   author?: string;
 }
 
-export interface Activity {
-  id: string; // Changed to string
-  title: string;
-  type: 'Campaign' | 'Workshop' | 'Protest';
-  date: string;
-  description: string;
-  imageUrl: string;
-  location?: string;
-  fullDescription?: string;
-  stats?: { label: string; value: string }[];
-}
-
 export interface VideoItem {
   id: string;
   title: string;
@@ -84,7 +72,59 @@ export interface ExecutiveLeader {
   };
 }
 
+export interface StateLeader {
+  id: string;
+  name: string;
+  designation: string;
+  state: string;
+  bio: string;
+  imageUrl: string;
+  socialMedia?: {
+    twitter?: string;
+    facebook?: string;
+    instagram?: string;
+    youtube?: string;
+  };
+}
+
 export interface User {
   id: string;
   username: string;
 }
+
+export type Activity = {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  type: string;
+  date: string;
+  location: string;
+  fullDescription?: string;
+  stats?: { value: string; label: string }[];
+};
+
+export interface SocialMediaTeamMember {
+  id: string;
+  name: string;
+  position: string;
+  level: 'District' | 'Assembly' | 'Block';
+  placeName: string;
+  imageUrl: string;
+  socialMedia: {
+    instagram?: string;
+    twitter?: string;
+    facebook?: string;
+    youtube?: string;
+  };
+  bio?: string;
+}
+
+export interface LegalTeamMember {
+  id: string;
+  name: string;
+  position: string;
+  imageUrl: string;
+  bio?: string;
+}
+

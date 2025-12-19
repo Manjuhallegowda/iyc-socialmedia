@@ -4,7 +4,17 @@ import { HTTPException } from 'hono/http-exception';
 import { cors } from 'hono/cors';
 import { jwt, sign } from 'hono/jwt';
 import type { Context, Next } from 'hono';
-import { Leader, NewsItem, Activity, VideoItem, GalleryItem, ExecutiveLeader } from './types';
+import {
+  Leader,
+  NewsItem,
+  VideoItem,
+  GalleryItem,
+  ExecutiveLeader,
+  StateLeader,
+  Activity,
+  SocialMediaTeamMember,
+  LegalTeamMember,
+} from './types';
 
 // Define the environment bindings
 export type Env = {
@@ -47,13 +57,14 @@ app.use('*', async (c, next) => {
 const jwtMiddleware = async (c: Context, next: Next) => {
   const secret = c.env.JWT_SECRET;
   if (!secret) {
-    return c.json({ error: 'Server misconfiguration: JWT_SECRET missing' }, 500);
+    return c.json(
+      { error: 'Server misconfiguration: JWT_SECRET missing' },
+      500
+    );
   }
   // create and run the Hono jwt middleware using the secret
   return await jwt({ secret })(c, next);
 };
-
-
 
 // --- HELPERS ---
 
@@ -65,7 +76,11 @@ const generateUUID = () => crypto.randomUUID();
  * - salt: base64 string
  * - hashHex: hex string of derived key
  */
-const hashPassword = async (password: string, saltBase64: string, iterations = 150_000) => {
+const hashPassword = async (
+  password: string,
+  saltBase64: string,
+  iterations = 150_000
+) => {
   const encoder = new TextEncoder();
   const passwordKey = await crypto.subtle.importKey(
     'raw',
@@ -89,7 +104,9 @@ const hashPassword = async (password: string, saltBase64: string, iterations = 1
   );
 
   const hashArray = Array.from(new Uint8Array(derivedBits));
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 
   return {
     hashHex,
@@ -124,7 +141,9 @@ auth.post('/login', async (c) => {
     }
 
     // Check if any user exists
-    const userCountRow = await c.env.DB.prepare('SELECT COUNT(*) AS count FROM users').first<{ count: number }>();
+    const userCountRow = await c.env.DB.prepare(
+      'SELECT COUNT(*) AS count FROM users'
+    ).first<{ count: number }>();
     const userCount = userCountRow ? Number(userCountRow.count) : 0;
 
     let user: User | null = null;
@@ -137,23 +156,49 @@ auth.post('/login', async (c) => {
       const hashed = await hashPassword(password, salt);
       const hashedPassword = hashed.hashHex;
 
-      user = { id, username, hashedPassword, salt, hashVersion: hashed.version, iterations: hashed.iterations, algorithm: hashed.algorithm };
+      user = {
+        id,
+        username,
+        hashedPassword,
+        salt,
+        hashVersion: hashed.version,
+        iterations: hashed.iterations,
+        algorithm: hashed.algorithm,
+      };
 
       await c.env.DB.prepare(
         'INSERT INTO users (id, username, hashedPassword, salt, hashVersion, iterations, algorithm) VALUES (?, ?, ?, ?, ?, ?, ?)'
-      ).bind(id, username, hashedPassword, salt, hashed.version, hashed.iterations, hashed.algorithm).run();
+      )
+        .bind(
+          id,
+          username,
+          hashedPassword,
+          salt,
+          hashed.version,
+          hashed.iterations,
+          hashed.algorithm
+        )
+        .run();
 
       console.log('Admin user created successfully.');
     } else {
       // Normal authentication flow
-      const fetched = await c.env.DB.prepare('SELECT * FROM users WHERE username = ?').bind(username).first<User>();
+      const fetched = await c.env.DB.prepare(
+        'SELECT * FROM users WHERE username = ?'
+      )
+        .bind(username)
+        .first<User>();
       if (!fetched) {
         return c.json({ error: 'Invalid credentials' }, 401);
       }
       user = fetched;
 
       // Verify the password
-      const hashed = await hashPassword(password, user.salt, user.iterations || 150_000);
+      const hashed = await hashPassword(
+        password,
+        user.salt,
+        user.iterations || 150_000
+      );
       if (hashed.hashHex !== user.hashedPassword) {
         return c.json({ error: 'Invalid credentials' }, 401);
       }
@@ -186,15 +231,24 @@ auth.post('/change-password', jwtMiddleware, async (c) => {
     const { currentPassword, newPassword } = await c.req.json();
 
     if (!currentPassword || !newPassword) {
-      return c.json({ error: 'Current password and new password are required' }, 400);
+      return c.json(
+        { error: 'Current password and new password are required' },
+        400
+      );
     }
 
-    const user = await c.env.DB.prepare('SELECT * FROM users WHERE id = ?').bind(userId).first<User>();
+    const user = await c.env.DB.prepare('SELECT * FROM users WHERE id = ?')
+      .bind(userId)
+      .first<User>();
     if (!user) {
       return c.json({ error: 'User not found' }, 404);
     }
 
-    const currentHashed = await hashPassword(currentPassword, user.salt, user.iterations || 150_000);
+    const currentHashed = await hashPassword(
+      currentPassword,
+      user.salt,
+      user.iterations || 150_000
+    );
     if (currentHashed.hashHex !== user.hashedPassword) {
       return c.json({ error: 'Incorrect current password' }, 403);
     }
@@ -203,8 +257,17 @@ auth.post('/change-password', jwtMiddleware, async (c) => {
     const newSalt = generateSaltBase64();
     const newHashed = await hashPassword(newPassword, newSalt);
 
-    await c.env.DB.prepare('UPDATE users SET hashedPassword = ?, salt = ?, hashVersion = ?, iterations = ?, algorithm = ? WHERE id = ?')
-      .bind(newHashed.hashHex, newSalt, newHashed.version, newHashed.iterations, newHashed.algorithm, userId)
+    await c.env.DB.prepare(
+      'UPDATE users SET hashedPassword = ?, salt = ?, hashVersion = ?, iterations = ?, algorithm = ? WHERE id = ?'
+    )
+      .bind(
+        newHashed.hashHex,
+        newSalt,
+        newHashed.version,
+        newHashed.iterations,
+        newHashed.algorithm,
+        userId
+      )
       .run();
 
     return c.json({ message: 'Password updated successfully' });
@@ -240,14 +303,21 @@ users.get('/', async (c) => {
 // POST (create) a new user
 users.post('/', async (c) => {
   try {
-    const { username, password } = await c.req.json<{ username: string; password: string }>();
+    const { username, password } = await c.req.json<{
+      username: string;
+      password: string;
+    }>();
 
     if (!username || !password) {
       return c.json({ error: 'Username and password are required' }, 400);
     }
 
     // Check for duplicate username
-    const existingUser = await c.env.DB.prepare('SELECT id FROM users WHERE username = ?').bind(username).first();
+    const existingUser = await c.env.DB.prepare(
+      'SELECT id FROM users WHERE username = ?'
+    )
+      .bind(username)
+      .first();
     if (existingUser) {
       return c.json({ error: 'Username already taken' }, 409);
     }
@@ -258,7 +328,17 @@ users.post('/', async (c) => {
 
     await c.env.DB.prepare(
       'INSERT INTO users (id, username, hashedPassword, salt, hashVersion, iterations, algorithm) VALUES (?, ?, ?, ?, ?, ?, ?)'
-    ).bind(id, username, hashed.hashHex, salt, hashed.version, hashed.iterations, hashed.algorithm).run();
+    )
+      .bind(
+        id,
+        username,
+        hashed.hashHex,
+        salt,
+        hashed.version,
+        hashed.iterations,
+        hashed.algorithm
+      )
+      .run();
 
     return c.json({ id, username }, 201);
   } catch (e: any) {
@@ -277,7 +357,9 @@ users.delete('/:id', async (c) => {
       return c.json({ error: 'You cannot delete yourself.' }, 403);
     }
 
-    const result = await c.env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userIdToDelete).run();
+    const result = await c.env.DB.prepare('DELETE FROM users WHERE id = ?')
+      .bind(userIdToDelete)
+      .run();
     if (!result || result.meta?.changes === 0) {
       return c.json({ error: 'User not found' }, 404);
     }
@@ -301,7 +383,16 @@ const errorResponse = (message: string, status: number = 500) => {
 
 // --- GENERIC CRUD FACTORY ---
 
-type TableName = 'leaders' | 'news' | 'activities' | 'videos' | 'gallery_items' | 'executive_leaders';
+type TableName =
+  | 'leaders'
+  | 'news'
+  | 'activities'
+  | 'videos'
+  | 'gallery_items'
+  | 'executive_leaders'
+  | 'state_leaders'
+  | 'social_media_team'
+  | 'legal_team';
 
 interface CrudOptions<T> {
   beforeSave?: (item: T | Omit<T, 'id'>) => any;
@@ -326,7 +417,9 @@ const createCrudEndpoints = <T extends { id: string }>(
   // GET all items
   router.get(basePath, async (c) => {
     try {
-      const res = await c.env.DB.prepare(`SELECT * FROM ${tableName}`).all<any>();
+      const res = await c.env.DB.prepare(
+        `SELECT * FROM ${tableName}`
+      ).all<any>();
       const rows = (res as any).results ?? res;
       const transformedResults = (rows || []).map(transformAfterFetch);
       return c.json(transformedResults);
@@ -340,7 +433,11 @@ const createCrudEndpoints = <T extends { id: string }>(
   router.get(`${basePath}/:id`, async (c) => {
     const id = c.req.param('id');
     try {
-      const item = await c.env.DB.prepare(`SELECT * FROM ${tableName} WHERE id = ?`).bind(id).first<any>();
+      const item = await c.env.DB.prepare(
+        `SELECT * FROM ${tableName} WHERE id = ?`
+      )
+        .bind(id)
+        .first<any>();
       if (!item) return c.json({ error: 'Not Found' }, 404);
       return c.json(transformAfterFetch(item));
     } catch (e: any) {
@@ -356,12 +453,18 @@ const createCrudEndpoints = <T extends { id: string }>(
       const newItem = { ...transformedBody, id: generateUUID() };
 
       // Filter out undefined keys and build columns/values safely
-      const keys = Object.keys(newItem).filter((k) => typeof (newItem as any)[k] !== 'undefined');
+      const keys = Object.keys(newItem).filter(
+        (k) => typeof (newItem as any)[k] !== 'undefined'
+      );
       const placeholders = keys.map(() => '?').join(', ');
       const values = keys.map((k) => (newItem as any)[k]);
 
       const fields = keys.join(', ');
-      await c.env.DB.prepare(`INSERT INTO ${tableName} (${fields}) VALUES (${placeholders})`).bind(...values).run();
+      await c.env.DB.prepare(
+        `INSERT INTO ${tableName} (${fields}) VALUES (${placeholders})`
+      )
+        .bind(...values)
+        .run();
       return c.json(transformAfterFetch(newItem), 201);
     } catch (e: any) {
       return c.json({ error: e.message }, 500);
@@ -380,7 +483,9 @@ const createCrudEndpoints = <T extends { id: string }>(
       const transformedBody = transformBeforeSave(body);
 
       // Build update set while filtering undefined and not updating id column
-      const entries = Object.entries(transformedBody).filter(([k, v]) => k !== 'id' && typeof v !== 'undefined');
+      const entries = Object.entries(transformedBody).filter(
+        ([k, v]) => k !== 'id' && typeof v !== 'undefined'
+      );
       if (entries.length === 0) {
         return c.json({ error: 'No updatable fields provided' }, 400);
       }
@@ -388,7 +493,11 @@ const createCrudEndpoints = <T extends { id: string }>(
       const fields = entries.map(([k]) => `${k} = ?`).join(', ');
       const values = entries.map(([, v]) => v);
 
-      const stmnt = await c.env.DB.prepare(`UPDATE ${tableName} SET ${fields} WHERE id = ?`).bind(...values, id).run();
+      const stmnt = await c.env.DB.prepare(
+        `UPDATE ${tableName} SET ${fields} WHERE id = ?`
+      )
+        .bind(...values, id)
+        .run();
 
       if (!stmnt || stmnt.meta?.changes === 0) {
         return c.json({ error: 'Not Found' }, 404);
@@ -403,7 +512,11 @@ const createCrudEndpoints = <T extends { id: string }>(
   router.delete(`${basePath}/:id`, jwtMiddleware, async (c) => {
     const id = c.req.param('id');
     try {
-      const stmnt = await c.env.DB.prepare(`DELETE FROM ${tableName} WHERE id = ?`).bind(id).run();
+      const stmnt = await c.env.DB.prepare(
+        `DELETE FROM ${tableName} WHERE id = ?`
+      )
+        .bind(id)
+        .run();
       if (!stmnt || stmnt.meta?.changes === 0) {
         return c.json({ error: 'Not Found' }, 404);
       }
@@ -431,17 +544,6 @@ const leaderTransforms: CrudOptions<Leader> = {
   }),
 };
 
-const activityTransforms: CrudOptions<Activity> = {
-  beforeSave: (activity) => ({
-    ...activity,
-    stats: JSON.stringify((activity as any).stats || []),
-  }),
-  afterFetch: (activity: any) => ({
-    ...activity,
-    stats: JSON.parse(activity.stats || '[]'),
-  }),
-};
-
 const executiveLeaderTransforms: CrudOptions<ExecutiveLeader> = {
   beforeSave: (executiveLeader) => ({
     ...executiveLeader,
@@ -453,6 +555,39 @@ const executiveLeaderTransforms: CrudOptions<ExecutiveLeader> = {
   }),
 };
 
+const stateLeaderTransforms: CrudOptions<StateLeader> = {
+  beforeSave: (stateLeader) => ({
+    ...stateLeader,
+    socialMedia: JSON.stringify((stateLeader as any).socialMedia || {}),
+  }),
+  afterFetch: (stateLeader: any) => ({
+    ...stateLeader,
+    socialMedia: JSON.parse(stateLeader.socialMedia || '{}'),
+  }),
+};
+
+const activityTransforms: CrudOptions<Activity> = {
+  beforeSave: (activity) => ({
+    ...activity,
+    stats: JSON.stringify((activity as any).stats || []),
+  }),
+  afterFetch: (activity: any) => ({
+    ...activity,
+    stats: JSON.parse(activity.stats || '[]'),
+  }),
+};
+
+const socialMediaTeamTransforms: CrudOptions<SocialMediaTeamMember> = {
+  beforeSave: (member) => ({
+    ...member,
+    socialMedia: JSON.stringify((member as any).socialMedia || {}),
+  }),
+  afterFetch: (member: any) => ({
+    ...member,
+    socialMedia: JSON.parse(member.socialMedia || '{}'),
+  }),
+};
+
 // --- REGISTER ALL ENDPOINTS ---
 
 createCrudEndpoints<Leader>(api, 'leaders', leaderTransforms);
@@ -460,7 +595,18 @@ createCrudEndpoints<NewsItem>(api, 'news');
 createCrudEndpoints<Activity>(api, 'activities', activityTransforms);
 createCrudEndpoints<VideoItem>(api, 'videos');
 createCrudEndpoints<GalleryItem>(api, 'gallery_items');
-createCrudEndpoints<ExecutiveLeader>(api, 'executive_leaders', executiveLeaderTransforms);
+createCrudEndpoints<ExecutiveLeader>(
+  api,
+  'executive_leaders',
+  executiveLeaderTransforms
+);
+createCrudEndpoints<StateLeader>(api, 'state_leaders', stateLeaderTransforms);
+createCrudEndpoints<SocialMediaTeamMember>(
+  api,
+  'social_media_team',
+  socialMediaTeamTransforms
+);
+createCrudEndpoints<LegalTeamMember>(api, 'legal_team');
 
 // --- R2 DIRECT UPLOAD ENDPOINT ---
 // For local development, you must have your R2 bucket configured correctly.

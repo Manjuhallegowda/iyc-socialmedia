@@ -51,13 +51,13 @@ export interface NewsItem {
 export interface Activity {
   id: string;
   title: string;
-  type: 'Campaign' | 'Workshop' | 'Protest';
+  type: string;
   date: string;
   description: string;
   imageUrl: string;
   location?: string;
   fullDescription?: string;
-  stats?: string; // JSON string
+  stats?: string; // Stored as JSON string
 }
 
 export interface VideoItem {
@@ -82,4 +82,33 @@ export interface ExecutiveLeader {
   imageUrl: string;
   description: string;
   socialMedia: string; // Stored as JSON string
+}
+
+export interface StateLeader {
+  id: string;
+  name: string;
+  designation: string;
+  state: string;
+  bio: string;
+  imageUrl: string;
+  socialMedia: string; // Stored as JSON string
+}
+
+export interface SocialMediaTeamMember {
+    id: string;
+    name: string;
+    position: string;
+    level: 'District' | 'Assembly' | 'Block';
+    placeName: string;
+    imageUrl: string;
+    socialMedia: string; // JSON string
+    bio?: string;
+}
+
+export interface LegalTeamMember {
+    id: string;
+    name: string;
+    position: string;
+    imageUrl: string;
+    bio?: string;
 }

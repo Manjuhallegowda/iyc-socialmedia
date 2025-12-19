@@ -17,7 +17,7 @@ const ActivityPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <main className="pt-24">
+      <main className="pt-20">
         <section id="activities" className="py-20 bg-white scroll-mt-24">
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">

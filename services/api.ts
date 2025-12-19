@@ -7,7 +7,7 @@
  * You must deploy the worker in the `/worker` directory and set the correct URL below.
  */
 
-import { Leader, NewsItem, Activity, VideoItem, GalleryItem, ExecutiveLeader, User } from '../types';
+import { Leader, NewsItem, Activity, VideoItem, GalleryItem, ExecutiveLeader, User, StateLeader, Milestone, SocialMediaTeamMember, LegalTeamMember } from '../types';
 
 // --- CONFIGURATION ---
 
@@ -172,3 +172,8 @@ export const apiActivities = createApiCrud<Activity>('activities');
 export const apiVideos = createApiCrud<VideoItem>('videos');
 export const apiGalleryItems = createApiCrud<GalleryItem>('gallery_items');
 export const apiUsers = createApiCrudForUsers<User>('users');
+export const apiStateLeaders = createApiCrud<StateLeader>('state_leaders');
+export const apiMilestones = createApiCrud<Milestone>('milestones');
+export const apiSocialMediaTeam = createApiCrud<SocialMediaTeamMember>('social_media_team');
+export const apiLegalTeam = createApiCrud<LegalTeamMember>('legal_team');
+
