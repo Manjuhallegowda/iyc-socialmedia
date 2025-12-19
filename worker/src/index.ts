@@ -5,7 +5,7 @@ import { cors } from 'hono/cors';
 import { jwt, sign } from 'hono/jwt';
 import type { Context, Next } from 'hono';
 import {
-  Leader,
+  KpyccTeamMember,
   NewsItem,
   VideoItem,
   GalleryItem,
@@ -384,7 +384,7 @@ const errorResponse = (message: string, status: number = 500) => {
 // --- GENERIC CRUD FACTORY ---
 
 type TableName =
-  | 'leaders'
+  | 'kpycc_team'
   | 'news'
   | 'activities'
   | 'videos'
@@ -529,19 +529,43 @@ const createCrudEndpoints = <T extends { id: string }>(
 
 // --- DATA TRANSFORMATIONS ---
 
-const leaderTransforms: CrudOptions<Leader> = {
-  beforeSave: (leader) => ({
-    ...leader,
-    social: JSON.stringify((leader as any).social || {}),
-    protests: JSON.stringify((leader as any).protests || []),
-    achievements: JSON.stringify((leader as any).achievements || []),
+const kpyccTeamTransforms: CrudOptions<KpyccTeamMember> = {
+  beforeSave: (member) => ({
+    ...member,
+    social: JSON.stringify((member as any).social || {}),
+    activity: JSON.stringify(
+      ((member as any).activity || '').split(',').map((s: string) => s.trim())
+    ),
+    mailstone: JSON.stringify(
+      ((member as any).mailstone || '').split(',').map((s: string) => s.trim())
+    ),
   }),
-  afterFetch: (leader: any) => ({
-    ...leader,
-    social: JSON.parse(leader.social || '{}'),
-    protests: JSON.parse(leader.protests || '[]'),
-    achievements: JSON.parse(leader.achievements || '[]'),
-  }),
+  afterFetch: (member: any) => {
+    let social = {};
+    try {
+      social = JSON.parse(member.social || '{}');
+    } catch (e) {
+      // ignore
+    }
+    let activity = [];
+    try {
+      activity = JSON.parse(member.activity || '[]');
+    } catch (e) {
+      // ignore
+    }
+    let mailstone = [];
+    try {
+      mailstone = JSON.parse(member.mailstone || '[]');
+    } catch (e) {
+      // ignore
+    }
+    return {
+      ...member,
+      social,
+      activity,
+      mailstone,
+    };
+  },
 };
 
 const executiveLeaderTransforms: CrudOptions<ExecutiveLeader> = {
@@ -590,7 +614,7 @@ const socialMediaTeamTransforms: CrudOptions<SocialMediaTeamMember> = {
 
 // --- REGISTER ALL ENDPOINTS ---
 
-createCrudEndpoints<Leader>(api, 'leaders', leaderTransforms);
+createCrudEndpoints<KpyccTeamMember>(api, 'kpycc_team', kpyccTeamTransforms);
 createCrudEndpoints<NewsItem>(api, 'news');
 createCrudEndpoints<Activity>(api, 'activities', activityTransforms);
 createCrudEndpoints<VideoItem>(api, 'videos');

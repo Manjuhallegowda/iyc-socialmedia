@@ -7,7 +7,7 @@
  * You must deploy the worker in the `/worker` directory and set the correct URL below.
  */
 
-import { Leader, NewsItem, Activity, VideoItem, GalleryItem, ExecutiveLeader, User, StateLeader, Milestone, SocialMediaTeamMember, LegalTeamMember } from '../types';
+import { KpyccTeamMember, NewsItem, Activity, VideoItem, GalleryItem, ExecutiveLeader, User, StateLeader, SocialMediaTeamMember, LegalTeamMember } from '../types';
 
 // --- CONFIGURATION ---
 
@@ -165,7 +165,7 @@ const createApiCrudForUsers = <T extends { id: string }>(
     apiFetch<{ success: boolean }>(`/${resource}/${id}`, { method: 'DELETE' }),
 });
 
-export const apiLeaders = createApiCrud<Leader>('leaders');
+export const apiKpyccTeam = createApiCrud<KpyccTeamMember>('kpycc_team');
 export const apiExecutiveLeaders = createApiCrud<ExecutiveLeader>('executive_leaders');
 export const apiNews = createApiCrud<NewsItem>('news');
 export const apiActivities = createApiCrud<Activity>('activities');
@@ -173,7 +173,6 @@ export const apiVideos = createApiCrud<VideoItem>('videos');
 export const apiGalleryItems = createApiCrud<GalleryItem>('gallery_items');
 export const apiUsers = createApiCrudForUsers<User>('users');
 export const apiStateLeaders = createApiCrud<StateLeader>('state_leaders');
-export const apiMilestones = createApiCrud<Milestone>('milestones');
 export const apiSocialMediaTeam = createApiCrud<SocialMediaTeamMember>('social_media_team');
 export const apiLegalTeam = createApiCrud<LegalTeamMember>('legal_team');
 

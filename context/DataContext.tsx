@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {
-  Leader,
+  KpyccTeamMember,
   ExecutiveLeader,
   NewsItem,
   VideoItem,
@@ -12,7 +12,7 @@ import {
   Activity,
 } from '../types';
 import {
-  apiLeaders,
+  apiKpyccTeam,
   apiExecutiveLeaders,
   apiNews,
   apiVideos,
@@ -25,7 +25,7 @@ import {
 } from '../services/api';
 
 interface DataContextType {
-  leaders: Leader[];
+  kpyccTeam: KpyccTeamMember[];
   executiveLeaders: ExecutiveLeader[];
   stateLeaders: StateLeader[];
   news: NewsItem[];
@@ -38,9 +38,9 @@ interface DataContextType {
   loading: boolean;
   refreshData: () => Promise<void>;
   // CRUD Actions
-  addLeader: (leader: Leader) => Promise<void>;
-  updateLeader: (leader: Leader) => Promise<void>;
-  deleteLeader: (id: string) => Promise<void>;
+  addKpyccTeamMember: (member: KpyccTeamMember) => Promise<void>;
+  updateKpyccTeamMember: (member: KpyccTeamMember) => Promise<void>;
+  deleteKpyccTeamMember: (id: string) => Promise<void>;
   addExecutiveLeader: (leader: ExecutiveLeader) => Promise<void>;
   updateExecutiveLeader: (leader: ExecutiveLeader) => Promise<void>;
   deleteExecutiveLeader: (id: string) => Promise<void>;
@@ -77,7 +77,7 @@ export const DataProvider: React.FC<{
   children: React.ReactNode;
   isAuthenticated: boolean;
 }> = ({ children, isAuthenticated }) => {
-  const [leaders, setLeaders] = React.useState<Leader[]>([]);
+  const [kpyccTeam, setKpyccTeam] = React.useState<KpyccTeamMember[]>([]);
   const [executiveLeaders, setExecutiveLeaders] = React.useState<
     ExecutiveLeader[]
   >([]);
@@ -97,7 +97,7 @@ export const DataProvider: React.FC<{
     setLoading(true);
     try {
       const publicDataPromises = [
-        apiLeaders.getAll(),
+        apiKpyccTeam.getAll(),
         apiExecutiveLeaders.getAll(),
         apiStateLeaders.getAll(),
         apiNews.getAll(),
@@ -114,8 +114,8 @@ export const DataProvider: React.FC<{
 
       const results = await Promise.all(allPromises);
 
-      const [l, el, sl, n, v, g, smt, lt, ac] = results;
-      setLeaders(l as Leader[]);
+      const [kpycc, el, sl, n, v, g, smt, lt, ac] = results;
+      setKpyccTeam(kpycc as KpyccTeamMember[]);
       setExecutiveLeaders(el as ExecutiveLeader[]);
       setStateLeaders(sl as StateLeader[]);
       setNews(n as NewsItem[]);
@@ -143,16 +143,16 @@ export const DataProvider: React.FC<{
   }, [isAuthenticated]);
 
   // Action Wrappers
-  const addLeader = async (item: Leader) => {
-    await apiLeaders.create(item);
+  const addKpyccTeamMember = async (item: KpyccTeamMember) => {
+    await apiKpyccTeam.create(item);
     await refreshData();
   };
-  const updateLeader = async (item: Leader) => {
-    await apiLeaders.update(item);
+  const updateKpyccTeamMember = async (item: KpyccTeamMember) => {
+    await apiKpyccTeam.update(item);
     await refreshData();
   };
-  const deleteLeader = async (id: string) => {
-    await apiLeaders.delete(id);
+  const deleteKpyccTeamMember = async (id: string) => {
+    await apiKpyccTeam.delete(id);
     await refreshData();
   };
 
@@ -166,7 +166,7 @@ export const DataProvider: React.FC<{
   };
   const deleteExecutiveLeader = async (id: string) => {
     await apiExecutiveLeaders.delete(id);
-    await refresh.Data();
+    await refreshData();
   };
 
   const addStateLeader = async (item: StateLeader) => {
@@ -277,7 +277,7 @@ export const DataProvider: React.FC<{
   return (
     <DataContext.Provider
       value={{
-        leaders,
+        kpyccTeam,
         executiveLeaders,
         stateLeaders,
         news,
@@ -289,9 +289,9 @@ export const DataProvider: React.FC<{
         activities,
         loading,
         refreshData,
-        addLeader,
-        updateLeader,
-        deleteLeader,
+        addKpyccTeamMember,
+        updateKpyccTeamMember,
+        deleteKpyccTeamMember,
         addExecutiveLeader,
         updateExecutiveLeader,
         deleteExecutiveLeader,

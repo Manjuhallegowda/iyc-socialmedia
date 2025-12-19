@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useData } from '../context/DataContext';
 import { uploadImageToR2, apiChangePassword } from '../services/api';
 import {
-  Leader,
+  KpyccTeamMember,
   NewsItem,
   VideoItem,
   GalleryItem,
@@ -31,7 +31,7 @@ import {
 
 const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
   const {
-    leaders,
+    kpyccTeam,
     executiveLeaders,
     stateLeaders,
     news,
@@ -41,9 +41,9 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     socialMediaTeam,
     legalTeam,
     activities,
-    addLeader,
-    updateLeader,
-    deleteLeader,
+    addKpyccTeamMember,
+    updateKpyccTeamMember,
+    deleteKpyccTeamMember,
     addExecutiveLeader,
     updateExecutiveLeader,
     deleteExecutiveLeader,
@@ -72,7 +72,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     deleteActivity,
   } = useData();
   const [activeTab, setActiveTab] = useState<
-    | 'leaders'
+    | 'kpyccTeam'
     | 'executiveLeaders'
     | 'stateLeaders'
     | 'news'
@@ -82,7 +82,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     | 'settings'
     | 'socialMediaTeam'
     | 'legalTeam'
-  >('leaders');
+  >('kpyccTeam');
   const [showModal, setShowModal] = useState(false);
 
   // Generic Form State
@@ -194,10 +194,14 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
   };
 
   const handleEdit = (item: any) => {
-    if (activeTab === 'leaders' && item.social) {
-      const { social, ...rest } = item;
-      setFormData({ ...rest, ...social });
-      setSelectedLeaderId(null); // Clear for non-leader-associated items
+    if (activeTab === 'kpyccTeam' && item.social) {
+      const { social, activity, mailstone, ...rest } = item;
+      setFormData({
+        ...rest,
+        ...JSON.parse(social || '{}'),
+        activity: (JSON.parse(activity || '[]') as string[]).join(', '),
+        mailstone: (JSON.parse(mailstone || '[]') as string[]).join(', '),
+      });
     } else if (activeTab === 'executiveLeaders' && item.socialMedia) {
       const { socialMedia, ...rest } = item;
       setFormData({ ...rest, ...socialMedia });
@@ -229,7 +233,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
     if (!isEditing && !formData.imageUrl) {
       // Find the active tab that requires an image
       const imageTabs = [
-        'leaders',
+        'kpyccTeam',
         'executiveLeaders',
         'news',
         'gallery',
@@ -243,20 +247,31 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       }
     }
 
-    if (activeTab === 'leaders') {
-      const { twitter, facebook, instagram, ...rest } = formData;
-      const leaderData: Partial<Leader> = {
+    if (activeTab === 'kpyccTeam') {
+      const { twitter, facebook, instagram, activity, mailstone, ...rest } = formData;
+      const memberData: Partial<KpyccTeamMember> = {
         ...rest,
-        age: Number(formData.age) || 0,
         startYear: Number(formData.startYear) || 0,
-        social: {
+        social: JSON.stringify({
           twitter: twitter || '',
           facebook: facebook || '',
           instagram: instagram || '',
-        },
+        }),
+        activity: JSON.stringify(
+          (activity || '')
+            .split(',')
+            .map((s: string) => s.trim())
+            .filter((s: string) => s)
+        ),
+        mailstone: JSON.stringify(
+          (mailstone || '')
+            .split(',')
+            .map((s: string) => s.trim())
+            .filter((s: string) => s)
+        ),
       };
-      if (isEditing) await updateLeader(leaderData as Leader);
-      else await addLeader(leaderData as Leader);
+      if (isEditing) await updateKpyccTeamMember(memberData as KpyccTeamMember);
+      else await addKpyccTeamMember(memberData as KpyccTeamMember);
     } else if (activeTab === 'executiveLeaders') {
       // New: Handle Executive Leaders
       const { twitter, facebook, instagram, youtube, ...rest } = formData;
@@ -402,14 +417,14 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
       </div>
       <nav className="flex-1 p-4 space-y-2">
         <button
-          onClick={() => setActiveTab('leaders')}
+          onClick={() => setActiveTab('kpyccTeam')}
           className={`flex items-center gap-3 w-full p-3 rounded-lg transition-colors ${
-            activeTab === 'leaders'
+            activeTab === 'kpyccTeam'
               ? 'bg-saffron text-white'
               : 'hover:bg-gray-100 text-indiaGreen'
           }`}
         >
-          <Users size={18} /> Leaders
+          <Users size={18} /> KPYCC Team
         </button>
         <button
           onClick={() => setActiveTab('executiveLeaders')}
@@ -527,8 +542,8 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {activeTab === 'leaders' &&
-                leaders.map((item) => (
+              {activeTab === 'kpyccTeam' &&
+                kpyccTeam.map((item) => (
                   <tr key={item.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4">
                       <img
@@ -549,7 +564,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                         <Edit size={16} />
                       </button>
                       <button
-                        onClick={() => deleteLeader(item.id)}
+                        onClick={() => deleteKpyccTeamMember(item.id)}
                         className="text-red-500 hover:bg-red-50 p-2 rounded"
                       >
                         <Trash2 size={16} />
@@ -1197,7 +1212,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
             </>
           )}
 
-          {activeTab === 'leaders' && (
+          {activeTab === 'kpyccTeam' && (
             <>
               <input
                 required
@@ -1208,42 +1223,38 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                   setFormData({ ...formData, name: e.target.value })
                 }
               />
-              <select
+              <input
                 required
+                placeholder="Designation"
                 value={formData.designation || ''}
                 className="w-full p-3 border rounded"
                 onChange={(e) =>
                   setFormData({ ...formData, designation: e.target.value })
                 }
-              >
-                <option value="" disabled>
-                  Select Designation
-                </option>
-                <option value="State SM Chair">State SM Chair</option>
-                <option value="District SM Coordinator">
-                  District SM Coordinator
-                </option>
-                <option value="Assembly SM Coordinator">
-                  Assembly SM Coordinator
-                </option>
-              </select>
-              <input
-                required
-                placeholder="State"
-                value={formData.state || ''}
-                className="w-full p-3 border rounded"
-                onChange={(e) =>
-                  setFormData({ ...formData, state: e.target.value })
-                }
               />
               <input
                 required
-                type="number"
-                placeholder="Age"
-                value={formData.age || ''}
+                placeholder="District"
+                value={formData.district || ''}
                 className="w-full p-3 border rounded"
                 onChange={(e) =>
-                  setFormData({ ...formData, age: e.target.value })
+                  setFormData({ ...formData, district: e.target.value })
+                }
+              />
+              <input
+                placeholder="Assembly"
+                value={formData.assembly || ''}
+                className="w-full p-3 border rounded"
+                onChange={(e) =>
+                  setFormData({ ...formData, assembly: e.target.value })
+                }
+              />
+              <input
+                placeholder="Block"
+                value={formData.block || ''}
+                className="w-full p-3 border rounded"
+                onChange={(e) =>
+                  setFormData({ ...formData, block: e.target.value })
                 }
               />
               <input
@@ -1264,15 +1275,6 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 rows={3}
                 onChange={(e) =>
                   setFormData({ ...formData, bio: e.target.value })
-                }
-              />
-              <input
-                required
-                placeholder="Education"
-                value={formData.education || ''}
-                className="w-full p-3 border rounded"
-                onChange={(e) =>
-                  setFormData({ ...formData, education: e.target.value })
                 }
               />
               <input
@@ -1317,6 +1319,24 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                 className="w-full p-3 border rounded"
                 onChange={(e) =>
                   setFormData({ ...formData, instagram: e.target.value })
+                }
+              />
+              <textarea
+                placeholder="Activities (comma-separated)"
+                value={formData.activity || ''}
+                className="w-full p-3 border rounded"
+                rows={3}
+                onChange={(e) =>
+                  setFormData({ ...formData, activity: e.target.value })
+                }
+              />
+              <textarea
+                placeholder="Milestones (comma-separated)"
+                value={formData.mailstone || ''}
+                className="w-full p-3 border rounded"
+                rows={3}
+                onChange={(e) =>
+                  setFormData({ ...formData, mailstone: e.target.value })
                 }
               />
 

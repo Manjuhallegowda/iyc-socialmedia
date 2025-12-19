@@ -2,37 +2,37 @@ import React, { useState, useMemo } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { useData } from '../context/DataContext';
-import { Leader } from '../types';
+import { KpyccTeamMember } from '../types';
 import { MapPin, ChevronRight, Hash } from 'lucide-react';
 
 const TeamPage: React.FC = () => {
-  const { leaders } = useData();
+  const { kpyccTeam } = useData();
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
 
   const districts = useMemo(() => {
     const districtSet = new Set<string>();
-    leaders.forEach((leader) => {
-      if (leader.district) {
-        districtSet.add(leader.district);
+    kpyccTeam.forEach((member) => {
+      if (member.district) {
+        districtSet.add(member.district);
       }
     });
     return Array.from(districtSet);
-  }, [leaders]);
+  }, [kpyccTeam]);
 
   const selectedDistrictData = useMemo(() => {
     if (!selectedDistrict) return null;
 
-    const districtLeaders = leaders.filter(
-      (leader) => leader.district === selectedDistrict
+    const districtMembers = kpyccTeam.filter(
+      (member) => member.district === selectedDistrict
     );
-    const president = districtLeaders.find(
-      (leader) => leader.designation === 'District SM Coordinator'
+    const president = districtMembers.find(
+      (member) => member.designation === 'District SM Coordinator'
     );
-    const assemblyCoordinators = districtLeaders.filter(
-      (leader) => leader.designation === 'Assembly SM Coordinator'
+    const assemblyCoordinators = districtMembers.filter(
+      (member) => member.designation === 'Assembly SM Coordinator'
     );
-    const blockCoordinators = districtLeaders.filter((leader) =>
-      leader.designation.includes('Block')
+    const blockCoordinators = districtMembers.filter((member) =>
+      member.designation.includes('Block')
     ); // Assuming block might have different names
 
     return {
@@ -42,15 +42,17 @@ const TeamPage: React.FC = () => {
         assembly: assemblyCoordinators.length,
         block: blockCoordinators.length,
       },
+      milestones: president ? JSON.parse(president.mailstone || '[]') : [],
+      activities: president ? JSON.parse(president.activity || '[]') : [],
     };
-  }, [selectedDistrict, leaders]);
+  }, [selectedDistrict, kpyccTeam]);
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
       <Navbar />
       <main className="pt-40 pb-20 container mx-auto px-4">
         <h1 className="text-4xl font-bold text-center text-indiaGreen mb-4">
-          Our Team
+          KPYCC Team
         </h1>
         <p className="text-lg text-center text-gray-600 mb-12 max-w-2xl mx-auto">
           Explore our team across the districts of Karnataka.
@@ -79,6 +81,9 @@ const TeamPage: React.FC = () => {
                     <p className="text-sm font-semibold text-indiaGreen uppercase tracking-wider text-xs mb-3">
                       {selectedDistrictData.president.designation}
                     </p>
+                    <p className="text-gray-600 text-sm">
+                      {selectedDistrictData.president.bio}
+                    </p>
                   </div>
                 </div>
                 <div className="mt-4">
@@ -97,6 +102,26 @@ const TeamPage: React.FC = () => {
                     </li>
                   </ul>
                 </div>
+                {selectedDistrictData.milestones.length > 0 && (
+                  <div className="mt-4">
+                    <h3 className="text-lg font-bold">Milestones</h3>
+                    <ul className="list-disc list-inside mt-2 text-gray-700">
+                      {selectedDistrictData.milestones.map((milestone, index) => (
+                        <li key={index}>{milestone}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {selectedDistrictData.activities.length > 0 && (
+                  <div className="mt-4">
+                    <h3 className="text-lg font-bold">Activities</h3>
+                    <ul className="list-disc list-inside mt-2 text-gray-700">
+                      {selectedDistrictData.activities.map((activity, index) => (
+                        <li key={index}>{activity}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="text-center text-gray-500">

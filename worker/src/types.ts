@@ -3,37 +3,21 @@
 // These types are a D1-compatible representation of the frontend types.
 // Complex objects and arrays are stored as JSON strings.
 
-export interface Protest {
-  id: string;
-  title: string;
-  date: string;
-  description: string;
-}
-
-export interface Leader {
+export interface KpyccTeamMember {
   id: string;
   name: string;
-  designation:
-    | 'State SM Chair'
-    | 'District SM Coordinator'
-    | 'Assembly SM Coordinator';
-  state: string;
-  district?: string;
+  designation: string;
+  district: string;
+  assembly?: string;
   block?: string;
   imageUrl: string;
-  age: number;
-  education: string;
+  activity: string;
   startYear: number;
   bio: string;
   email: string;
   phone: string;
-  social: {
-    twitter?: string;
-    facebook?: string;
-    instagram?: string;
-  };
-  protests: Protest[];
-  achievements: string[];
+  social: string; // Stored as JSON string
+  mailstone: string; // Stored as JSON string
 }
 
 export interface NewsItem {

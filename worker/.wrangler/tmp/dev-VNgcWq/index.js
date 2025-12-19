@@ -1,7 +1,7 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// .wrangler/tmp/bundle-hXokIz/checked-fetch.js
+// .wrangler/tmp/bundle-B5DcZw/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -2761,19 +2761,40 @@ var createCrudEndpoints = /* @__PURE__ */ __name((router, tableName, options = {
     }
   });
 }, "createCrudEndpoints");
-var leaderTransforms = {
-  beforeSave: /* @__PURE__ */ __name((leader) => ({
-    ...leader,
-    social: JSON.stringify(leader.social || {}),
-    protests: JSON.stringify(leader.protests || []),
-    achievements: JSON.stringify(leader.achievements || [])
+var kpyccTeamTransforms = {
+  beforeSave: /* @__PURE__ */ __name((member) => ({
+    ...member,
+    social: JSON.stringify(member.social || {}),
+    activity: JSON.stringify(
+      (member.activity || "").split(",").map((s) => s.trim())
+    ),
+    mailstone: JSON.stringify(
+      (member.mailstone || "").split(",").map((s) => s.trim())
+    )
   }), "beforeSave"),
-  afterFetch: /* @__PURE__ */ __name((leader) => ({
-    ...leader,
-    social: JSON.parse(leader.social || "{}"),
-    protests: JSON.parse(leader.protests || "[]"),
-    achievements: JSON.parse(leader.achievements || "[]")
-  }), "afterFetch")
+  afterFetch: /* @__PURE__ */ __name((member) => {
+    let social = {};
+    try {
+      social = JSON.parse(member.social || "{}");
+    } catch (e) {
+    }
+    let activity = [];
+    try {
+      activity = JSON.parse(member.activity || "[]");
+    } catch (e) {
+    }
+    let mailstone = [];
+    try {
+      mailstone = JSON.parse(member.mailstone || "[]");
+    } catch (e) {
+    }
+    return {
+      ...member,
+      social,
+      activity,
+      mailstone
+    };
+  }, "afterFetch")
 };
 var executiveLeaderTransforms = {
   beforeSave: /* @__PURE__ */ __name((executiveLeader) => ({
@@ -2815,7 +2836,7 @@ var socialMediaTeamTransforms = {
     socialMedia: JSON.parse(member.socialMedia || "{}")
   }), "afterFetch")
 };
-createCrudEndpoints(api, "leaders", leaderTransforms);
+createCrudEndpoints(api, "kpycc_team", kpyccTeamTransforms);
 createCrudEndpoints(api, "news");
 createCrudEndpoints(api, "activities", activityTransforms);
 createCrudEndpoints(api, "videos");
@@ -2923,7 +2944,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-hXokIz/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-B5DcZw/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -2955,7 +2976,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-hXokIz/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-B5DcZw/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

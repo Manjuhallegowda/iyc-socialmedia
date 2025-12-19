@@ -9,10 +9,10 @@ import {
   Clock,
   BookOpen,
 } from 'lucide-react';
-import { Leader } from '../types';
+import { KpyccTeamMember } from '../types';
 
 interface LeaderModalProps {
-  leader: Leader;
+  leader: KpyccTeamMember;
   onClose: () => void;
 }
 

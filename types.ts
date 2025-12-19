@@ -1,23 +1,12 @@
-export interface Protest {
-  title: string;
-  location: string;
-  date: string;
-  description: string;
-}
-
-export interface Leader {
-  id:string;
+export interface KpyccTeamMember {
+  id: string;
   name: string;
-  designation:
-    | 'State SM Chair'
-    | 'District SM Coordinator'
-    | 'Assembly SM Coordinator';
-  state: string;
-  district?: string;
+  designation: string;
+  district: string;
+  assembly?: string;
   block?: string;
   imageUrl: string;
-  age: number;
-  education: string;
+  activity: string[];
   startYear: number;
   bio: string;
   email: string;
@@ -27,8 +16,7 @@ export interface Leader {
     facebook?: string;
     instagram?: string;
   };
-  protests: Protest[];
-  achievements: string[];
+  mailstone: string[];
 }
 
 export interface NewsItem {
