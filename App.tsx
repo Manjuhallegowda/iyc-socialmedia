@@ -6,6 +6,7 @@ import AdminDashboard from './components/AdminDashboard';
 import AdminLogin from './components/AdminLogin';
 import JoinPage from './components/JoinPage';
 import TeamPage from './components/TeamPage';
+import KpyccTeamPage from './components/KpyccTeamPage';
 import ActivityPage from './components/ActivityPage';
 import ProfilePage from './components/ProfilePage';
 import StateLeaderProfilePage from './components/StateLeaderProfilePage';
@@ -37,6 +38,7 @@ const App: React.FC = () => {
 
           {/* New Team Page Route */}
           <Route path="/team" element={<TeamPage />} />
+          <Route path="/kpycc-team/:district" element={<KpyccTeamPage />} />
           <Route path="/social-media" element={<SocialMediaPage />} />
           <Route path="/legal" element={<LegalPage />} />
           

@@ -1,6 +1,7 @@
 // worker/src/index.ts
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
+import type { ContentfulStatusCode } from 'hono/utils/http-status';
 import { cors } from 'hono/cors';
 import { jwt, sign } from 'hono/jwt';
 import type { Context, Next } from 'hono';
@@ -691,6 +692,32 @@ app.get('/images/:filename', async (c) => {
 // Mount the protected API router under / to avoid clobbering root routes
 app.route('/', api);
 
+// --- MAP DATA PROXY ENDPOINT ---
+app.get('/map-data/karnataka-districts.json', async (c) => {
+  try {
+    const response = await fetch(
+      'https://raw.githubusercontent.com/udit-001/india-maps-data/main/states/karnataka/topojson/karnataka.json'
+    );
+    if (!response.ok) {
+      return c.json(
+        { error: `Failed to fetch TopoJSON: ${response.statusText}` },
+        response.status
+      );
+    }
+    const data = await response.json();
+    console.log('TopoJSON data being served:', data); // Add this line for debugging
+    return new Response(JSON.stringify(data), {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // Allow all origins for this public data
+      },
+    });
+  } catch (e: any) {
+    console.error('Error proxying map data:', e);
+    return c.json({ error: e.message || 'Failed to proxy map data' }, 500);
+  }
+});
+
 // --- HEALTH CHECK & DEFAULT ROUTE ---
 app.get('/', (c) => c.text('IYC Portfolio API is running!'));
 
@@ -698,7 +725,7 @@ app.onError((err, c) => {
   console.error(`${err}`);
   if (err instanceof HTTPException) {
     // Use the status from the HTTP exception, but return a JSON response
-    return c.json({ error: err.message }, err.status);
+    return c.json({ error: err.message }, err.status as ContentfulStatusCode);
   }
   // For all other errors, it's a true 500
   return c.json({ error: 'Internal Server Error' }, 500);

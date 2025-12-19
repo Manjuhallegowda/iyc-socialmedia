@@ -1,9 +1,17 @@
 import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { useData } from '../context/DataContext';
 import { KpyccTeamMember } from '../types';
-import { MapPin, ChevronRight, Hash } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
+import {
+  ComposableMap,
+  Geographies,
+  Geography,
+} from '@vnedyalk0v/react19-simple-maps';
+
+const KARNATAKA_TOPOJSON_URL = 'http://localhost:8787/map-data/karnataka-districts.json';
 
 const TeamPage: React.FC = () => {
   const { kpyccTeam } = useData();
@@ -33,7 +41,7 @@ const TeamPage: React.FC = () => {
     );
     const blockCoordinators = districtMembers.filter((member) =>
       member.designation.includes('Block')
-    ); // Assuming block might have different names
+    );
 
     return {
       president,
@@ -41,6 +49,7 @@ const TeamPage: React.FC = () => {
         district: president ? 1 : 0,
         assembly: assemblyCoordinators.length,
         block: blockCoordinators.length,
+        active: districtMembers.length,
       },
       milestones: president ? JSON.parse(president.mailstone || '[]') : [],
       activities: president ? JSON.parse(president.activity || '[]') : [],
@@ -90,15 +99,13 @@ const TeamPage: React.FC = () => {
                   <h3 className="text-lg font-bold">Member Counts</h3>
                   <ul className="mt-2 space-y-1">
                     <li>
-                      District Coordinators:{' '}
-                      {selectedDistrictData.counts.district}
+                      Assembly Leaders: {selectedDistrictData.counts.assembly}
                     </li>
                     <li>
-                      Assembly Coordinators:{' '}
-                      {selectedDistrictData.counts.assembly}
+                      Block Leaders/Members: {selectedDistrictData.counts.block}
                     </li>
                     <li>
-                      Block Coordinators: {selectedDistrictData.counts.block}
+                      Active Members: {selectedDistrictData.counts.active}
                     </li>
                   </ul>
                 </div>
@@ -122,6 +129,14 @@ const TeamPage: React.FC = () => {
                     </ul>
                   </div>
                 )}
+                <div className="mt-6 text-center">
+                  <Link
+                    to={`/kpycc-team/${selectedDistrict}`}
+                    className="inline-flex items-center px-6 py-2 bg-saffron text-white rounded-full font-bold text-lg shadow-lg hover:bg-orange-600 hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  >
+                    Know More <ChevronRight className="ml-2 w-5 h-5" />
+                  </Link>
+                </div>
               </div>
             ) : (
               <div className="text-center text-gray-500">
@@ -129,14 +144,52 @@ const TeamPage: React.FC = () => {
               </div>
             )}
           </div>
-
           {/* Right Column: Map Placeholder and District List */}
           <div className="md:col-span-2 bg-white p-6 rounded-lg shadow-sm">
-            <div className="w-full h-96 bg-gray-200 rounded-lg mb-4 flex items-center justify-center">
-              <p className="text-gray-500">Interactive Map Placeholder</p>
-            </div>
+            <ComposableMap
+              projection="geoMercator"
+              projectionConfig={{
+                scale: 2800,
+                center: [76.5, 14.5],
+              }}
+              style={{ width: '100%', height: '400px' }}
+            >
+                <Geographies geography="https://localhost:8787/map-data/karnataka-districts.json">
+                {({ geographies }) =>
+                  geographies.map((geo) => {
+                    const isSelected =
+                      selectedDistrict === geo.properties.district;
+                    return (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        onClick={() =>
+                          setSelectedDistrict(geo.properties.district)
+                        }
+                        style={{
+                          default: {
+                            fill: isSelected ? '#ff9933' : '#e0e0e0',
+                            stroke: '#666',
+                            strokeWidth: 0.5,
+                            outline: 'none',
+                          },
+                          hover: {
+                            fill: '#ff9933',
+                            outline: 'none',
+                          },
+                          pressed: {
+                            fill: '#ff9933',
+                            outline: 'none',
+                          },
+                        }}
+                      />
+                    );
+                  })
+                }
+              </Geographies>
+            </ComposableMap>
             <div>
-              <h3 className="text-lg font-bold mb-2">Districts</h3>
+              <h3 className="text-lg font-bold mb-2 mt-4">Districts</h3>
               <div className="flex flex-wrap gap-2">
                 {districts.map((district) => (
                   <button
@@ -162,3 +215,4 @@ const TeamPage: React.FC = () => {
 };
 
 export default TeamPage;
+
