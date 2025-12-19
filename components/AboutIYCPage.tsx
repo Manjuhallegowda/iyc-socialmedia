@@ -279,16 +279,19 @@ const AboutIYCPage: React.FC = () => {
                   {/* Decorative element for depth */}
                   <div className="absolute inset-0 bg-green-700/10 rounded-3xl -z-10 transform translate-x-3 translate-y-3 group-hover:translate-x-4 group-hover:translate-y-4 transition duration-300 hidden md:block" />
 
-                  <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white transform group-hover:-translate-x-1 group-hover:-translate-y-1 transition duration-300">
+<div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white 
+                transform group-hover:-translate-x-1 group-hover:-translate-y-1 
+                transition duration-300 h-[360px] bg-white">
                     <img
-                      src={aboutImage.imageUrl}
-                      alt={
-                        aboutImage.alt ||
-                        'Young members of the Indian Youth Congress volunteering or protesting'
-                      }
-                      className="w-full h-auto object-cover aspect-[4/3] saturate-150 transition-all duration-500 group-hover:saturate-100"
-                      loading="lazy"
-                    />
+  src={aboutImage.imageUrl}
+  alt={
+    aboutImage.alt ||
+    'Indian Youth Congress emblem'
+  }
+  className="w-full h-full object-contain p-6 transition-all duration-500"
+  loading="lazy"
+/>
+
                   </div>
                 </motion.div>
               )}

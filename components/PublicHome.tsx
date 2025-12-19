@@ -368,14 +368,14 @@ const PublicHome: React.FC = () => {
               transition={{ ...transition, delay: 0.45 }}
               className="flex flex-col sm:flex-row gap-4 justify-center"
             >
-              <a
+              {/*<a
                 href="#join"
                 className="px-8 py-3 bg-saffron text-white rounded-full font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-saffron/30 transform hover:-translate-y-1 hover:scale-102 focus:outline-none focus-visible:ring-2 focus-visible:ring-white flex items-center justify-center gap-2"
                 aria-label="Join Digital Army"
               >
                 <Share2 size={20} />
                 Join Digital Army
-              </a>
+              </a>*/}
               <a
                 href="#leadership"
                 className="px-8 py-3 bg-white text-indiaGreen rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-lg transform hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
@@ -523,7 +523,7 @@ const PublicHome: React.FC = () => {
           <div className="w-full px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
-                <span>Join the Movement</span>
+                <span>Movements</span>
                 <span className="block h-1 w-20 bg-saffron mt-2"></span>
               </h2>
               <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-4 rounded-full"></div>

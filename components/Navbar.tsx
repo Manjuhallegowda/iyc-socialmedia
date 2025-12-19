@@ -39,16 +39,22 @@ const Navbar: React.FC = () => {
       img: 'https://www.elections.in/political-leaders/images/rahul-congress.jpg',
     },
     {
+      name: 'Manish Sharma',
+      role1: 'National Incharge',
+      role2: 'Indian Youth Congress',
+      img: 'https://gfilesindia.com/wp-content/uploads/2025/11/Manish-Sharma-Youth-Congress-Incharge.jpg',
+    },
+    {
       name: 'Uday Bhanu Chib',
       role1: 'National President',
       role2: 'Indian Youth Congress',
       img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjHbTMFAzU33eTPtWZ1HlLj4TxLw7smuAdxQ&s',
     },
     {
-      name: 'Manish Sharma',
-      role1: 'Genral Secretary',
-      role2: 'Indian Youth Congress',
-      img: 'https://gfilesindia.com/wp-content/uploads/2025/11/Manish-Sharma-Youth-Congress-Incharge.jpg',
+      name: 'D.K. Shivakumar',
+      role1: 'Karnataka PCC President',
+      role2: 'Deputy CM',
+      img: 'https://ipcmedia.in/public/uploads/profile/1756048100_12.jpg',
     },
     {
       name: 'Siddaramaiah',
@@ -56,12 +62,7 @@ const Navbar: React.FC = () => {
       role2: 'Govt. of Karnataka',
       img: 'https://www.coorgnews.in/wp-content/uploads/2024/08/siddaramaiah-photo.jpg',
     },
-    {
-      name: 'D.K. Shivakumar',
-      role1: 'Deputy CM',
-      role2: 'Karnataka PCC President',
-      img: 'https://ipcmedia.in/public/uploads/profile/1756048100_12.jpg',
-    },
+    
     {
       name: 'Manjunath Gowda',
       role1: 'IYC Karnataka',
@@ -203,12 +204,12 @@ const Navbar: React.FC = () => {
                   {link.name}
                 </a>
               ))}
-              <a
+              {/*<a
                 href="/join"
                 className="bg-saffron text-white px-5 py-2 rounded-full font-bold hover:bg-orange-600 transition-colors shadow-sm whitespace-nowrap"
               >
                 Join Team
-              </a>
+              </a>*/}
             </div>
 
             {/* Mobile Menu Button */}
