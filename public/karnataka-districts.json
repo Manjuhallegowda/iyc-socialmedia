@@ -1,0 +1,609 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Bagalkot",
+        "NAME": "Bagalkot",
+        "name": "Bagalkot"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.65, 16.25],
+            [75.75, 16.25],
+            [75.75, 16.15],
+            [75.65, 16.15],
+            [75.65, 16.25]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Bangalore Rural",
+        "NAME": "Bangalore Rural",
+        "name": "Bangalore Rural"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.0, 13.2],
+            [77.1, 13.2],
+            [77.1, 13.1],
+            [77.0, 13.1],
+            [77.0, 13.2]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Bangalore Urban",
+        "NAME": "Bangalore Urban",
+        "name": "Bangalore Urban"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.3, 12.8],
+            [77.4, 12.8],
+            [77.4, 12.7],
+            [77.3, 12.7],
+            [77.3, 12.8]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Belgaum",
+        "NAME": "Belgaum",
+        "name": "Belgaum"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [74.5, 16.6],
+            [74.6, 16.6],
+            [74.6, 16.5],
+            [74.5, 16.5],
+            [74.5, 16.6]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Bellary",
+        "NAME": "Bellary",
+        "name": "Bellary"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.7, 15.1],
+            [76.8, 15.1],
+            [76.8, 15.0],
+            [76.7, 15.0],
+            [76.7, 15.1]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Bidar", "NAME": "Bidar", "name": "Bidar" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.8, 17.9],
+            [77.9, 17.9],
+            [77.9, 17.8],
+            [77.8, 17.8],
+            [77.8, 17.9]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Chikkaballapur",
+        "NAME": "Chikkaballapur",
+        "name": "Chikkaballapur"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.7, 13.4],
+            [77.8, 13.4],
+            [77.8, 13.3],
+            [77.7, 13.3],
+            [77.7, 13.4]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Chikkamagaluru",
+        "NAME": "Chikkamagaluru",
+        "name": "Chikkamagaluru"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.6, 13.3],
+            [75.7, 13.3],
+            [75.7, 13.2],
+            [75.6, 13.2],
+            [75.6, 13.3]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Chitradurga",
+        "NAME": "Chitradurga",
+        "name": "Chitradurga"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.3, 14.2],
+            [76.4, 14.2],
+            [76.4, 14.1],
+            [76.3, 14.1],
+            [76.3, 14.2]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Dakshina Kannada",
+        "NAME": "Dakshina Kannada",
+        "name": "Dakshina Kannada"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [74.8, 12.8],
+            [74.9, 12.8],
+            [74.9, 12.7],
+            [74.8, 12.7],
+            [74.8, 12.8]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Davanagere",
+        "NAME": "Davanagere",
+        "name": "Davanagere"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.9, 14.4],
+            [76.0, 14.4],
+            [76.0, 14.3],
+            [75.9, 14.3],
+            [75.9, 14.4]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Gadag", "NAME": "Gadag", "name": "Gadag" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.6, 15.4],
+            [75.7, 15.4],
+            [75.7, 15.3],
+            [75.6, 15.3],
+            [75.6, 15.4]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Gulbarga",
+        "NAME": "Gulbarga",
+        "name": "Gulbarga"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.8, 17.3],
+            [76.9, 17.3],
+            [76.9, 17.2],
+            [76.8, 17.2],
+            [76.8, 17.3]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Hassan",
+        "NAME": "Hassan",
+        "name": "Hassan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.0, 13.0],
+            [76.1, 13.0],
+            [76.1, 12.9],
+            [76.0, 12.9],
+            [76.0, 13.0]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Haveri",
+        "NAME": "Haveri",
+        "name": "Haveri"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.4, 14.8],
+            [75.5, 14.8],
+            [75.5, 14.7],
+            [75.4, 14.7],
+            [75.4, 14.8]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Hubli-Dharwad",
+        "NAME": "Hubli-Dharwad",
+        "name": "Hubli-Dharwad"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.1, 15.3],
+            [75.2, 15.3],
+            [75.2, 15.2],
+            [75.1, 15.2],
+            [75.1, 15.3]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Kalaburagi",
+        "NAME": "Kalaburagi",
+        "name": "Kalaburagi"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.8, 17.3],
+            [76.9, 17.3],
+            [76.9, 17.2],
+            [76.8, 17.2],
+            [76.8, 17.3]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Karnataka",
+        "NAME": "Karnataka",
+        "name": "Karnataka"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [74.0, 12.0],
+            [78.5, 12.0],
+            [78.5, 18.5],
+            [74.0, 18.5],
+            [74.0, 12.0]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Karwar",
+        "NAME": "Karwar",
+        "name": "Karwar"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [74.1, 14.8],
+            [74.2, 14.8],
+            [74.2, 14.7],
+            [74.1, 14.7],
+            [74.1, 14.8]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Kolar", "NAME": "Kolar", "name": "Kolar" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [78.1, 13.1],
+            [78.2, 13.1],
+            [78.2, 13.0],
+            [78.1, 13.0],
+            [78.1, 13.1]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Koppal",
+        "NAME": "Koppal",
+        "name": "Koppal"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.1, 15.3],
+            [76.2, 15.3],
+            [76.2, 15.2],
+            [76.1, 15.2],
+            [76.1, 15.3]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Mandya",
+        "NAME": "Mandya",
+        "name": "Mandya"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.9, 12.5],
+            [77.0, 12.5],
+            [77.0, 12.4],
+            [76.9, 12.4],
+            [76.9, 12.5]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Mysore",
+        "NAME": "Mysore",
+        "name": "Mysore"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.6, 12.2],
+            [76.7, 12.2],
+            [76.7, 12.1],
+            [76.6, 12.1],
+            [76.6, 12.2]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Raichur",
+        "NAME": "Raichur",
+        "name": "Raichur"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.3, 16.2],
+            [77.4, 16.2],
+            [77.4, 16.1],
+            [77.3, 16.1],
+            [77.3, 16.2]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Ramanagara",
+        "NAME": "Ramanagara",
+        "name": "Ramanagara"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.3, 12.8],
+            [77.4, 12.8],
+            [77.4, 12.7],
+            [77.3, 12.7],
+            [77.3, 12.8]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Shimoga",
+        "NAME": "Shimoga",
+        "name": "Shimoga"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.5, 13.9],
+            [75.6, 13.9],
+            [75.6, 13.8],
+            [75.5, 13.8],
+            [75.5, 13.9]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Tumkur",
+        "NAME": "Tumkur",
+        "name": "Tumkur"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [76.9, 13.3],
+            [77.0, 13.3],
+            [77.0, 13.2],
+            [76.9, 13.2],
+            [76.9, 13.3]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "district": "Udupi", "NAME": "Udupi", "name": "Udupi" },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [74.7, 13.3],
+            [74.8, 13.3],
+            [74.8, 13.2],
+            [74.7, 13.2],
+            [74.7, 13.3]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Uttara Kannada",
+        "NAME": "Uttara Kannada",
+        "name": "Uttara Kannada"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [74.3, 14.8],
+            [74.4, 14.8],
+            [74.4, 14.7],
+            [74.3, 14.7],
+            [74.3, 14.8]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Vijayapura",
+        "NAME": "Vijayapura",
+        "name": "Vijayapura"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [75.7, 16.8],
+            [75.8, 16.8],
+            [75.8, 16.7],
+            [75.7, 16.7],
+            [75.7, 16.8]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "district": "Yadgir",
+        "NAME": "Yadgir",
+        "name": "Yadgir"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [77.1, 16.7],
+            [77.2, 16.7],
+            [77.2, 16.6],
+            [77.1, 16.6],
+            [77.1, 16.7]
+          ]
+        ]
+      }
+    }
+  ]
+}

@@ -17,6 +17,29 @@ export interface KpyccTeamMember {
     instagram?: string;
   };
   mailstone: string[];
+  level: 'District' | 'Assembly' | 'Block' | 'State';
+}
+
+export interface DistrictHierarchyData {
+  district: string;
+  president?: KpyccTeamMember;
+  assemblyMembers: KpyccTeamMember[];
+  blockMembers: KpyccTeamMember[];
+  smTeamMembers: SocialMediaTeamMember[];
+  legalTeamMembers: LegalTeamMember[];
+  counts: {
+    district: number;
+    assembly: number;
+    block: number;
+    smTeam: number;
+    legalTeam: number;
+    totalActive: number;
+  };
+  statistics: {
+    maleMembers: number;
+    femaleMembers: number;
+    youngLeaders: number; // Under 35
+  };
 }
 
 export interface NewsItem {
@@ -115,4 +138,3 @@ export interface LegalTeamMember {
   imageUrl: string;
   bio?: string;
 }
-

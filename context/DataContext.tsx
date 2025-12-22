@@ -10,6 +10,7 @@ import {
   SocialMediaTeamMember,
   LegalTeamMember,
   Activity,
+  DistrictHierarchyData,
 } from '../types';
 import {
   apiKpyccTeam,
@@ -37,6 +38,7 @@ interface DataContextType {
   activities: Activity[];
   loading: boolean;
   refreshData: () => Promise<void>;
+  getDistrictHierarchyData: (district: string) => DistrictHierarchyData | null;
   // CRUD Actions
   addKpyccTeamMember: (member: KpyccTeamMember) => Promise<void>;
   updateKpyccTeamMember: (member: KpyccTeamMember) => Promise<void>;
@@ -237,9 +239,7 @@ export const DataProvider: React.FC<{
     await apiSocialMediaTeam.create(member);
     await refreshData();
   };
-  const updateSocialMediaTeamMember = async (
-    member: SocialMediaTeamMember
-  ) => {
+  const updateSocialMediaTeamMember = async (member: SocialMediaTeamMember) => {
     await apiSocialMediaTeam.update(member);
     await refreshData();
   };
@@ -274,6 +274,68 @@ export const DataProvider: React.FC<{
     await refreshData();
   };
 
+  const getDistrictHierarchyData = (
+    district: string
+  ): DistrictHierarchyData | null => {
+    if (!district) return null;
+
+    const districtMembers = kpyccTeam.filter(
+      (member) => member.district === district
+    );
+    const smTeamMembers = socialMediaTeam.filter(
+      (member) => member.placeName === district
+    );
+    const legalTeamMembers = legalTeam.filter(
+      (member) =>
+        // Assuming legal team members might have district info in their position or bio
+        member.bio?.includes(district) ||
+        member.position.toLowerCase().includes(district.toLowerCase())
+    );
+
+    const president = districtMembers.find(
+      (member) =>
+        member.designation.includes('District') && member.level === 'District'
+    );
+
+    const assemblyMembers = districtMembers.filter(
+      (member) =>
+        member.level === 'Assembly' || member.designation.includes('Assembly')
+    );
+
+    const blockMembers = districtMembers.filter(
+      (member) =>
+        member.level === 'Block' || member.designation.includes('Block')
+    );
+
+    const counts = {
+      district: president ? 1 : 0,
+      assembly: assemblyMembers.length,
+      block: blockMembers.length,
+      smTeam: smTeamMembers.length,
+      legalTeam: legalTeamMembers.length,
+      totalActive:
+        districtMembers.length + smTeamMembers.length + legalTeamMembers.length,
+    };
+
+    // Calculate statistics (mock implementation - would need real age/gender data)
+    const statistics = {
+      maleMembers: Math.floor(counts.totalActive * 0.6), // Mock data
+      femaleMembers: Math.floor(counts.totalActive * 0.4), // Mock data
+      youngLeaders: Math.floor(counts.totalActive * 0.3), // Mock data
+    };
+
+    return {
+      district,
+      president,
+      assemblyMembers,
+      blockMembers,
+      smTeamMembers,
+      legalTeamMembers,
+      counts,
+      statistics,
+    };
+  };
+
   return (
     <DataContext.Provider
       value={{
@@ -289,6 +351,7 @@ export const DataProvider: React.FC<{
         activities,
         loading,
         refreshData,
+        getDistrictHierarchyData,
         addKpyccTeamMember,
         updateKpyccTeamMember,
         deleteKpyccTeamMember,
