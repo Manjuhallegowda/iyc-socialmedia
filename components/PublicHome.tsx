@@ -284,7 +284,7 @@ const PublicHome: React.FC = () => {
 
       <Navbar />
 
-      <main id="main" className="pt-20">
+      <main id="main" className="pt-34">
         {/* Hero */}
         <section
           id="home"
@@ -392,7 +392,7 @@ const PublicHome: React.FC = () => {
                 className="mt-6 flex items-center justify-center gap-4"
                 aria-hidden={prefersReducedMotion.current}
               >
-                <motion.button
+                {/*<motion.button
                   whileTap={{ scale: 0.96 }}
                   onClick={() => setHeroPlaying((p) => !p)}
                   aria-pressed={!heroPlaying}
@@ -405,7 +405,7 @@ const PublicHome: React.FC = () => {
                   <span className="sr-only">
                     {heroPlaying ? 'Pause' : 'Play'}
                   </span>
-                </motion.button>
+                </motion.button>*/}
 
                 <div
                   className="flex items-center gap-2"
@@ -440,7 +440,7 @@ const PublicHome: React.FC = () => {
         {/* About */}
         <section
           id="about-preview"
-          className="py-20 bg-white scroll-mt-24 border-b border-gray-200"
+          className="py-20 bg-white scroll-mt-24 border-b border-gray-200 flex rounded-lg border shadow-sm"
         >
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
