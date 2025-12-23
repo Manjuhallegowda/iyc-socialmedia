@@ -4,6 +4,7 @@ import Navbar from './Navbar';
 import Footer from './Footer';
 import { useData } from '../context/DataContext';
 import { DistrictHierarchyData } from '../types';
+import KarnatakaMap from './KarnatakaMap';
 import {
   ChevronRight,
   Users,
@@ -79,12 +80,12 @@ const TeamPage: React.FC = () => {
         {/* Header Section */}
         <div className="text-center mb-12">
           <h1 className="text-5xl font-bold text-indiaGreen mb-4">
-            KPYCC Interactive District Explorer
+            KPYCC Interactive Karnataka Map
           </h1>
           <p className="text-xl text-gray-600 mb-6 max-w-3xl mx-auto">
             Explore our comprehensive team structure across all districts of
-            Karnataka. Click on any district to view hierarchical leadership and
-            member data.
+            Karnataka. Click on any district in the map to view hierarchical
+            leadership and member data.
           </p>
           <div className="flex justify-center space-x-8 text-sm text-gray-500">
             <div className="flex items-center">
@@ -278,7 +279,7 @@ const TeamPage: React.FC = () => {
                     Select a District
                   </h3>
                   <p className="text-gray-500">
-                    Click on any district from the right panel to view detailed
+                    Click on any district in the map to view detailed
                     information about the team structure and leadership.
                   </p>
                 </div>
@@ -286,12 +287,12 @@ const TeamPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Panel: District Selection */}
+          {/* Right Panel: Interactive Karnataka Map */}
           <div className="lg:col-span-3">
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-2xl font-bold text-gray-800">
-                  Karnataka Districts
+                  Karnataka Districts Map
                 </h2>
                 <div className="text-sm text-gray-500">
                   {activeDistricts.length} of {KARNATAKA_DISTRICTS.length}{' '}
@@ -324,47 +325,19 @@ const TeamPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* District Grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-                {KARNATAKA_DISTRICTS.map((district) => {
-                  const isSelected = selectedDistrict === district;
-                  const hasData = hasDataForDistrict(district);
-
-                  return (
-                    <button
-                      key={district}
-                      onClick={() => handleDistrictClick(district)}
-                      className={`p-3 rounded-lg text-sm font-semibold transition-all duration-200 border-2 ${
-                        isSelected
-                          ? 'bg-saffron text-white border-saffron shadow-lg transform scale-105'
-                          : hasData
-                          ? 'bg-green-50 text-green-800 border-green-200 hover:bg-green-100 hover:border-green-300'
-                          : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="text-center">
-                        <div className="font-bold text-xs leading-tight mb-1">
-                          {district}
-                        </div>
-                        {hasData && (
-                          <div className="text-xs opacity-75">
-                            {
-                              getDistrictHierarchyData(district)?.counts
-                                .totalActive
-                            }{' '}
-                            members
-                          </div>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
+              {/* Interactive Map */}
+              <div className="mb-6">
+                <KarnatakaMap
+                  selectedDistrict={selectedDistrict}
+                  onDistrictClick={handleDistrictClick}
+                  districtsWithData={activeDistricts}
+                />
               </div>
 
               {/* Legend */}
-              <div className="mt-8 pt-6 border-t border-gray-200">
+              <div className="pt-6 border-t border-gray-200">
                 <h4 className="text-sm font-semibold text-gray-700 mb-3">
-                  Legend
+                  Map Legend
                 </h4>
                 <div className="flex flex-wrap gap-4 text-xs">
                   <div className="flex items-center">
@@ -379,6 +352,35 @@ const TeamPage: React.FC = () => {
                     <div className="w-3 h-3 bg-gray-300 rounded mr-2"></div>
                     <span className="text-gray-600">No Data Available</span>
                   </div>
+                </div>
+              </div>
+
+              {/* Quick Access Grid */}
+              <div className="mt-8">
+                <h4 className="text-sm font-semibold text-gray-700 mb-3">
+                  Quick District Access
+                </h4>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+                  {KARNATAKA_DISTRICTS.map((district) => {
+                    const isSelected = selectedDistrict === district;
+                    const hasData = hasDataForDistrict(district);
+
+                    return (
+                      <button
+                        key={district}
+                        onClick={() => handleDistrictClick(district)}
+                        className={`p-2 rounded text-xs font-semibold transition-all duration-200 ${
+                          isSelected
+                            ? 'bg-saffron text-white shadow-md'
+                            : hasData
+                            ? 'bg-green-100 text-green-800 hover:bg-green-200'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                        }`}
+                      >
+                        {district}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
