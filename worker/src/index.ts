@@ -531,16 +531,32 @@ const createCrudEndpoints = <T extends { id: string }>(
 // --- DATA TRANSFORMATIONS ---
 
 const kpyccTeamTransforms: CrudOptions<KpyccTeamMember> = {
-  beforeSave: (member) => ({
-    ...member,
-    social: JSON.stringify((member as any).social || {}),
-    activity: JSON.stringify(
-      ((member as any).activity || '').split(',').map((s: string) => s.trim())
-    ),
-    mailstone: JSON.stringify(
-      ((member as any).mailstone || '').split(',').map((s: string) => s.trim())
-    ),
-  }),
+  beforeSave: (member) => {
+    const newMember = { ...member } as any;
+
+    // Infer level from designation
+    if (newMember.designation) {
+      const designation = newMember.designation.toLowerCase();
+      if (designation.includes('district')) {
+        newMember.level = 'District';
+      } else if (designation.includes('assembly')) {
+        newMember.level = 'Assembly';
+      } else if (designation.includes('block')) {
+        newMember.level = 'Block';
+      }
+    }
+
+    return {
+      ...newMember,
+      social: JSON.stringify(newMember.social || {}),
+      activity: JSON.stringify(
+        (newMember.activity || '').split(',').map((s: string) => s.trim())
+      ),
+      mailstone: JSON.stringify(
+        (newMember.mailstone || '').split(',').map((s: string) => s.trim())
+      ),
+    };
+  },
   afterFetch: (member: any) => {
     let social = {};
     try {

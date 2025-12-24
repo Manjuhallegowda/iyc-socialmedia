@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Menu, X } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isTeamDropdownOpen, setTeamDropdownOpen] = useState(false);
   const [isMobileTeamDropdownOpen, setMobileTeamDropdownOpen] = useState(false);
-  const [active, setActive] = useState<string>(
-    window.location.hash || '/#home'
-  );
+  const location = useLocation();
+  const [active, setActive] = useState<string>(location.pathname + location.hash);
 
   const firstLinkRef = useRef<HTMLAnchorElement | null>(null);
   const teamDropdownRef = useRef<HTMLDivElement | null>(null);
@@ -19,21 +18,21 @@ const Navbar: React.FC = () => {
       role1: 'Karnataka PCC President',
       role2: 'Deputy CM, Govt. of Karnataka',
       img: 'https://ipcmedia.in/public/uploads/profile/1756048100_12.jpg',
-      href: '/profile/dk-shivakumar',
+      href: '/dk-shivakumar-profile',
     },
     {
       name: 'Siddaramaiah',
       role1: 'Chief Minister',
       role2: 'Govt. of Karnataka',
       img: 'https://www.coorgnews.in/wp-content/uploads/2024/08/siddaramaiah-photo.jpg',
-      href: '/profile/siddaramaiah',
+      href: '/siddaramaiah-profile',
     },
     {
       name: 'Manjunath Gowda',
       role1: 'State President',
       role2: 'IYC Karnataka',
-      img: 'https://imagesvs.oneindia.com/img/2018/04/manjunath-gowda-1524829569.jpg',
-      href: '/profile/manjunath-gowda',
+      img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLW4RHRvfmWY9Nw9cebeqJfH0954kKP7Xv6w&s',
+      href: '/hsmanjunatha',
     },
   ];
 
@@ -50,7 +49,7 @@ const Navbar: React.FC = () => {
     },
     { name: 'Activities', href: '/#activities' },
     { name: 'Videos', href: '/#videos' },
-    { name: 'Gallery', href: '/#gallery' },
+    { name: 'Gallery', href: '/gallery' },
     { name: 'Contact', href: '/#contact' },
   ];
 
@@ -160,9 +159,9 @@ const Navbar: React.FC = () => {
         {/* RIGHT SIDE LEADERS (DESKTOP) */}
         <div className="hidden md:flex ml-auto items-center gap-5">
           {prominentLeaders.map((leader) => (
-            <a
+            <Link
               key={leader.name}
-              href={leader.href}
+              to={leader.href}
               className="flex items-center gap-2 group"
             >
               <img
@@ -177,7 +176,7 @@ const Navbar: React.FC = () => {
                 <div className="text-[11px] text-gray-500">{leader.role1}</div>
                 <div className="text-[10px] text-gray-400">{leader.role2}</div>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
 

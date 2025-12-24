@@ -1,6 +1,6 @@
 import React, { useMemo, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   ArrowLeft,
   ArrowRight,
@@ -14,156 +14,171 @@ import {
   Heart,
   MapPin,
   Calendar,
-  Target, // Added new icons
+  Target,
   Briefcase,
   MessageSquare,
-  TrendingUp, // Added icons for general use
+  TrendingUp,
+  CheckCircle,
+  Flag,
 } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { useData } from '../context/DataContext';
 
-// --- 1. Define custom color/styling constants ---
-const COLORS = {
-  // Using Tailwind utility classes for consistency
-  saffron: 'text-orange-600',
-  indiaGreen: 'text-green-700',
-  bg: 'bg-gray-50',
-  text: 'text-gray-800',
-};
+// --- 1. Constants & Data ---
 
-// --- 2. Define Data Arrays Outside the Component ---
+const THEME = {
+  saffron: '#FF9933', // Official Flag Saffron
+  white: '#FFFFFF',
+  green: '#138808', // Official Flag Green
+  navy: '#000080', // Ashok Chakra Navy
+};
 
 const HISTORY_TIMELINE = [
   {
     year: '1960',
-    title: 'Foundation of Indian Youth Congress',
-    text: 'Founded on August 9, 1960, the Indian Youth Congress was created to channel the energy of young Indians into nation-building and democratic participation.',
+    title: 'Foundation',
+    text: 'Founded on August 9, 1960, to channel the energy of young Indians into nation-building.',
   },
   {
-    year: 'Late 1960s',
-    title: 'Transformation under Indira Gandhi',
-    text: 'Indira Gandhi restructured the IYC as a frontal organization, strengthening its role in political training, mass contact, and social work.',
+    year: '1970s',
+    title: 'Transformation',
+    text: 'Restructured as a frontal organization, strengthening its role in mass contact and social work.',
   },
   {
     year: '1980s',
-    title: 'Rajiv Gandhi & Youth Empowerment',
-    text: 'Rajiv Gandhi emerged from the IYC and expanded democratic participation by lowering the voting age to 18.',
+    title: 'Youth Empowerment',
+    text: 'Expanded democratic participation by lowering the voting age to 18 under Rajiv Gandhi.',
   },
   {
     year: '2000s',
-    title: 'Democratic Reforms under Rahul Gandhi',
-    text: 'Rahul Gandhi introduced internal elections and transparency, making the IYC more inclusive and accountable.',
+    title: 'Democratic Reforms',
+    text: 'Introduction of internal elections and transparency to make the IYC inclusive.',
   },
 ];
 
 const LEADER_QUOTES = [
   {
     name: 'Indira Gandhi',
-    role: 'Former Prime Minister of India',
+    role: 'Former Prime Minister',
     quote:
-      'The power to question is the basis of all human progress. Youth must never stop questioning injustice.',
+      'The power to question is the basis of all human progress. Youth must never stop questioning.',
+    color: 'from-orange-500 to-orange-600',
+    // CHANGE THIS PATH to your actual image
+    bgImage: '/assets/indra.png',
   },
   {
     name: 'Rajiv Gandhi',
-    role: 'Former Prime Minister of India',
+    role: 'Former Prime Minister',
     quote:
       'Youth is not a question of age. It is a state of mind — the courage to dream and the strength to act.',
+    color: 'from-blue-200 to-indigo-700',
+    // CHANGE THIS PATH to your actual image
+    bgImage: '/assets/rajiv.png',
   },
   {
-    name: 'Rahul Gandhi',
-    role: 'Leader, Indian National Congress',
+    name: 'Sonia Gandhi',
+    role: 'Chairperson, AICC',
     quote:
       'The future of India depends on fearless young Indians who stand for truth, equality, and democracy.',
-  },
-];
-
-const IMPACT_POINTS = [
-  {
-    title: 'Grassroots Mobilisation',
-    text: 'Movements, protests, and campaigns on unemployment, education, price rise, and justice.',
-    icon: Users,
+    color: 'from-indigo-700 to-blue-200',
+    // CHANGE THIS PATH to your actual image
+    bgImage: '/assets/sonia.png',
   },
   {
-    title: 'Leadership Development',
-    text: 'Training future leaders through structured political programs and fellowships.',
-    icon: BookOpen,
-  },
-  {
-    title: 'Ideological Defence',
-    text: 'Defending constitutional values against divisive and authoritarian politics.',
-    icon: Zap,
+    name: 'Mallikarjun Kharge',
+    role: 'President, AICC',
+    quote:
+      "India's youth is vying for change, dreaming about a better and secured life. Let's empower them to lead.",
+    color: 'from-green-600 to-green-700',
+    // CHANGE THIS PATH to your actual image
+    bgImage: '/assets/mallikarjun.png',
   },
 ];
 
 const CORE_PILLARS = [
   {
-    icon: 'Shield',
+    icon: Shield,
     title: 'Democratic Values',
-    description:
-      'Upholding the Constitution and promoting free speech and open debate.',
+    description: 'Upholding the Constitution and promoting free speech.',
+    color: 'text-blue-600',
+    bg: 'bg-blue-50',
   },
   {
-    icon: 'Scale',
+    icon: Scale,
     title: 'Social Justice',
     description:
-      'Fighting for equality, inclusivity, and the rights of marginalized communities.',
+      'Fighting for equality and rights of marginalized communities.',
+    color: 'text-orange-600',
+    bg: 'bg-orange-50',
   },
   {
-    icon: 'Heart',
+    icon: Heart,
     title: 'Youth Empowerment',
     description:
-      'Providing a platform for young voices to lead, contest, and shape policy.',
+      'Providing a platform for young voices to lead and shape policy.',
+    color: 'text-green-700',
+    bg: 'bg-green-50',
   },
 ];
 
 const KEY_STATS = [
-  { number: '1M+', label: 'Active Volunteers', icon: 'Users' },
-  { number: '29', label: 'State Units', icon: 'MapPin' },
-  { number: '60+', label: 'Years of Service', icon: 'Calendar' },
-  { number: '100+', label: 'Major Campaigns', icon: 'Target' },
+  { number: '1M+', label: 'Volunteers', icon: Users },
+  { number: '29', label: 'States', icon: MapPin },
+  { number: '60+', label: 'Years', icon: Calendar },
+  { number: '100+', label: 'Campaigns', icon: Flag },
 ];
 
-const SOCIAL_MEDIA_WING_POINTS = [
-  'Countering fake news and propaganda',
-  'High-impact digital campaigns',
-  'Training disciplined digital volunteers',
-  'Youth-led storytelling and ground reports',
+const IMPACT_POINTS = [
+  {
+    title: 'Grassroots Mobilisation',
+    text: 'Movements on unemployment & education.',
+    icon: Users,
+  },
+  {
+    title: 'Leadership Development',
+    text: 'Training future leaders via fellowships.',
+    icon: BookOpen,
+  },
+  {
+    title: 'Ideological Defence',
+    text: 'Defending constitutional values.',
+    icon: Shield,
+  },
 ];
 
-// --- 3. Utility Functions & Animation Variants ---
+// --- 2. Sub-Components for Cleanliness ---
 
-// Helper function to dynamically map string name to Lucide Icon component
-const iconMap = {
-  Shield,
-  Scale,
-  Heart,
-  Users,
-  MapPin,
-  Calendar,
-  Target,
-  Zap,
-  BookOpen,
-  Mic,
-  Globe,
-  Briefcase,
-  MessageSquare,
-  TrendingUp,
-};
+const SectionHeader = ({
+  title,
+  subtitle,
+  color = 'text-gray-900',
+  align = 'center',
+}: any) => (
+  <div className={`mb-12 ${align === 'center' ? 'text-center' : 'text-left'}`}>
+    <h2
+      className={`text-3xl md:text-4xl font-extrabold ${color} mb-3 tracking-tight`}
+    >
+      {title}
+    </h2>
+    {subtitle && (
+      <div
+        className={`h-1 w-24 ${
+          align === 'center' ? 'mx-auto' : ''
+        } bg-gradient-to-r from-orange-500 via-white to-green-600 rounded-full`}
+      />
+    )}
+  </div>
+);
 
-const getIconComponent = (iconName: keyof typeof iconMap) => {
-  return iconMap[iconName] || MessageSquare; // Fallback icon
-};
-
-const fadeIn = {
-  initial: { opacity: 0, y: 30 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-};
-
-// --- 4. The Component ---
+// --- 3. Main Component ---
 
 const AboutIYCPage: React.FC = () => {
   const { galleryItems } = useData();
+
+  // Parallax scroll hook
+  const { scrollYProgress } = useScroll();
+  const yRange = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
   const aboutImage = useMemo(
     () => galleryItems.find((item) => item.tag === 'about'),
@@ -171,326 +186,404 @@ const AboutIYCPage: React.FC = () => {
   );
 
   useEffect(() => {
-    document.title = 'About IYC - Indian Youth Congress';
+    document.title = 'About Us | Indian Youth Congress';
+    window.scrollTo(0, 0);
   }, []);
 
   return (
-    <div className={`min-h-screen ${COLORS.bg} ${COLORS.text} font-sans`}>
+    <div className="min-h-screen bg-white font-sans text-gray-800 selection:bg-orange-200 selection:text-orange-900">
       <Navbar />
 
-      <main id="main-content" className="pt-20" aria-labelledby="page-title">
-        {/* Back Link Section */}
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-6 pt-4">
-          <Link
-            to="/"
-            className={`inline-flex items-center gap-2 ${COLORS.saffron} font-semibold hover:text-orange-800 transition-colors`}
-            aria-label="Back to Home Page"
-          >
-            <ArrowLeft size={16} />
-            Back to Home
-          </Link>
+      <main className="pt-20">
+        {/* --- HERO SECTION --- */}
+        <div className="relative bg-white overflow-hidden">
+          {/* Abstract Background Decoration */}
+          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-orange-100 blur-3xl opacity-50"></div>
+          <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-green-100 blur-3xl opacity-50"></div>
+
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 pt-12 pb-20 relative z-10">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-orange-600 transition-colors mb-8"
+            >
+              <ArrowLeft size={16} /> Back to Home
+            </Link>
+
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: 'easeOut' }}
+              className="max-w-4xl"
+            >
+              <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 leading-tight mb-6">
+                The Political Force of <br />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-600 via-orange-500 to-yellow-500">
+                  Young India
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl text-gray-600 font-light leading-relaxed max-w-3xl border-l-4 border-green-600 pl-6">
+                Defending democracy, upholding constitutional values, and
+                fighting for social justice. We are the future, today.
+              </p>
+            </motion.div>
+          </div>
         </div>
 
-        {/* HERO Section (Section 1) */}
-        <motion.section {...fadeIn} className="bg-white pt-16 pb-12 shadow-lg">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <h1
-              id="page-title"
-              className={`text-5xl md:text-7xl font-extrabold ${COLORS.indiaGreen} mb-6`}
-            >
-              Indian Youth Congress
-            </h1>
+        {/* --- STATS STRIP --- */}
+        <div className="bg-gray-900 text-white py-12 relative overflow-hidden shadow-2xl">
+          {/* Subtle Tricolor border at top */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-white to-green-600"></div>
 
-            <p className="text-xl md:text-2xl font-semibold text-gray-700 max-w-4xl">
-              The political force of young India — defending democracy,
-              constitutional values, and social justice.
-            </p>
-
-            {/* National Flag Color Separator */}
-            <div className="mt-8 flex gap-1 items-center">
-              <div className="h-1 w-12 bg-orange-600 rounded-full" />
-              <div className="h-1 w-12 bg-white rounded-full border border-gray-200" />
-              <div className="h-1 w-12 bg-green-700 rounded-full" />
-            </div>
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+            {KEY_STATS.map((stat, idx) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="text-center group hover:-translate-y-1 transition-transform duration-300"
+              >
+                <stat.icon className="w-8 h-8 mx-auto mb-3 text-orange-500 group-hover:text-white transition-colors" />
+                <div className="text-4xl font-bold mb-1">{stat.number}</div>
+                <div className="text-sm uppercase tracking-widest text-gray-400 font-semibold">
+                  {stat.label}
+                </div>
+              </motion.div>
+            ))}
           </div>
-        </motion.section>
+        </div>
 
-        {/* KEY STATISTICS Section (New: Attention Grabber) */}
-        <section className="bg-orange-600 py-12 text-white shadow-inner">
+        {/* --- MISSION SECTION (Split Layout) --- */}
+        <section className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-              {KEY_STATS.map((stat, index) => {
-                const Icon = getIconComponent(
-                  stat.icon as keyof typeof iconMap
-                );
-                return (
-                  <motion.div
-                    key={stat.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                  >
-                    <Icon className="w-10 h-10 mx-auto mb-3 text-white/80" />
-                    <div className="text-4xl md:text-5xl font-extrabold">
-                      {stat.number}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+              >
+                <SectionHeader
+                  title="Our Mission"
+                  subtitle={true}
+                  align="left"
+                />
+                <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
+                  <p>
+                    The{' '}
+                    <span className="font-bold text-gray-900">
+                      Indian Youth Congress (IYC)
+                    </span>{' '}
+                    is the vibrant youth wing of the Indian National Congress.
+                    We are not just a political organization; we are a movement.
+                  </p>
+                  <p>
+                    We exist to channel the boundless energy, idealism, and
+                    courage of India’s youth into constructive nation-building.
+                    From the streets to the parliament, we ensure that the voice
+                    of the common youth resonates in the halls of power.
+                  </p>
+
+                  <div className="pt-4 flex flex-wrap gap-4">
+                    <div className="flex items-center gap-2 bg-orange-50 px-4 py-2 rounded-lg border border-orange-100">
+                      <CheckCircle size={18} className="text-orange-600" />
+                      <span className="font-medium text-orange-900">
+                        Secularism
+                      </span>
                     </div>
-                    <p className="text-sm font-medium uppercase tracking-wider text-white/90">
-                      {stat.label}
-                    </p>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+                    <div className="flex items-center gap-2 bg-green-50 px-4 py-2 rounded-lg border border-green-100">
+                      <CheckCircle size={18} className="text-green-700" />
+                      <span className="font-medium text-green-900">
+                        Democracy
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 bg-blue-50 px-4 py-2 rounded-lg border border-blue-100">
+                      <CheckCircle size={18} className="text-blue-700" />
+                      <span className="font-medium text-blue-900">
+                        Equality
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
 
-        {/* ABOUT Section (Section 2: Text and Image) */}
-        <section className="bg-white pt-16 pb-20">
-          <div className="max-w-6xl mx-auto px-6 lg:px-12">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl font-bold mb-4 border-b-2 border-green-700/50 inline-block pb-1">
-                  Our Mission
-                </h2>
-                <p className="text-lg text-gray-700 leading-relaxed space-y-4">
-                  <p>
-                    The Indian Youth Congress (IYC) is the youth wing of the
-                    Indian National Congress and one of the largest democratic
-                    youth organizations in the world.
-                  </p>
-                  <p>
-                    It exists to channel the energy, idealism, and courage of
-                    India’s youth into nation-building and progressive political
-                    action, ensuring a vibrant and equitable future for all
-                    citizens.
-                  </p>
-                </p>
-              </div>
-
-              {aboutImage && (
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.8 }}
-                  className="relative group mt-8 md:mt-0"
-                >
-                  {/* Decorative element for depth */}
-                  <div className="absolute inset-0 bg-green-700/10 rounded-3xl -z-10 transform translate-x-3 translate-y-3 group-hover:translate-x-4 group-hover:translate-y-4 transition duration-300 hidden md:block" />
-
-                  <div
-                    className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white 
-                transform group-hover:-translate-x-1 group-hover:-translate-y-1 
-                transition duration-300 h-[360px] bg-white"
-                  >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="relative"
+              >
+                <div className="absolute inset-0 bg-gradient-to-tr from-orange-400 to-green-600 rounded-2xl transform rotate-3 blur-sm opacity-30"></div>
+                <div className="relative bg-white p-2 rounded-2xl shadow-xl border border-gray-100 overflow-hidden h-[450px]">
+                  {aboutImage ? (
                     <img
                       src={aboutImage.imageUrl}
-                      alt={aboutImage.alt || 'Indian Youth Congress emblem'}
-                      className="w-full h-full object-contain p-6 transition-all duration-500"
-                      loading="lazy"
+                      alt="IYC Event"
+                      className="w-full h-full object-cover rounded-xl hover:scale-105 transition-transform duration-700"
                     />
-                  </div>
-                </motion.div>
-              )}
+                  ) : (
+                    <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400 flex-col">
+                      <Users size={48} className="mb-4 opacity-50" />
+                      <span>About Us Image</span>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* CORE PILLARS Section (New: Values Focus) */}
-        <section
-          className={`${COLORS.bg} py-20 border-t border-b border-gray-100`}
-        >
+        {/* --- PILLARS --- */}
+        <section className="py-24 bg-gray-50">
           <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <h2
-              className={`text-4xl font-extrabold mb-12 text-center ${COLORS.indiaGreen}`}
-            >
-              Our Core Pillars
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              {CORE_PILLARS.map((value, index) => {
-                const Icon = getIconComponent(
-                  value.icon as keyof typeof iconMap
-                );
-                return (
-                  <motion.div
-                    key={value.title}
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.15 }}
-                    className="text-center p-8 bg-white rounded-2xl shadow-xl border-t-8 border-orange-600/50 hover:shadow-2xl transition duration-300"
-                  >
-                    <Icon
-                      className={`w-12 h-12 mx-auto mb-4 ${COLORS.saffron}`}
-                      strokeWidth={2.5}
-                    />
-                    <h3 className="text-2xl font-bold mb-3">{value.title}</h3>
-                    <p className="text-gray-600">{value.description}</p>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+            <SectionHeader title="Our Core Pillars" subtitle={true} />
 
-        {/* HISTORY Section (Section 3: Timeline) */}
-        <section className={`bg-white py-20`}>
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <h2
-              className={`text-4xl font-extrabold mb-12 border-b-4 border-orange-600 inline-block pb-3 ${COLORS.indiaGreen}`}
-            >
-              Our History & Legacy
-            </h2>
-
-            <div className="relative border-l-4 border-orange-600/70 pl-10 space-y-12">
-              {HISTORY_TIMELINE.map((item, index) => (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {CORE_PILLARS.map((pillar, idx) => (
                 <motion.div
-                  key={item.year}
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  key={pillar.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  className="relative"
-                  role="listitem"
+                  transition={{ delay: idx * 0.2 }}
+                  className={`bg-white p-8 rounded-2xl shadow-lg border-t-4 ${
+                    pillar.color === 'text-orange-600'
+                      ? 'border-orange-500'
+                      : pillar.color === 'text-green-700'
+                      ? 'border-green-600'
+                      : 'border-blue-600'
+                  } hover:shadow-2xl transition-shadow duration-300`}
                 >
-                  <div className="absolute -left-[30px] top-2 w-5 h-5 bg-white border-4 border-orange-600 rounded-full shadow-md" />
-
-                  <div className="bg-gray-50 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-shadow duration-300">
-                    <span
-                      className={`inline-block mb-3 px-3 py-1 rounded-full bg-orange-100 ${COLORS.saffron} font-bold text-xs`}
-                    >
-                      {item.year}
-                    </span>
-                    <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                    <p className="text-base text-gray-600 leading-relaxed">
-                      {item.text}
-                    </p>
+                  <div
+                    className={`w-14 h-14 ${pillar.bg} ${pillar.color} rounded-full flex items-center justify-center mb-6`}
+                  >
+                    <pillar.icon size={28} />
                   </div>
+                  <h3 className="text-xl font-bold mb-3">{pillar.title}</h3>
+                  <p className="text-gray-600">{pillar.description}</p>
                 </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* LEADER QUOTES Section (Section 4) */}
-        <section className={`${COLORS.bg} py-20`}>
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <h2
-              className={`text-4xl font-extrabold mb-12 border-b-4 border-green-700 inline-block pb-3 ${COLORS.indiaGreen}`}
-            >
-              Voices That Shaped the Movement
-            </h2>
+        {/* --- HISTORY TIMELINE --- */}
+        <section className="py-24 bg-white relative overflow-hidden">
+          {/* Background Map Effect (Optional placeholder) */}
+          <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#138808_1px,transparent_1px)] [background-size:16px_16px]"></div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {LEADER_QUOTES.map((leader, index) => (
-                <motion.blockquote
-                  key={leader.name}
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  className="relative bg-white rounded-2xl p-8 shadow-xl"
-                  aria-label={`Quote by ${leader.name}`}
-                >
-                  <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-orange-600 to-green-700 rounded-tl-2xl rounded-bl-2xl" />
+          <div className="max-w-5xl mx-auto px-6 lg:px-12 relative z-10">
+            <SectionHeader title="Our Legacy" subtitle={true} />
 
-                  <p className="text-lg text-gray-800 leading-relaxed mb-6 pl-5 italic">
-                    <Mic
-                      className={`inline-block mr-2 w-5 h-5 ${COLORS.saffron}`}
-                    />
-                    “{leader.quote}”
-                  </p>
+            <div className="relative">
+              {/* Central Line */}
+              <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-200"></div>
 
-                  <footer className="border-t pt-4 pl-5">
-                    <p className="font-bold text-lg">{leader.name}</p>
-                    <p className="text-sm text-gray-500">{leader.role}</p>
-                  </footer>
-                </motion.blockquote>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* IMPACT Section (Section 5) */}
-        <section className="bg-white py-20">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <h2
-              className={`text-4xl font-extrabold mb-12 border-b-4 border-green-700 inline-block pb-3 ${COLORS.indiaGreen}`}
-            >
-              Our Core Impact
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {IMPACT_POINTS.map((item, index) => {
-                const Icon = item.icon;
-                return (
+              <div className="space-y-12">
+                {HISTORY_TIMELINE.map((item, idx) => (
                   <motion.div
-                    key={item.title}
+                    key={item.year}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    className="bg-gray-50 rounded-2xl p-8 shadow-xl border-t-4 border-green-700 hover:border-orange-600 transition-colors"
+                    transition={{ delay: idx * 0.1 }}
+                    className={`flex flex-col md:flex-row items-center justify-between gap-8 ${
+                      idx % 2 === 0 ? 'md:flex-row-reverse' : ''
+                    }`}
                   >
-                    <Icon className={`w-8 h-8 mb-4 ${COLORS.indiaGreen}`} />
-                    <h3 className="text-xl font-bold mb-3">{item.title}</h3>
-                    <p className="text-base text-gray-600">{item.text}</p>
+                    {/* Text Side */}
+                    <div className="w-full md:w-[45%] bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:border-orange-200 transition-colors">
+                      <div className="text-3xl font-bold text-orange-600 mb-2">
+                        {item.year}
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        {item.text}
+                      </p>
+                    </div>
+
+                    {/* Dot */}
+                    <div className="w-4 h-4 bg-green-600 rounded-full border-4 border-white shadow-md z-10 hidden md:block relative">
+                      {/* Pulsing effect */}
+                      <div className="absolute inset-0 bg-green-600 rounded-full animate-ping opacity-20"></div>
+                    </div>
+
+                    {/* Empty Side for Balance */}
+                    <div className="w-full md:w-[45%] hidden md:block"></div>
                   </motion.div>
-                );
-              })}
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        {/* SOCIAL MEDIA WING (Section 6: Distinct Branding) */}
-        <section className="bg-gray-900 text-white py-20">
+        {/* --- LEADERSHIP VOICES --- */}
+        <section className="py-24 bg-slate-900 text-white overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <h2 className="text-4xl md:text-5xl font-extrabold mb-8">
-              The Social Media Wing
-              <span className="block text-orange-600 mt-2 text-3xl">
-                Our Digital Frontline
-              </span>
+            <h2 className="text-3xl md:text-4xl font-extrabold text-center mb-16">
+              <span className="text-orange-500">Voice's</span> That{' '}
+              <span className="text-green-500">Guide Us</span>
             </h2>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-base">
-              {SOCIAL_MEDIA_WING_POINTS.map((text, index) => (
-                <motion.div
-                  key={text}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="bg-gray-800 rounded-xl p-6 border-l-4 border-orange-600 flex items-center shadow-lg"
+          <div
+            className="[mask-image:linear-gradient(to-right,transparent,white_20%,white_80%,transparent)] group"
+            style={
+              {
+                '--animation-duration': '80s',
+              } as React.CSSProperties
+            }
+          >
+            <div className="flex w-max flex-nowrap gap-8 animate-scroll">
+              {[...LEADER_QUOTES, ...LEADER_QUOTES].map((leader, idx) => (
+                <div
+                  key={`${leader.name}-${idx}`}
+                  className="relative rounded-2xl p-8 overflow-hidden group shadow-xl h-full flex flex-col justify-between w-full max-w-sm flex-shrink-0"
                 >
-                  <TrendingUp className="w-5 h-5 text-green-500 mr-3 flex-shrink-0" />
-                  <p>{text}</p>
-                </motion.div>
+                  {/* 1. BACKGROUND IMAGE LAYER */}
+                  <div
+                    className="absolute inset-0 z-0 transition-transform duration-700 group-hover:scale-110"
+                    style={{
+                      backgroundImage: `url('${leader.bgImage}')`,
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center top',
+                    }}
+                  />
+
+                  {/* 2. DARK OVERLAY (Gradient makes text readable) */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/60 z-10 transition-opacity group-hover:opacity-90"></div>
+
+                  {/* 3. COLOR STRIP AT TOP */}
+                  <div
+                    className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${leader.color} z-20`}
+                  ></div>
+
+                  {/* 4. CONTENT (Relative z-20 ensures it sits on top) */}
+                  <div className="relative z-20">
+                    <Mic className="w-8 h-8 text-white/60 mb-6" />
+
+                    <p className="text-lg text-white italic mb-8 leading-relaxed font-medium">
+                      "{leader.quote}"
+                    </p>
+
+                    <div className="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
+                      <div>
+                        <h4 className="font-bold text-white text-lg">
+                          {leader.name}
+                        </h4>
+                        <p className="text-sm text-gray-300">{leader.role}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* CALL TO ACTION (New: Footer Connection) */}
-        <section className="bg-green-700 py-16">
-          <div className="max-w-4xl mx-auto text-center px-6 lg:px-12">
-            <h3 className="text-3xl md:text-4xl font-extrabold text-white mb-4">
-              Ready to make an impact?
-            </h3>
-            <p className="text-lg text-green-100 mb-8">
-              Join the movement, stand for constitutional values, and shape the
-              future of India.
-            </p>
-            <Link
-              to="/join"
-              className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-green-700 bg-white hover:bg-gray-100 transition-colors shadow-lg transform hover:scale-[1.02]"
-            >
-              Join the IYC Today <ArrowRight className="ml-2 w-4 h-4" />
-            </Link>
+        {/* --- DIGITAL WING --- */}
+        <section className="py-24 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12">
+            <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl border border-gray-100 flex flex-col md:flex-row items-center gap-12 overflow-hidden relative">
+              {/* Decorative Circle */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-orange-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 -mr-16 -mt-16"></div>
+
+              <div className="flex-1 z-10">
+                <div className="flex items-center gap-2 mb-4">
+                  <TrendingUp className="text-green-600" />
+                  <span className="font-bold text-green-700 tracking-wide text-sm uppercase">
+                    Digital Frontier
+                  </span>
+                </div>
+                <h2 className="text-4xl font-extrabold text-gray-900 mb-6">
+                  The IYC Social Media Wing
+                </h2>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700">
+                      Combating misinformation with facts and ground reports.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700">
+                      Driving high-impact digital campaigns for social justice.
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-orange-500 mt-1 flex-shrink-0" />
+                    <span className="text-gray-700">
+                      Empowering youth volunteers with digital literacy.
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="flex-1 w-full z-10">
+                <div className="bg-gradient-to-br from-gray-900 to-gray-800 p-8 rounded-2xl shadow-lg text-white">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-blue-400" /> Connect with Us
+                  </h3>
+                  <div className="space-y-4">
+                    <p className="text-gray-400 text-sm">
+                      Join the digital army. Follow us for real-time updates.
+                    </p>
+                    <div className="flex gap-4">
+                      {/* Social placeholders */}
+                      <div className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer transition-colors">
+                        X
+                      </div>
+                      <div className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer transition-colors">
+                        Fb
+                      </div>
+                      <div className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer transition-colors">
+                        In
+                      </div>
+                      <div className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer transition-colors">
+                        Yt
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
-      </main>
 
+        {/* --- CTA SECTION ---
+        <section className="bg-gradient-to-r from-orange-600 to-orange-500 py-20 text-center relative overflow-hidden">
+          {/* Abstract Pattern overlay
+          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+
+          <div className="max-w-4xl mx-auto px-6 relative z-10">
+            <h2 className="text-4xl font-extrabold text-white mb-6">
+              Ready to Serve the Nation?
+            </h2>
+            <p className="text-orange-100 text-xl mb-8">
+              Join the movement that defines the future of India. Be the change
+              you wish to see.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                to="/join"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white text-orange-700 font-bold rounded-full shadow-lg hover:shadow-xl hover:bg-gray-100 transition-all transform hover:-translate-y-1"
+              >
+                Become a Member <ArrowRight className="ml-2 w-5 h-5" />
+              </Link>
+              <Link
+                to="/donate"
+                className="inline-flex items-center justify-center px-8 py-4 bg-orange-700 border border-orange-400 text-white font-bold rounded-full shadow-lg hover:bg-orange-800 transition-all"
+              >
+                Contribute
+              </Link>
+            </div>
+          </div>
+        </section>*/}
+      </main>
       <Footer />
     </div>
   );

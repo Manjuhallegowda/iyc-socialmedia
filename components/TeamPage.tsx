@@ -1,19 +1,19 @@
-import React, { useState, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useMemo, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { useData } from '../context/DataContext';
 import { DistrictHierarchyData } from '../types';
-import KarnatakaMap from './KarnatakaMap';
 import {
   ChevronRight,
   Users,
   Award,
-  TrendingUp,
   MapPin,
   Building,
   Target,
   BarChart3,
+  CheckCircle2,
+  Info,
 } from 'lucide-react';
 
 // All Karnataka districts (comprehensive list)
@@ -52,7 +52,13 @@ const KARNATAKA_DISTRICTS = [
 ];
 
 const TeamPage: React.FC = () => {
-  const { getDistrictHierarchyData, loading } = useData();
+  const location = useLocation();
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
+  const { getDistrictHierarchyData } = useData();
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
 
   const selectedDistrictData = useMemo((): DistrictHierarchyData | null => {
@@ -73,294 +79,107 @@ const TeamPage: React.FC = () => {
     hasDataForDistrict(district)
   );
 
+  const totalMembers = activeDistricts.reduce((sum, district) => {
+    const data = getDistrictHierarchyData(district);
+    return sum + (data?.counts.totalActive || 0);
+  }, 0);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 text-gray-800 font-sans">
+    <div className="min-h-screen bg-gray-50 text-gray-800 font-sans selection:bg-orange-100 selection:text-orange-900">
       <Navbar />
-      <main className="pt-32 pb-20 container mx-auto px-4">
-        {/* Header Section */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-indiaGreen mb-4">
-            KPYCC Interactive Karnataka Map
-          </h1>
-          <p className="text-xl text-gray-600 mb-6 max-w-3xl mx-auto">
-            Explore our comprehensive team structure across all districts of
-            Karnataka. Click on any district in the map to view hierarchical
-            leadership and member data.
-          </p>
-          <div className="flex justify-center space-x-8 text-sm text-gray-500">
-            <div className="flex items-center">
-              <MapPin className="w-4 h-4 mr-2" />
-              <span>All 31 Districts</span>
+
+      {/* Hero Header */}
+      <div className="bg-white border-b border-gray-200 pt-32 pb-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-end gap-6">
+            <div>
+              <h5 className="text-orange-600 font-bold tracking-wider uppercase text-sm mb-2">
+                Organization Structure
+              </h5>
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                KPYCC Leadership Network
+              </h1>
+              <p className="text-lg text-gray-500 max-w-2xl">
+                A transparent hierarchical view of our leadership across all 31
+                districts of Karnataka.
+              </p>
             </div>
-            <div className="flex items-center">
-              <Users className="w-4 h-4 mr-2" />
-              <span>Multi-level Hierarchy</span>
-            </div>
-            <div className="flex items-center">
-              <Award className="w-4 h-4 mr-2" />
-              <span>Real-time Data</span>
+
+            {/* Top Level Stats Summary */}
+            <div className="flex gap-6 text-right">
+              <div className="hidden md:block">
+                <div className="text-3xl font-bold text-gray-900">
+                  {KARNATAKA_DISTRICTS.length}
+                </div>
+                <div className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                  Districts
+                </div>
+              </div>
+              <div className="hidden md:block pl-6 border-l border-gray-200">
+                <div className="text-3xl font-bold text-green-600">
+                  {activeDistricts.length}
+                </div>
+                <div className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                  Active Units
+                </div>
+              </div>
+              <div className="hidden md:block pl-6 border-l border-gray-200">
+                <div className="text-3xl font-bold text-blue-600">
+                  {totalMembers}
+                </div>
+                <div className="text-xs text-gray-500 uppercase tracking-wide font-medium">
+                  Total Leaders
+                </div>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          {/* Left Panel: District Information */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-2xl shadow-xl p-8 sticky top-8">
-              {selectedDistrictData ? (
-                <div>
-                  {/* District Header */}
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-3xl font-bold text-indiaGreen">
-                      {selectedDistrict}
-                    </h2>
-                    {hasDataForDistrict(selectedDistrict) && (
-                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
-                        Active
-                      </span>
-                    )}
-                  </div>
-
-                  {/* President Profile */}
-                  {selectedDistrictData.president && (
-                    <div className="mb-8">
-                      <h3 className="text-xl font-bold mb-4 text-gray-800">
-                        District President
-                      </h3>
-                      <div className="bg-gradient-to-r from-saffron to-orange-500 rounded-xl overflow-hidden shadow-lg">
-                        <div className="h-48 overflow-hidden">
-                          <img
-                            src={selectedDistrictData.president.imageUrl}
-                            alt={selectedDistrictData.president.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        <div className="p-6 text-white">
-                          <h4 className="text-2xl font-bold mb-2">
-                            {selectedDistrictData.president.name}
-                          </h4>
-                          <p className="text-orange-100 text-sm font-semibold uppercase tracking-wider mb-3">
-                            {selectedDistrictData.president.designation}
-                          </p>
-                          <p className="text-orange-50 text-sm">
-                            {selectedDistrictData.president.bio}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Hierarchical Counts */}
-                  <div className="mb-8">
-                    <h3 className="text-xl font-bold mb-4 text-gray-800">
-                      Leadership Structure
-                    </h3>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="flex items-center mb-1">
-                              <Award className="w-4 h-4 text-blue-600 mr-2" />
-                              <span className="text-sm font-semibold text-blue-800">
-                                District Level
-                              </span>
-                            </div>
-                          </div>
-                          <span className="text-2xl font-bold text-blue-600">
-                            {selectedDistrictData.counts.district}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="bg-green-50 p-4 rounded-lg">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="flex items-center mb-1">
-                              <Building className="w-4 h-4 text-green-600 mr-2" />
-                              <span className="text-sm font-semibold text-green-800">
-                                Assembly Level
-                              </span>
-                            </div>
-                          </div>
-                          <span className="text-2xl font-bold text-green-600">
-                            {selectedDistrictData.counts.assembly}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="bg-purple-50 p-4 rounded-lg">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="flex items-center mb-1">
-                              <Target className="w-4 h-4 text-purple-600 mr-2" />
-                              <span className="text-sm font-semibold text-purple-800">
-                                Block Level
-                              </span>
-                            </div>
-                          </div>
-                          <span className="text-2xl font-bold text-purple-600">
-                            {selectedDistrictData.counts.block}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="bg-orange-50 p-4 rounded-lg">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="flex items-center mb-1">
-                              <Users className="w-4 h-4 text-orange-600 mr-2" />
-                              <span className="text-sm font-semibold text-orange-800">
-                                SM Team
-                              </span>
-                            </div>
-                          </div>
-                          <span className="text-2xl font-bold text-orange-600">
-                            {selectedDistrictData.counts.smTeam}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Team Statistics */}
-                  <div className="mb-8">
-                    <h3 className="text-xl font-bold mb-4 text-gray-800">
-                      Team Statistics
-                    </h3>
-                    <div className="bg-gray-50 p-6 rounded-xl">
-                      <div className="flex items-center justify-between mb-3">
-                        <div className="flex items-center">
-                          <BarChart3 className="w-5 h-5 text-indiaGreen mr-2" />
-                          <span className="text-gray-600">
-                            Total Active Members
-                          </span>
-                        </div>
-                        <span className="text-2xl font-bold text-indiaGreen">
-                          {selectedDistrictData.counts.totalActive}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-3 gap-4 text-center">
-                        <div>
-                          <div className="text-lg font-bold text-blue-600">
-                            {selectedDistrictData.statistics.maleMembers}
-                          </div>
-                          <div className="text-xs text-gray-500">Male</div>
-                        </div>
-                        <div>
-                          <div className="text-lg font-bold text-pink-600">
-                            {selectedDistrictData.statistics.femaleMembers}
-                          </div>
-                          <div className="text-xs text-gray-500">Female</div>
-                        </div>
-                        <div>
-                          <div className="text-lg font-bold text-green-600">
-                            {selectedDistrictData.statistics.youngLeaders}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            Young Leaders
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Know More Button */}
-                  <div className="text-center">
-                    <Link
-                      to={`/kpycc-team/${selectedDistrict}`}
-                      className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-saffron to-orange-500 text-white rounded-full font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-orange-300"
-                    >
-                      Explore District Profile
-                      <ChevronRight className="ml-3 w-6 h-6" />
-                    </Link>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <MapPin className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                    Select a District
-                  </h3>
-                  <p className="text-gray-500">
-                    Click on any district in the map to view detailed
-                    information about the team structure and leadership.
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Right Panel: Interactive Karnataka Map */}
-          <div className="lg:col-span-3">
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-gray-800">
-                  Karnataka Districts Map
+      <main className="py-12 container mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* LEFT PANEL: Interactive Map & Grid (Occupies 7 cols) */}
+          <div className="lg:col-span-7 space-y-8">
+            {/* Map Container */}
+            <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 relative overflow-hidden">
+              <div className="flex items-center justify-between mb-8">
+                <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+                  <MapPin className="w-5 h-5 text-orange-500" />
+                  Karnataka Overview
                 </h2>
-                <div className="text-sm text-gray-500">
-                  {activeDistricts.length} of {KARNATAKA_DISTRICTS.length}{' '}
-                  active
+
+                {/* Legend */}
+                <div className="flex gap-4 text-xs font-medium">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-orange-500"></span>{' '}
+                    Selected
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-green-500"></span>{' '}
+                    Active
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-gray-300"></span>{' '}
+                    Inactive
+                  </div>
                 </div>
               </div>
 
-              {/* Statistics Overview */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-lg">
-                  <div className="text-2xl font-bold">
-                    {KARNATAKA_DISTRICTS.length}
-                  </div>
-                  <div className="text-blue-100 text-sm">Total Districts</div>
-                </div>
-                <div className="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg">
-                  <div className="text-2xl font-bold">
-                    {activeDistricts.length}
-                  </div>
-                  <div className="text-green-100 text-sm">Active Districts</div>
-                </div>
-                <div className="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4 rounded-lg">
-                  <div className="text-2xl font-bold">
-                    {activeDistricts.reduce((sum, district) => {
-                      const data = getDistrictHierarchyData(district);
-                      return sum + (data?.counts.totalActive || 0);
-                    }, 0)}
-                  </div>
-                  <div className="text-purple-100 text-sm">Total Members</div>
-                </div>
-              </div>
-
-              {/* Interactive Map */}
-              <div className="mb-6">
-                <KarnatakaMap
-                  selectedDistrict={selectedDistrict}
-                  onDistrictClick={handleDistrictClick}
-                  districtsWithData={activeDistricts}
+              {/* Static Karnataka Map SVG */}
+              <div className="flex justify-center bg-gray-50 rounded-2xl p-6 border border-gray-100 mb-8">
+                <img
+                  src="/assets/Karnataka_districts_map.svg"
+                  alt="Karnataka Districts Map"
+                  className="w-full max-w-lg h-auto drop-shadow-md transition-opacity hover:opacity-95"
                 />
               </div>
 
-              {/* Legend */}
-              <div className="pt-6 border-t border-gray-200">
-                <h4 className="text-sm font-semibold text-gray-700 mb-3">
-                  Map Legend
-                </h4>
-                <div className="flex flex-wrap gap-4 text-xs">
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-saffron rounded mr-2"></div>
-                    <span className="text-gray-600">Selected District</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-green-500 rounded mr-2"></div>
-                    <span className="text-gray-600">Active District</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-3 h-3 bg-gray-300 rounded mr-2"></div>
-                    <span className="text-gray-600">No Data Available</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Quick Access Grid */}
-              <div className="mt-8">
-                <h4 className="text-sm font-semibold text-gray-700 mb-3">
-                  Quick District Access
-                </h4>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
+              {/* Quick Access Grid (Pills) */}
+              <div>
+                <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4">
+                  Select a District
+                </h3>
+                <div className="flex flex-wrap gap-2">
                   {KARNATAKA_DISTRICTS.map((district) => {
                     const isSelected = selectedDistrict === district;
                     const hasData = hasDataForDistrict(district);
@@ -369,12 +188,12 @@ const TeamPage: React.FC = () => {
                       <button
                         key={district}
                         onClick={() => handleDistrictClick(district)}
-                        className={`p-2 rounded text-xs font-semibold transition-all duration-200 ${
+                        className={`px-4 py-2 rounded-full text-xs font-semibold transition-all duration-300 border ${
                           isSelected
-                            ? 'bg-saffron text-white shadow-md'
+                            ? 'bg-orange-600 border-orange-600 text-white shadow-md shadow-orange-200 scale-105'
                             : hasData
-                            ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                            ? 'bg-white border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300'
+                            : 'bg-white border-gray-200 text-gray-400 hover:bg-gray-50'
                         }`}
                       >
                         {district}
@@ -383,6 +202,167 @@ const TeamPage: React.FC = () => {
                   })}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* RIGHT PANEL: Details Sidebar (Occupies 5 cols) */}
+          <div className="lg:col-span-5 relative">
+            <div className="sticky top-24 space-y-6">
+              {selectedDistrictData ? (
+                <>
+                  {/* Active Selection Card */}
+                  <div className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden relative">
+                    {/* Header Decoration */}
+                    <div className="h-2 w-full bg-gradient-to-r from-orange-500 via-white to-green-600"></div>
+
+                    <div className="p-8">
+                      {/* District Title */}
+                      <div className="flex justify-between items-start mb-8">
+                        <div>
+                          <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                            Selected District
+                          </span>
+                          <h2 className="text-3xl font-serif font-bold text-gray-900 mt-1">
+                            {selectedDistrict}
+                          </h2>
+                        </div>
+                        {hasDataForDistrict(selectedDistrict || '') && (
+                          <span className="flex items-center gap-1 bg-green-50 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-100">
+                            <CheckCircle2 className="w-3 h-3" /> Active Unit
+                          </span>
+                        )}
+                      </div>
+
+                      {/* President Profile - Executive Style */}
+                      {selectedDistrictData.president && (
+                        <div className="bg-gray-50 rounded-2xl p-6 border border-gray-100 mb-8 flex flex-col sm:flex-row items-center sm:items-start gap-6">
+                          <div className="relative">
+                            <div className="w-24 h-24 rounded-full p-1 bg-white border border-gray-200 shadow-sm">
+                              <img
+                                src={selectedDistrictData.president.imageUrl}
+                                alt={selectedDistrictData.president.name}
+                                className="w-full h-full object-cover rounded-full"
+                              />
+                            </div>
+                            <div className="absolute bottom-0 right-0 bg-blue-600 text-white p-1.5 rounded-full border-2 border-white">
+                              <Award className="w-3 h-3" />
+                            </div>
+                          </div>
+                          <div className="text-center sm:text-left flex-1">
+                            <h3 className="text-xl font-bold text-gray-900 leading-tight">
+                              {selectedDistrictData.president.name}
+                            </h3>
+                            <p className="text-sm font-semibold text-blue-700 uppercase tracking-wide mt-1 mb-3">
+                              {selectedDistrictData.president.designation}
+                            </p>
+                            <p className="text-sm text-gray-600 leading-relaxed italic border-l-2 border-orange-300 pl-3">
+                              "
+                              {selectedDistrictData.president.bio.length > 80
+                                ? selectedDistrictData.president.bio.substring(
+                                    0,
+                                    80
+                                  ) + '...'
+                                : selectedDistrictData.president.bio}
+                              "
+                            </p>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* KPI Stats Grid */}
+                      <h4 className="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <BarChart3 className="w-4 h-4 text-gray-400" />
+                        Structure & Strength
+                      </h4>
+
+                      <div className="grid grid-cols-2 gap-3 mb-8">
+                        <div className="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="p-1.5 bg-blue-50 rounded-lg group-hover:bg-blue-100 transition-colors">
+                              <Award className="w-4 h-4 text-blue-600" />
+                            </div>
+                            <span className="text-xs font-semibold text-gray-500 uppercase">
+                              District
+                            </span>
+                          </div>
+                          <span className="text-2xl font-bold text-gray-900">
+                            {selectedDistrictData.counts.district}
+                          </span>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="p-1.5 bg-green-50 rounded-lg group-hover:bg-green-100 transition-colors">
+                              <Building className="w-4 h-4 text-green-600" />
+                            </div>
+                            <span className="text-xs font-semibold text-gray-500 uppercase">
+                              Assembly
+                            </span>
+                          </div>
+                          <span className="text-2xl font-bold text-gray-900">
+                            {selectedDistrictData.counts.assembly}
+                          </span>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="p-1.5 bg-purple-50 rounded-lg group-hover:bg-purple-100 transition-colors">
+                              <Target className="w-4 h-4 text-purple-600" />
+                            </div>
+                            <span className="text-xs font-semibold text-gray-500 uppercase">
+                              Block
+                            </span>
+                          </div>
+                          <span className="text-2xl font-bold text-gray-900">
+                            {selectedDistrictData.counts.block}
+                          </span>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-white border border-gray-100 shadow-sm hover:shadow-md transition-shadow group">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="p-1.5 bg-orange-50 rounded-lg group-hover:bg-orange-100 transition-colors">
+                              <Users className="w-4 h-4 text-orange-600" />
+                            </div>
+                            <span className="text-xs font-semibold text-gray-500 uppercase">
+                              SM Team
+                            </span>
+                          </div>
+                          <span className="text-2xl font-bold text-gray-900">
+                            {selectedDistrictData.counts.smTeam}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* CTA Button */}
+                      <Link
+                        to={`/kpycc-team/${selectedDistrict}`}
+                        className="block w-full py-4 bg-gray-900 text-white text-center rounded-xl font-bold hover:bg-gray-800 transition-all flex items-center justify-center gap-2 group"
+                      >
+                        View Full Organization
+                        <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                      </Link>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                /* Empty State Placeholder */
+                <div className="bg-white rounded-3xl border border-dashed border-gray-300 p-12 text-center h-full flex flex-col justify-center items-center">
+                  <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mb-6">
+                    <MapPin className="w-10 h-10 text-gray-300" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">
+                    No District Selected
+                  </h3>
+                  <p className="text-gray-500 mb-8 max-w-xs mx-auto">
+                    Click on any district from the map or the list to view its
+                    leadership hierarchy.
+                  </p>
+                  <div className="flex items-center gap-2 text-sm text-gray-400 bg-gray-50 px-4 py-2 rounded-full">
+                    <Info className="w-4 h-4" />
+                    <span>Select a location to begin</span>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

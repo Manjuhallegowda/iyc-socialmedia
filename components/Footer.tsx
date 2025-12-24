@@ -213,6 +213,18 @@ const Footer: React.FC = () => {
             &copy; {new Date().getFullYear()} IYC Karnataka. All rights
             reserved.
           </p>
+
+          <p className="text-gray-600 text-xs mt-2">
+            Built by{' '}
+            <a
+              href="https://www.ranstacksolutions.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-white underline underline-offset-4 transition"
+            >
+              Ranstack Solutions
+            </a>
+          </p>
         </div>
       </div>
     </footer>

@@ -722,7 +722,7 @@ const PublicHome: React.FC = () => {
                   to="/activities"
                   className="inline-block px-8 py-3 bg-saffron text-white rounded-full font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-saffron/30 transform hover:-translate-y-1 hover:scale-102 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 >
-                  More Movement
+                  More Activities
                 </Link>
               </div>
             )}
