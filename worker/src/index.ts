@@ -22,7 +22,7 @@ export type Env = {
   DB: D1Database;
   BUCKET: R2Bucket;
   CORS_ALLOWED_ORIGIN: string;
-  JWT_SECRET: string;
+  JJWT_SECRET_KEY: string;
 };
 
 // Define the User type for authentication
@@ -56,10 +56,10 @@ app.use('*', async (c, next) => {
 
 // JWT middleware — creates per-request jwt middleware so it can read env
 const jwtMiddleware = async (c: Context, next: Next) => {
-  const secret = c.env.JWT_SECRET;
+  const secret = c.env.JJWT_SECRET_KEY;
   if (!secret) {
     return c.json(
-      { error: 'Server misconfiguration: JWT_SECRET missing' },
+      { error: 'Server misconfiguration: JJWT_SECRET_KEY missing' },
       500
     );
   }
@@ -151,7 +151,6 @@ auth.post('/login', async (c) => {
 
     // If no users exist, create the first user as admin
     if (userCount === 0) {
-      console.log('No users found. Creating first admin user.');
       const id = generateUUID();
       const salt = generateSaltBase64();
       const hashed = await hashPassword(password, salt);
@@ -180,8 +179,6 @@ auth.post('/login', async (c) => {
           hashed.algorithm
         )
         .run();
-
-      console.log('Admin user created successfully.');
     } else {
       // Normal authentication flow
       const fetched = await c.env.DB.prepare(
@@ -212,7 +209,7 @@ auth.post('/login', async (c) => {
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24,
     };
 
-    const token = await sign(payload, c.env.JWT_SECRET);
+    const token = await sign(payload, c.env.JJWT_SECRET_KEY);
 
     return c.json({ token });
   } catch (err: any) {
@@ -425,7 +422,6 @@ const createCrudEndpoints = <T extends { id: string }>(
       const transformedResults = (rows || []).map(transformAfterFetch);
       return c.json(transformedResults);
     } catch (e: any) {
-      console.error(`Error in GET ${basePath}:`, e);
       return c.json({ error: e.message, stack: e.stack }, 500);
     }
   });
@@ -717,11 +713,10 @@ app.get('/map-data/karnataka-districts.json', async (c) => {
     if (!response.ok) {
       return c.json(
         { error: `Failed to fetch TopoJSON: ${response.statusText}` },
-        response.status
+        response.status as any
       );
     }
     const data = await response.json();
-    console.log('TopoJSON data being served:', data); // Add this line for debugging
     return new Response(JSON.stringify(data), {
       headers: {
         'Content-Type': 'application/json',
@@ -741,7 +736,7 @@ app.onError((err, c) => {
   console.error(`${err}`);
   if (err instanceof HTTPException) {
     // Use the status from the HTTP exception, but return a JSON response
-    return c.json({ error: err.message }, err.status as ContentfulStatusCode);
+    return c.json({ error: err.message }, err.status as any);
   }
   // For all other errors, it's a true 500
   return c.json({ error: 'Internal Server Error' }, 500);

@@ -1,7 +1,7 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// .wrangler/tmp/bundle-KMxVU9/checked-fetch.js
+// .wrangler/tmp/bundle-eRMdYs/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -2444,10 +2444,10 @@ app.use("*", async (c, next) => {
   return await corsMiddleware(c, next);
 });
 var jwtMiddleware = /* @__PURE__ */ __name(async (c, next) => {
-  const secret = c.env.JWT_SECRET;
+  const secret = c.env.JJWT_SECRET_KEY;
   if (!secret) {
     return c.json(
-      { error: "Server misconfiguration: JWT_SECRET missing" },
+      { error: "Server misconfiguration: JJWT_SECRET_KEY missing" },
       500
     );
   }
@@ -2507,7 +2507,6 @@ auth.post("/login", async (c) => {
     const userCount = userCountRow ? Number(userCountRow.count) : 0;
     let user = null;
     if (userCount === 0) {
-      console.log("No users found. Creating first admin user.");
       const id = generateUUID();
       const salt = generateSaltBase64();
       const hashed = await hashPassword(password, salt);
@@ -2532,7 +2531,6 @@ auth.post("/login", async (c) => {
         hashed.iterations,
         hashed.algorithm
       ).run();
-      console.log("Admin user created successfully.");
     } else {
       const fetched = await c.env.DB.prepare(
         "SELECT * FROM users WHERE username = ?"
@@ -2555,7 +2553,7 @@ auth.post("/login", async (c) => {
       // expires in 24 hours
       exp: Math.floor(Date.now() / 1e3) + 60 * 60 * 24
     };
-    const token = await sign2(payload, c.env.JWT_SECRET);
+    const token = await sign2(payload, c.env.JJWT_SECRET_KEY);
     return c.json({ token });
   } catch (err) {
     console.error("Login error:", err);
@@ -2684,7 +2682,6 @@ var createCrudEndpoints = /* @__PURE__ */ __name((router, tableName, options = {
       const transformedResults = (rows || []).map(transformAfterFetch);
       return c.json(transformedResults);
     } catch (e) {
-      console.error(`Error in GET ${basePath}:`, e);
       return c.json({ error: e.message, stack: e.stack }, 500);
     }
   });
@@ -2918,7 +2915,6 @@ app.get("/map-data/karnataka-districts.json", async (c) => {
       );
     }
     const data = await response.json();
-    console.log("TopoJSON data being served:", data);
     return new Response(JSON.stringify(data), {
       headers: {
         "Content-Type": "application/json",
@@ -2982,7 +2978,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-KMxVU9/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-eRMdYs/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -3014,7 +3010,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-KMxVU9/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-eRMdYs/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;

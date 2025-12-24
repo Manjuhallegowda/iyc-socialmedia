@@ -16,5 +16,6 @@ binding = "BUCKET"
 bucket_name = "iyc-portfolio-images"
 
 [vars]
-CORS_ALLOWED_ORIGIN = "*"
-JWT_SECRET = "jx1VeP/ZOPFkp9fWjDa9uee9x1hrxda7NWvYwFfJnAM="
+CORS_ALLOWED_ORIGIN = "https://iyckarnataka.com"
+# The JJWT_SECRET_KEY should be set as a secret using `npx wrangler secret put JJWT_SECRET_KEY`
+# Do not store secrets in this file.

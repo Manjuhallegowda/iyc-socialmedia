@@ -1,5 +1,16 @@
 // services/api.ts
 
+// Fix for Vite env types in TypeScript
+interface ImportMetaEnv {
+  readonly VITE_API_BASE_URL: string;
+  readonly VITE_R2_PUBLIC_URL: string;
+  // add other env variables here if needed
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 /**
  * SERVICE LAYER: Cloudflare Worker
  *
@@ -7,20 +18,28 @@
  * You must deploy the worker in the `/worker` directory and set the correct URL below.
  */
 
-import { KpyccTeamMember, NewsItem, Activity, VideoItem, GalleryItem, ExecutiveLeader, User, StateLeader, SocialMediaTeamMember, LegalTeamMember } from '../types';
+import {
+  KpyccTeamMember,
+  NewsItem,
+  Activity,
+  VideoItem,
+  GalleryItem,
+  ExecutiveLeader,
+  User,
+  StateLeader,
+  SocialMediaTeamMember,
+  LegalTeamMember,
+} from '../types';
 
 // --- CONFIGURATION ---
 
 // IMPORTANT: Replace this with your actual deployed worker URL
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  'https://iyc-portfolio-api.iyc-portfolio.workers.dev';
+const API_BASE_URL = import.meta.env.DEV ? '/api' : import.meta.env.VITE_API_BASE_URL;
 
 // A public URL for displaying images, pointing to your R2 bucket.
 // You might need to set up a custom domain for this in production.
 // For now, this assumes the worker will proxy image requests or that you have a public R2 URL.
-const R2_PUBLIC_URL = 
-  import.meta.env.VITE_R2_PUBLIC_URL || 'https://pub-4205e061fe1346a58daa8bd774b51f10.r2.dev';
+const R2_PUBLIC_URL = import.meta.env.VITE_R2_PUBLIC_URL;
 
 // --- HELPERS ---
 
@@ -54,10 +73,18 @@ const apiFetch = async <T>(
   const token = localStorage.getItem('authToken');
 
   const headers: Record<string, string> = {
-    ...options.headers,
+    ...(options.headers &&
+    typeof options.headers === 'object' &&
+    !(options.headers instanceof Headers)
+      ? (options.headers as Record<string, string>)
+      : {}),
   };
 
-  if (options.body && !(options.body instanceof FormData) && !headers['Content-Type']) {
+  if (
+    options.body &&
+    !(options.body instanceof FormData) &&
+    !headers['Content-Type']
+  ) {
     headers['Content-Type'] = 'application/json';
   }
 
@@ -153,11 +180,11 @@ const createApiCrud = <T extends { id: string }>(
 
 // --- API ENDPOINTS ---
 
-
-
 const createApiCrudForUsers = <T extends { id: string }>(
   resource: string
-): Omit<ApiCrud<T>, 'update'> & { create: (item: Omit<T, 'id'> & { password: string }) => Promise<T> } => ({
+): Omit<ApiCrud<T>, 'update'> & {
+  create: (item: Omit<T, 'id'> & { password: string }) => Promise<T>;
+} => ({
   getAll: () => apiFetch<T[]>(`/${resource}`),
   create: (item) =>
     apiFetch<T>(`/${resource}`, { method: 'POST', body: JSON.stringify(item) }),
@@ -166,13 +193,14 @@ const createApiCrudForUsers = <T extends { id: string }>(
 });
 
 export const apiKpyccTeam = createApiCrud<KpyccTeamMember>('kpycc_team');
-export const apiExecutiveLeaders = createApiCrud<ExecutiveLeader>('executive_leaders');
+export const apiExecutiveLeaders =
+  createApiCrud<ExecutiveLeader>('executive_leaders');
 export const apiNews = createApiCrud<NewsItem>('news');
 export const apiActivities = createApiCrud<Activity>('activities');
 export const apiVideos = createApiCrud<VideoItem>('videos');
 export const apiGalleryItems = createApiCrud<GalleryItem>('gallery_items');
 export const apiUsers = createApiCrudForUsers<User>('users');
 export const apiStateLeaders = createApiCrud<StateLeader>('state_leaders');
-export const apiSocialMediaTeam = createApiCrud<SocialMediaTeamMember>('social_media_team');
+export const apiSocialMediaTeam =
+  createApiCrud<SocialMediaTeamMember>('social_media_team');
 export const apiLegalTeam = createApiCrud<LegalTeamMember>('legal_team');
-

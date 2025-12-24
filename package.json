@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "type-check": "tsc --noEmit && (cd worker && npm install && npm run type-check)",
+    "lint": "echo 'Linting is not set up yet. Run npx eslint --init to set it up.'"
   },
   "dependencies": {
     "@remix-run/router": "1.15.3",

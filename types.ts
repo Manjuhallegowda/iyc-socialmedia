@@ -1,3 +1,31 @@
+export interface Leader {
+  id: string;
+  name: string;
+  designation: string;
+  state: string;
+  district?: string;
+  block?: string;
+  imageUrl: string;
+  age: number;
+  education: string;
+  startYear: number;
+  bio: string;
+  email: string;
+  phone: string;
+  social: {
+    twitter?: string;
+    facebook?: string;
+    instagram?: string;
+  };
+  protests: {
+    title: string;
+    location: string;
+    date: string;
+    description: string;
+  }[];
+  achievements: string[];
+}
+
 export interface KpyccTeamMember {
   id: string;
   name: string;
