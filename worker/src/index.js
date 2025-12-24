@@ -37,7 +37,7 @@ const generateUUID = () => crypto.randomUUID();
  * - salt: base64 string
  * - hashHex: hex string of derived key
  */
-const hashPassword = async (password, saltBase64, iterations = 150_000) => {
+const hashPassword = async (password, saltBase64, iterations = 100_000) => {
   const encoder = new TextEncoder();
   const passwordKey = await crypto.subtle.importKey(
     'raw',
