@@ -138,7 +138,7 @@ auth.post('/login', async (c) => {
       const hashed = await hashPassword(
         password,
         user.salt,
-        user.iterations || 150_000
+        user.iterations || 100_000
       );
       if (hashed.hashHex !== user.hashedPassword) {
         return c.json({ error: 'Invalid credentials' }, 401);
@@ -180,7 +180,7 @@ auth.post('/change-password', jwtMiddleware, async (c) => {
     const currentHashed = await hashPassword(
       currentPassword,
       user.salt,
-      user.iterations || 150_000
+      user.iterations || 100_000
     );
     if (currentHashed.hashHex !== user.hashedPassword) {
       return c.json({ error: 'Incorrect current password' }, 403);
