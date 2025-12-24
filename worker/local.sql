@@ -91,7 +91,7 @@ CREATE TABLE IF NOT EXISTS "users" (
   role TEXT DEFAULT 'user',
   created_at TEXT DEFAULT (datetime('now'))
 , iterations INTEGER DEFAULT 1, algorithm TEXT DEFAULT 'sha256', keylen INTEGER DEFAULT 32, digest TEXT);
-INSERT INTO "users" VALUES('9624b3ef-0ae0-4d76-ab2c-cedbbf2ac8a5','manjuhallegowda','29696473d4e5eb0677460b483ee1117d8e1b24ce74225fbf971ffcd920470f85',NULL,NULL,'X2Taet/e5izAlZkJXzQk1g==',1,'user','2025-12-12 19:05:30',150000,'PBKDF2-SHA256',32,NULL);
+INSERT INTO "users" VALUES('9624b3ef-0ae0-4d76-ab2c-cedbbf2ac8a5','manjuhallegowda','29696473d4e5eb0677460b483ee1117d8e1b24ce74225fbf971ffcd920470f85',NULL,NULL,'X2Taet/e5izAlZkJXzQk1g==',1,'user','2025-12-12 19:05:30',100000,'PBKDF2-SHA256',32,NULL);
 CREATE TABLE d1_migrations(
 		id         INTEGER PRIMARY KEY AUTOINCREMENT,
 		name       TEXT UNIQUE,

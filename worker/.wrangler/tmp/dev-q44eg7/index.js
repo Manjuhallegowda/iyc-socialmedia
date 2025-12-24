@@ -1,7 +1,7 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 
-// .wrangler/tmp/bundle-eRMdYs/checked-fetch.js
+// .wrangler/tmp/bundle-BceDow/checked-fetch.js
 var urls = /* @__PURE__ */ new Set();
 function checkURL(request, init) {
   const url = request instanceof URL ? request : new URL(
@@ -2454,7 +2454,7 @@ var jwtMiddleware = /* @__PURE__ */ __name(async (c, next) => {
   return await jwt({ secret })(c, next);
 }, "jwtMiddleware");
 var generateUUID = /* @__PURE__ */ __name(() => crypto.randomUUID(), "generateUUID");
-var hashPassword = /* @__PURE__ */ __name(async (password, saltBase64, iterations = 15e4) => {
+var hashPassword = /* @__PURE__ */ __name(async (password, saltBase64, iterations = 1e5) => {
   const encoder = new TextEncoder();
   const passwordKey = await crypto.subtle.importKey(
     "raw",
@@ -2542,7 +2542,7 @@ auth.post("/login", async (c) => {
       const hashed = await hashPassword(
         password,
         user.salt,
-        user.iterations || 15e4
+        user.iterations || 1e5
       );
       if (hashed.hashHex !== user.hashedPassword) {
         return c.json({ error: "Invalid credentials" }, 401);
@@ -2581,7 +2581,7 @@ auth.post("/change-password", jwtMiddleware, async (c) => {
     const currentHashed = await hashPassword(
       currentPassword,
       user.salt,
-      user.iterations || 15e4
+      user.iterations || 1e5
     );
     if (currentHashed.hashHex !== user.hashedPassword) {
       return c.json({ error: "Incorrect current password" }, 403);
@@ -2978,7 +2978,7 @@ var jsonError = /* @__PURE__ */ __name(async (request, env, _ctx, middlewareCtx)
 }, "jsonError");
 var middleware_miniflare3_json_error_default = jsonError;
 
-// .wrangler/tmp/bundle-eRMdYs/middleware-insertion-facade.js
+// .wrangler/tmp/bundle-BceDow/middleware-insertion-facade.js
 var __INTERNAL_WRANGLER_MIDDLEWARE__ = [
   middleware_ensure_req_body_drained_default,
   middleware_miniflare3_json_error_default
@@ -3010,7 +3010,7 @@ function __facade_invoke__(request, env, ctx, dispatch, finalMiddleware) {
 }
 __name(__facade_invoke__, "__facade_invoke__");
 
-// .wrangler/tmp/bundle-eRMdYs/middleware-loader.entry.ts
+// .wrangler/tmp/bundle-BceDow/middleware-loader.entry.ts
 var __Facade_ScheduledController__ = class ___Facade_ScheduledController__ {
   constructor(scheduledTime, cron, noRetry) {
     this.scheduledTime = scheduledTime;
