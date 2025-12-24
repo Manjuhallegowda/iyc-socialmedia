@@ -289,22 +289,27 @@ export const DataProvider: React.FC<{
       (member) =>
         // Assuming legal team members might have district info in their position or bio
         member.bio?.includes(district) ||
-        member.position.toLowerCase().includes(district.toLowerCase())
+        (member.position &&
+          member.position.toLowerCase().includes(district.toLowerCase()))
     );
 
     const president = districtMembers.find(
       (member) =>
-        member.designation.includes('District') && member.level === 'District'
+        member.designation &&
+        member.designation.includes('District') &&
+        member.level === 'District'
     );
 
     const assemblyMembers = districtMembers.filter(
       (member) =>
-        member.level === 'Assembly' || member.designation.includes('Assembly')
+        member.level === 'Assembly' ||
+        (member.designation && member.designation.includes('Assembly'))
     );
 
     const blockMembers = districtMembers.filter(
       (member) =>
-        member.level === 'Block' || member.designation.includes('Block')
+        member.level === 'Block' ||
+        (member.designation && member.designation.includes('Block'))
     );
 
     const counts = {
