@@ -80,7 +80,7 @@ const generateUUID = () => crypto.randomUUID();
 const hashPassword = async (
   password: string,
   saltBase64: string,
-  iterations = 150_000
+  iterations = 100_000
 ) => {
   const encoder = new TextEncoder();
   const passwordKey = await crypto.subtle.importKey(
