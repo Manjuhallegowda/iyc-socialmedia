@@ -668,7 +668,9 @@ api.post('/upload', jwtMiddleware, async (c) => {
     });
 
     // Return a path clients can use with the worker image-serving route
-    const publicUrl = `/images/${encodeURIComponent(storedFilename)}`;
+    const base = new URL(c.req.url).origin;
+    const publicUrl = `${base}/images/${encodeURIComponent(storedFilename)}`;
+
     return c.json({ publicUrl });
   } catch (e: any) {
     console.error('Upload error:', e);
