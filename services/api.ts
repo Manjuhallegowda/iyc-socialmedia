@@ -118,7 +118,7 @@ export const uploadImageToR2 = async (file: File): Promise<string> => {
   });
 
   // 3. Return the full public URL for the uploaded image
-  return `${R2_PUBLIC_URL}${publicUrl}`;
+  return publicUrl;
 };
 
 // --- AUTHENTICATION ---
