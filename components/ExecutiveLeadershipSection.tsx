@@ -135,6 +135,16 @@ const ExecutiveLeadershipSection: React.FC = () => {
                         <FaFacebookF size={18} />
                       </a>
                     )}
+                    {leader.socialMedia.twitter && (
+                      <a
+                        href={leader.socialMedia.twitter}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-gray-400 hover:text-[#1DA1F2] transition-colors"
+                      >
+                        <FaInstagram size={18} />
+                      </a>
+                    )}
                   </div>
                 )}
               </div>
