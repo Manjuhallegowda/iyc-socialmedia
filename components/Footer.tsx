@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
+import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -58,7 +60,7 @@ const Footer: React.FC = () => {
             </div>
             <h3 className="text-xl font-bold">IYC Karnataka</h3>
             <p className="text-gray-400 text-sm">
-              Indian Youth Congress — Karnataka State Wing. Empowering youth
+              Indian Youth Congress - Karnataka State Wing. Empowering youth
               leadership and democratic participation across our state.
             </p>
 
@@ -73,7 +75,7 @@ const Footer: React.FC = () => {
             <h4 className="text-lg font-semibold mb-3">Quick Links</h4>
             <ul className="space-y-2 text-gray-400 text-sm">
               <li>
-                <a href="#about" className="hover:text-white transition">
+                <a href="/AboutIYCPage" className="hover:text-white transition">
                   About IYC
                 </a>
               </li>
@@ -103,12 +105,12 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-lg font-semibold mb-3">Follow Us</h4>
             <p className="text-gray-400 text-sm mb-3">
-              Stay connected — join us on social media for real-time updates.
+              Stay connected - join us on social media for real-time updates.
             </p>
             <div className="flex items-center space-x-4 text-2xl text-gray-300">
               {/* Replace '#' with real URLs */}
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/IYCKar"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
@@ -117,16 +119,16 @@ const Footer: React.FC = () => {
                 <FaFacebookF />
               </a>
               <a
-                href="https://twitter.com"
+                href="https://x.com/IYCKarnataka"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Twitter"
                 className="hover:text-sky-400 transform hover:scale-110 transition"
               >
-                <FaTwitter />
+                <FaXTwitter />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/iyc.karnataka"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
@@ -135,7 +137,7 @@ const Footer: React.FC = () => {
                 <FaInstagram />
               </a>
               <a
-                href="https://youtube.com"
+                href="https://www.youtube.com/c/IndianYouthCongress"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
@@ -146,14 +148,14 @@ const Footer: React.FC = () => {
             </div>
 
             <div className="mt-4 text-gray-400 text-sm">
-              <div>MG Road, Bengaluru — 560001</div>
+              <div>MG Road, Bengaluru - 560001</div>
               <div>
                 Email:{' '}
                 <a
                   href="mailto:contact@iyckarnataka.in"
                   className="hover:text-white"
                 >
-                  contact@iyckarnataka.in
+                  contact@iyckarnataka.com
                 </a>
               </div>
               <div>Phone: +91 98765 43210</div>

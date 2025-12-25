@@ -105,6 +105,60 @@ const DKShivakumarPoliticalPage: React.FC = () => {
           </div>
         </section>
 
+        {/* JOURNEY / MILESTONES - Not a Resume */}
+        <section className="py-16 px-6 bg-white">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="text-4xl font-serif font-bold text-stone-900 text-center mb-16">
+              A Legacy of Service
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                {
+                  year: 'Constituency',
+                  title: 'Kanakapura',
+                  desc: 'Representing the people with unwavering dedication.',
+                  icon: Star,
+                },
+                {
+                  year: 'Leadership',
+                  title: 'KPCC President',
+                  desc: 'Uniting the cadre and leading from the front.',
+                  icon: Flag,
+                },
+                {
+                  year: 'Governance',
+                  title: 'Deputy CM',
+                  desc: 'Steering the state towards prosperity.',
+                  icon: Landmark,
+                },
+                {
+                  year: 'Experience',
+                  title: '3+ Decades',
+                  desc: 'A lifetime spent in the service of the nation.',
+                  icon: Calendar,
+                },
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-col items-center text-center p-6 border border-stone-100 rounded-lg hover:border-orange-200 transition-colors"
+                >
+                  <div className="h-12 w-12 bg-stone-50 rounded-full flex items-center justify-center mb-4 text-orange-600">
+                    <item.icon className="h-6 w-6" />
+                  </div>
+                  <span className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">
+                    {item.year}
+                  </span>
+                  <h3 className="text-xl font-serif font-bold text-stone-900 mb-2">
+                    {item.title}
+                  </h3>
+                  <p className="text-stone-600 text-sm">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* AGENDA / FOCUS AREAS - Magazine Layout */}
         <section className="py-20 px-6 bg-stone-100">
           <div className="mx-auto max-w-7xl">
@@ -178,60 +232,6 @@ const DKShivakumarPoliticalPage: React.FC = () => {
                   </span>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* JOURNEY / MILESTONES - Not a Resume */}
-        <section className="py-20 px-6 bg-white">
-          <div className="mx-auto max-w-6xl">
-            <h2 className="text-4xl font-serif font-bold text-stone-900 text-center mb-16">
-              A Legacy of Service
-            </h2>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  year: 'Constituency',
-                  title: 'Kanakapura',
-                  desc: 'Representing the people with unwavering dedication.',
-                  icon: Star,
-                },
-                {
-                  year: 'Leadership',
-                  title: 'KPCC President',
-                  desc: 'Uniting the cadre and leading from the front.',
-                  icon: Flag,
-                },
-                {
-                  year: 'Governance',
-                  title: 'Deputy CM',
-                  desc: 'Steering the state towards prosperity.',
-                  icon: Landmark,
-                },
-                {
-                  year: 'Experience',
-                  title: '3+ Decades',
-                  desc: 'A lifetime spent in the service of the nation.',
-                  icon: Calendar,
-                },
-              ].map((item, idx) => (
-                <div
-                  key={idx}
-                  className="flex flex-col items-center text-center p-6 border border-stone-100 rounded-lg hover:border-orange-200 transition-colors"
-                >
-                  <div className="h-12 w-12 bg-stone-50 rounded-full flex items-center justify-center mb-4 text-orange-600">
-                    <item.icon className="h-6 w-6" />
-                  </div>
-                  <span className="text-xs font-bold text-stone-400 uppercase tracking-widest mb-2">
-                    {item.year}
-                  </span>
-                  <h3 className="text-xl font-serif font-bold text-stone-900 mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-stone-600 text-sm">{item.desc}</p>
-                </div>
-              ))}
             </div>
           </div>
         </section>

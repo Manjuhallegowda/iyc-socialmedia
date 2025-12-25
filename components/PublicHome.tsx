@@ -14,8 +14,15 @@ import ActivityModal from './ActivityModal';
 import NewsModal from './NewsModal';
 import VideoSection from './VideoSection';
 import Footer from './Footer';
-import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
-import ExecutiveLeadershipSection from './ExecutiveLeadershipSection'; // Import the new executive leadership section
+import {
+  FaFacebookF,
+  FaInstagram,
+  FaYoutube,
+  FaHandRock,
+  FaHandPaper,
+} from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
+import ExecutiveLeadershipSection from './ExecutiveLeadershipSection';
 import { useData } from '../context/DataContext';
 import { Activity, NewsItem, GalleryItem } from '../types';
 import {
@@ -28,16 +35,35 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
+  Users,
+  Megaphone,
+  MapPin,
+  Calendar,
+  CheckCircle,
 } from 'lucide-react';
 
-// Polished PublicHome with micro-interactions, framer-motion entrances,
-// enhanced hover states, focus-visible outlines, lightweight skeletons
-// and improved visual affordances. Frontend-only changes; no backend.
-
+// --- ANIMATION VARIANTS ---
 const transition = { duration: 0.5, ease: 'easeOut' };
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+};
 
 const PublicHome: React.FC = () => {
   const { news, activities, galleryItems, loading, stateLeaders } = useData();
+
+  // --- STATE MANAGEMENT (Preserved) ---
   const [contactSent, setContactSent] = useState(false);
   const [contactSending, setContactSending] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
@@ -51,16 +77,18 @@ const PublicHome: React.FC = () => {
     number | null
   >(null);
 
-  // Form state
+  // Form state (Logic preserved even if UI is removed from Hero)
   const [contactForm, setContactForm] = useState({
     name: '',
     email: '',
+    mobile: '',
     message: '',
     url: '',
   });
   const [formErrors, setFormErrors] = useState<{
     name?: string;
     email?: string;
+    mobile?: string;
     message?: string;
   }>({});
 
@@ -88,16 +116,18 @@ const PublicHome: React.FC = () => {
     () => galleryItems.filter((item) => item.tag === 'hero'),
     [galleryItems]
   );
-  const aboutImage = useMemo(
-    () => galleryItems.find((item) => item.tag === 'about'),
-    [galleryItems]
-  );
   const standardGalleryItems = useMemo(
     () => galleryItems.filter((item) => !item.tag || item.tag === 'gallery'),
     [galleryItems]
   );
 
-  // Hero auto-advance
+  // Select an about image from galleryItems (e.g., first with tag 'about')
+  const aboutImage = useMemo(
+    () => galleryItems.find((item) => item.tag === 'about'),
+    [galleryItems]
+  );
+
+  // --- HERO LOGIC ---
   const heroIntervalRef = useRef<number | null>(null);
   const [heroPaused, setHeroPaused] = useState(false);
   const [heroPlaying, setHeroPlaying] = useState(true);
@@ -110,7 +140,7 @@ const PublicHome: React.FC = () => {
       setCurrentHeroIndex((prev) => (prev + 1) % heroImages.length);
 
     if (!heroPaused && heroPlaying) {
-      heroIntervalRef.current = window.setInterval(advance, 5000);
+      heroIntervalRef.current = window.setInterval(advance, 6000);
     }
 
     return () => {
@@ -125,7 +155,7 @@ const PublicHome: React.FC = () => {
     [heroImages.length]
   );
 
-  // Gallery keyboard
+  // --- GALLERY KEYBOARD LOGIC ---
   const handleNextImage = useCallback(() => {
     if (standardGalleryItems.length === 0) return;
     setSelectedGalleryIndex((prev) =>
@@ -145,6 +175,7 @@ const PublicHome: React.FC = () => {
   // Modal focus trap
   const modalFirstRef = useRef<HTMLButtonElement | null>(null);
   const modalLastRef = useRef<HTMLButtonElement | null>(null);
+
   useEffect(() => {
     if (selectedGalleryIndex === null) return;
     modalFirstRef.current?.focus();
@@ -184,14 +215,15 @@ const PublicHome: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedGalleryIndex, handleNextImage, handlePrevImage]);
 
-  // Contact form validation
+  // --- FORM VALIDATION LOGIC (Preserved) ---
   const validateForm = () => {
     const errors: typeof formErrors = {};
     if (!contactForm.name.trim()) errors.name = 'Please enter your name.';
     if (!contactForm.email.trim()) errors.email = 'Please enter your email.';
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactForm.email))
       errors.email = 'Enter a valid email.';
-    if (!contactForm.message.trim()) errors.message = 'Please enter a message.';
+    if (!contactForm.mobile?.trim()) errors.mobile = 'Mobile number required.';
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -207,27 +239,13 @@ const PublicHome: React.FC = () => {
     setTimeout(() => {
       setContactSending(false);
       setContactSent(true);
-      setContactForm({ name: '', email: '', message: '', url: '' });
+      setContactForm({ name: '', email: '', mobile: '', message: '', url: '' });
       liveRegionRef.current?.focus();
-      setTimeout(() => setContactSent(false), 4000);
-    }, 900);
+      setTimeout(() => setContactSent(false), 5000);
+    }, 1200);
   };
 
-  const buildSrcSet = (item?: GalleryItem) => {
-    if (!item) return undefined;
-    const sizes = (item as any).sizes;
-    if (sizes && typeof sizes === 'object') {
-      return Object.entries(sizes)
-        .map(([w, url]) => `${url} ${w}w`)
-        .join(', ');
-    }
-    return undefined;
-  };
-
-  const nameId = useId();
-  const emailId = useId();
-  const msgId = useId();
-
+  // --- NEWS TICKER LOGIC ---
   const newsControls = useAnimation();
   const [isHoveringNews, setIsHoveringNews] = useState(false);
 
@@ -240,15 +258,14 @@ const PublicHome: React.FC = () => {
     if (isHoveringNews) {
       newsControls.stop();
     } else {
-      // Each card is w-96 (24rem = 384px) and gap is gap-8 (2rem = 32px)
-      const itemWidth = 384 + 32;
+      const itemWidth = 400;
       const totalWidth = itemWidth * news.length;
 
       newsControls.start({
         x: [0, -totalWidth],
         transition: {
           ease: 'linear',
-          duration: news.length * 7, // Adjust duration for speed
+          duration: news.length * 8,
           repeat: Infinity,
           repeatType: 'loop',
         },
@@ -258,436 +275,402 @@ const PublicHome: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="h-screen w-full flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <Loader2 className="w-12 h-12 text-saffron animate-spin mx-auto mb-4" />
-          <p className="text-indiaGreen font-bold">
-            Loading IYC Karnataka Portal...
-          </p>
-          <div className="mt-6 grid gap-3">
-            <div className="h-4 w-64 bg-gray-200 rounded animate-pulse mx-auto" />
-            <div className="h-4 w-48 bg-gray-200 rounded animate-pulse mx-auto" />
+      <div className="h-screen w-full flex flex-col items-center justify-center bg-white">
+        <div className="relative">
+          <div className="w-20 h-20 border-4 border-gray-100 border-t-saffron rounded-full animate-spin"></div>
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span style={{ opacity: 0.4 }}>
+              <FaHandRock color="#218838" size="1.5rem" />
+            </span>
           </div>
         </div>
+        <p className="mt-6 text-indiaGreen font-bold tracking-widest uppercase text-sm animate-pulse">
+          Loading IYC Portal...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800 font-sans">
+    <div className="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-saffron selection:text-white">
       <a
         href="#main"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-white focus:p-2 focus:rounded"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:bg-white focus:text-indiaGreen focus:p-4 focus:z-50 focus:font-bold focus:shadow-xl focus:rounded-lg"
       >
         Skip to content
       </a>
 
       <Navbar />
 
-      <main id="main" className="pt-34">
-        {/* Hero */}
+      <main id="main" className="pt-20">
+        {/* ================= HERO SECTION (Centered / No Form) ================= */}
         <section
           id="home"
-          className="relative h-screen flex items-center justify-center bg-gray-900 overflow-hidden pt-24 md:pt-40"
+          className="relative h-[95vh] md:h-screen flex items-center justify-center bg-gray-900 overflow-hidden"
         >
+          {/* Background Images with Zoom Effect */}
           <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden>
-            {heroImages.length > 0 ? (
-              heroImages.map((img, index) => (
+            <AnimatePresence mode="wait">
+              {heroImages.length > 0 ? (
                 <motion.div
-                  key={img.id}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: index === currentHeroIndex ? 0.45 : 0 }}
-                  transition={{ duration: 0.8 }}
-                  className={`absolute inset-0 transition-opacity duration-1000 ease-in-out`}
-                  aria-hidden={index !== currentHeroIndex}
+                  key={currentHeroIndex}
+                  initial={{ opacity: 0, scale: 1.1 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 1.5 }}
+                  className="absolute inset-0"
                 >
-                  <picture>
-                    {/* @ts-ignore */}
-                    {img.avifUrl ? (
-                      <source srcSet={img.avifUrl} type="image/avif" />
-                    ) : null}
-                    {/* @ts-ignore */}
-                    {img.webpUrl ? (
-                      <source srcSet={img.webpUrl} type="image/webp" />
-                    ) : null}
-                    <img
-                      src={img.imageUrl}
-                      alt={img.alt || `Hero Background ${index + 1}`}
-                      loading="lazy"
-                      className="w-full h-full object-cover object-center filter saturate-110"
-                      // @ts-ignore
-                      srcSet={buildSrcSet(img)}
-                    />
-                  </picture>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20 z-10" />
+                  <img
+                    src={heroImages[currentHeroIndex].imageUrl}
+                    alt={heroImages[currentHeroIndex].alt || 'Hero Background'}
+                    className="w-full h-full object-cover object-top filter contrast-110 select-none"
+                  />
                 </motion.div>
-              ))
-            ) : (
-              <div className="absolute inset-0 bg-gradient-to-b from-gray-800 to-gray-900" />
-            )}
-            <div className="absolute inset-0 bg-gradient-to-b from-gray-900/50 via-gray-900/40 to-gray-900"></div>
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-indiaGreen" />
+              )}
+            </AnimatePresence>
           </div>
 
-          <div className="relative z-10 text-center px-4 max-w-4xl mx-auto">
+          {/* Centered Content */}
+          <div className="relative z-20 container mx-auto px-4 h-full flex flex-col items-center justify-center text-center">
             <motion.div
-              initial={{ y: 20, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ ...transition, delay: 0.15 }}
-              className="inline-block bg-white/10 backdrop-blur-md px-6 py-2 rounded-full text-sm font-bold tracking-widest uppercase mb-4 border border-white/20 shadow-sm"
+              initial="hidden"
+              animate="visible"
+              variants={staggerContainer}
+              className="max-w-5xl space-y-8"
             >
-              <span className="bg-gradient-to-r from-orange-500 via-white to-green-500 bg-clip-text text-transparent drop-shadow-sm filter">
-                Indian Youth Congress
-              </span>
-            </motion.div>
-
-            <motion.h1
-              initial={{ scale: 0.98, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ ...transition, delay: 0.25 }}
-              className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-md"
-            >
-              IYC <span className="text-saffron">Karnataka</span>
-              <br />
-              <span className="text-3xl md:text-5xl text-gray-200 mt-2 block">
-                Social Media
-              </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ y: 6, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ ...transition, delay: 0.35 }}
-              className="text-lg md:text-xl text-gray-300 mb-8 font-light max-w-2xl mx-auto"
-            >
-              The digital frontline of Karnataka's youth. We fight propaganda
-              with truth, empower voices, and drive the narrative for a
-              progressive India.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ ...transition, delay: 0.45 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              {/*<a
-                href="#join"
-                className="px-8 py-3 bg-saffron text-white rounded-full font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-saffron/30 transform hover:-translate-y-1 hover:scale-102 focus:outline-none focus-visible:ring-2 focus-visible:ring-white flex items-center justify-center gap-2"
-                aria-label="Join Digital Army"
-              >
-                <Share2 size={20} />
-                Join Digital Army
-              </a>*/}
-              <a
-                href="#leadership"
-                className="px-8 py-3 bg-white text-indiaGreen rounded-full font-bold text-lg hover:bg-gray-100 transition-all shadow-lg transform hover:-translate-y-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                aria-label="View Leadership"
-              >
-                View Leadership
-              </a>
-            </motion.div>
-
-            {/* hero controls */}
-            {heroImages.length > 1 ? (
-              <div
-                className="mt-6 flex items-center justify-center gap-4"
-                aria-hidden={prefersReducedMotion.current}
-              >
-                {/*<motion.button
-                  whileTap={{ scale: 0.96 }}
-                  onClick={() => setHeroPlaying((p) => !p)}
-                  aria-pressed={!heroPlaying}
-                  aria-label={
-                    heroPlaying ? 'Pause hero rotation' : 'Play hero rotation'
-                  }
-                  className="bg-white/10 backdrop-blur px-3 py-2 rounded-full flex items-center gap-2 text-white"
-                >
-                  {heroPlaying ? <Pause size={16} /> : <Play size={16} />}
-                  <span className="sr-only">
-                    {heroPlaying ? 'Pause' : 'Play'}
-                  </span>
-                </motion.button>*/}
-
-                <div
-                  className="flex items-center gap-2"
-                  role="tablist"
-                  aria-label="Hero slides"
-                >
-                  {heroImages.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => goToHeroIndex(i)}
-                      aria-selected={i === currentHeroIndex}
-                      role="tab"
-                      className={`w-3 h-3 rounded-full ${
-                        i === currentHeroIndex ? 'bg-white' : 'bg-white/30'
-                      } focus:outline-none focus-visible:ring-2 focus-visible:ring-white`}
-                      aria-label={`Go to slide ${i + 1}`}
-                    />
-                  ))}
+              <motion.div variants={fadeInUp} className="flex justify-center">
+                <div className="inline-flex items-center gap-2 px-4 py-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-xs md:text-sm font-bold tracking-widest uppercase shadow-lg">
+                  <span className="w-2 h-2 rounded-full bg-saffron animate-pulse"></span>
+                  Official IYC Karnataka Portal
                 </div>
-              </div>
-            ) : null}
+              </motion.div>
+
+              <motion.h1
+                variants={fadeInUp}
+                className="text-5xl md:text-7xl lg:text-9xl font-black text-white leading-[0.9] tracking-tighter drop-shadow-2xl"
+              >
+                YOUTH <br className="md:hidden" />
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-saffron via-white to-green-500">
+                  POWER
+                </span>{' '}
+                <br />
+                <span className="text-4xl md:text-6xl lg:text-7xl text-gray-300 font-extrabold block mt-2 tracking-normal">
+                  FOR THE NATION
+                </span>
+              </motion.h1>
+
+              <motion.p
+                variants={fadeInUp}
+                className="text-lg md:text-2xl text-gray-200 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md"
+              >
+                The digital frontline of Karnataka's youth. We fight propaganda
+                with truth, empower voices, and drive the narrative for a
+                progressive India.
+              </motion.p>
+
+              {/*<motion.div
+                variants={fadeInUp}
+                className="pt-8 flex flex-wrap justify-center gap-6"
+              >
+                <a
+                  href="#activities"
+                  className="px-10 py-4 bg-saffron text-white font-black uppercase tracking-wide rounded-sm shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center gap-2 text-lg"
+                >
+                  View Our Work <ArrowRight size={22} />
+                </a>
+
+                {/* Hero Play/Pause Control 
+                {heroImages.length > 1 && (
+                  <button
+                    onClick={() => setHeroPaused(!heroPaused)}
+                    className="px-4 py-4 rounded-sm bg-white/10 hover:bg-white/20 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-saffron border border-white/30"
+                    aria-label={
+                      heroPaused ? 'Play slide show' : 'Pause slide show'
+                    }
+                  >
+                    {heroPaused ? <Play size={22} /> : <Pause size={22} />}
+                  </button>
+                )}
+              </motion.div>*/}
+            </motion.div>
           </div>
 
-          <div
-            className="absolute inset-0"
-            onMouseEnter={() => setHeroPaused(true)}
-            onMouseLeave={() => setHeroPaused(false)}
-            aria-hidden
-          />
+          {/* Angled Separator Bottom */}
+          <div className="absolute bottom-0 left-0 right-0 z-20">
+            <svg
+              viewBox="0 0 1440 80"
+              className="w-full h-auto text-white fill-current"
+            >
+              <path d="M0,20L60,25C120,30,240,40,360,45C480,50,600,50,720,40C840,30,960,10,1080,5C1200,0,1320,10,1380,15L1440,20L1440,80L1380,80C1320,80,1200,80,1080,80C960,80,840,80,720,80C600,80,480,80,360,80C240,80,120,80,60,80L0,80Z"></path>
+            </svg>
+          </div>
         </section>
 
-        {/* About */}
-        <section
-          id="about-preview"
-          className="py-20 bg-white scroll-mt-24 border-b border-gray-200 flex rounded-lg border shadow-sm"
-        >
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* ================= ABOUT SECTION ================= */}
+        <section id="about-preview" className="py-24 relative bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center"
+              className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center"
             >
               {/* Text */}
               <div>
-                <span className="text-sm font-bold tracking-widest text-saffron uppercase">
-                  About Us
-                </span>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-1 bg-saffron"></div>
+                  <span className="text-sm font-black tracking-[0.2em] text-gray-500 uppercase">
+                    Who We Are
+                  </span>
+                </div>
 
-                <h2 className="mt-4 text-4xl md:text-5xl font-extrabold text-indiaGreen leading-tight">
-                  Voice of Young India
+                <h2 className="text-4xl md:text-6xl font-black text-saffron leading-none mb-8">
+                  DEFENDING <br />
+                  THE <span className="text-indiaGreen">IDEA OF INDIA</span>
                 </h2>
 
-                <p className="mt-6 text-lg text-gray-700 leading-relaxed">
-                  Indian Youth Congress is the youth wing of the Indian National
-                  Congress, committed to nurturing young leadership, defending
+                <p className="text-xl text-gray-800 font-medium leading-relaxed mb-6">
+                  Indian Youth Congress is not just an organization; it is a
+                  movement. Committed to nurturing young leadership, defending
                   constitutional values, and empowering the youth to actively
                   participate in nation-building.
                 </p>
 
-                <p className="mt-4 text-gray-600 leading-relaxed">
+                <p className="mt-4 text-gray-600 leading-relaxed mb-8">
                   From grassroots movements to digital advocacy, IYC stands at
                   the forefront of social justice, democracy, and inclusive
-                  development — led by the energy, courage, and ideas of India’s
+                  development - led by the energy, courage, and ideas of India’s
                   youth.
                 </p>
 
-                <div className="mt-8">
+                <div className="flex flex-wrap gap-4">
                   <Link
                     to="/about-iyc"
-                    className="inline-flex items-center px-8 py-3 bg-saffron text-white rounded-full font-bold text-lg shadow-lg hover:bg-orange-600 hover:-translate-y-1 transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    className="inline-flex items-center px-8 py-3 bg-white border-2 border-gray-900 text-gray-900 rounded-full font-bold text-lg hover:bg-gray-900 hover:text-white transition-all duration-300"
                   >
-                    Know More
+                    Read Our History
                     <ArrowRight className="ml-3 w-5 h-5" />
                   </Link>
                 </div>
               </div>
 
-              {/* Visual / Accent */}
+              {/* Visual */}
               <motion.div
-                initial={{ opacity: 0, scale: 0.96 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 className="relative"
               >
-                <div className="absolute inset-0 bg-gradient-to-tr from-saffron/20 via-white to-indiaGreen/20 rounded-2xl blur-2xl" />
-                <div className="relative bg-gray-50 p-10 rounded-2xl shadow-xl border-l-8 border-saffron">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-4">
-                    Why Indian Youth Congress?
-                  </h3>
-                  <ul className="space-y-3 text-gray-700">
-                    <li className="flex items-start gap-3">
-                      <span className="w-2 h-2 mt-2 bg-saffron rounded-full" />
-                      Platform for young leaders and changemakers
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="w-2 h-2 mt-2 bg-saffron rounded-full" />
-                      Commitment to democracy & constitutional values
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <span className="w-2 h-2 mt-2 bg-saffron rounded-full" />
-                      Active participation in social & political movements
-                    </li>
-                  </ul>
+                {/* Decorative political frame */}
+                <div className="absolute inset-0 border-4 border-gray-100 transform translate-x-4 translate-y-4 rounded-lg"></div>
+                <div className="relative bg-white p-2 rounded-lg shadow-2xl border-t-4 border-saffron">
+                  {aboutImage ? (
+                    <img
+                      src={aboutImage.imageUrl}
+                      alt="About IYC"
+                      className="w-full h-auto rounded filter contrast-105"
+                    />
+                  ) : (
+                    <div className="h-64 bg-gray-200 rounded flex items-center justify-center text-gray-400">
+                      About Image
+                    </div>
+                  )}
+
+                  <div className="absolute -bottom-6 -left-6 hidden md:block bg-white p-6 rounded shadow-xl max-w-xs border-l-4 border-indiaGreen">
+                    <p className="text-gray-800 font-bold italic text-lg leading-tight">
+                      "The power of youth is the common wealth for the entire
+                      world."
+                    </p>
+                  </div>
                 </div>
               </motion.div>
             </motion.div>
           </div>
         </section>
 
-        {/* Executive Leadership Section */}
-        <ExecutiveLeadershipSection />
+        {/* ================= LEADERSHIP SECTION ================= */}
+        <div className="bg-gray-50 relative pt-12 pb-24 clip-path-slant">
+          {/* Executive Leadership Component */}
+          <ExecutiveLeadershipSection />
 
-        {/* Detailed Leadership Profiles */}
-        <section
-          id="leadership-profiles"
-          className="py-20 bg-gray-50 border-t border-gray-200"
-        >
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
-                State Leadership
+          {/* State Leadership Grid */}
+          <section
+            id="leadership-profiles"
+            className="mt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+          >
+            {/* Section Header */}
+            <div className="flex items-center justify-center gap-6 mb-16">
+              <div className="h-1 bg-gray-200 w-16 md:w-32 rounded-full"></div>
+              <h2 className="text-3xl md:text-4xl font-black text-gray-800 uppercase tracking-tight text-center">
+                State <span className="text-indiaGreen">Office Bearers</span>
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-4 rounded-full" />
+              <div className="h-1 bg-gray-200 w-16 md:w-32 rounded-full"></div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {stateLeaders.map((leader) => (
                 <article
                   key={leader.id}
-                  className="bg-white rounded-2xl shadow-lg p-8 border-l-8 border-saffron"
+                  className="bg-white rounded-r-lg shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col sm:flex-row overflow-hidden border border-gray-100 border-l-8 border-l-saffron group"
                 >
-                  <div className="flex items-start justify-between gap-6 mb-6">
-                    {/* Left: Text */}
-                    <div>
-                      <h3 className="text-2xl font-bold text-gray-800">
-                        {leader.name}
-                      </h3>
-                      <p className="text-saffron font-semibold text-lg">
-                        {leader.designation}
-                      </p>
-                      <p className="text-sm text-gray-500 mt-1">
-                        {leader.state}
-                      </p>
-                    </div>
-
-                    {/* Right: Image */}
+                  {/* Image Section */}
+                  <div className="w-full sm:w-1/3 h-64 sm:h-auto relative overflow-hidden bg-gray-200">
                     <img
                       src={leader.imageUrl}
                       alt={leader.name}
-                      className="w-32 h-32 rounded-lg object-cover border-4 border-saffron flex-shrink-0"
+                      // REMOVED: filter grayscale group-hover:grayscale-0
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent sm:bg-gradient-to-r sm:from-transparent sm:to-black/10 opacity-60"></div>
                   </div>
 
-                  <p className="text-gray-700 leading-relaxed line-clamp-3">
-                    {leader.bio}
-                  </p>
-
-                  {leader.socialMedia && (
-                    <div className="flex space-x-4 mt-4">
-                      {leader.socialMedia.twitter && (
-                        <a
-                          href={leader.socialMedia.twitter}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-gray-400 hover:text-blue-400 transition-colors"
-                        >
-                          <FaTwitter size={20} />
-                        </a>
-                      )}
-                      {leader.socialMedia.facebook && (
-                        <a
-                          href={leader.socialMedia.facebook}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-gray-400 hover:text-blue-600 transition-colors"
-                        >
-                          <FaFacebookF size={20} />
-                        </a>
-                      )}
-                      {leader.socialMedia.instagram && (
-                        <a
-                          href={leader.socialMedia.instagram}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-gray-400 hover:text-pink-500 transition-colors"
-                        >
-                          <FaInstagram size={20} />
-                        </a>
-                      )}
-                      {leader.socialMedia.youtube && (
-                        <a
-                          href={leader.socialMedia.youtube}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-gray-400 hover:text-red-500 transition-colors"
-                        >
-                          <FaYoutube size={20} />
-                        </a>
-                      )}
+                  {/* Content Section */}
+                  <div className="w-full sm:w-2/3 p-6 flex flex-col justify-between relative bg-white">
+                    {/* Watermark Icon */}
+                    <div className="absolute top-4 right-4 text-6xl opacity-50 pointer-events-none group-hover:text-indiaGreen/10 transition-colors">
+                      <img
+                        src="/assets/IYC_Logo.png"
+                        alt="Logo"
+                        className="w-16 h-16 object-contain"
+                      />
                     </div>
-                  )}
 
-                  <div className="mt-8">
-                    <Link
-                      to={`/state-leader/${leader.id}`}
-                      className="inline-flex items-center font-semibold text-saffron hover:text-orange-600 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
-                    >
-                      Read More
-                      <ArrowRight className="ml-2 w-4 h-4" />
-                    </Link>
+                    <div>
+                      <div className="flex justify-between items-start relative z-10">
+                        <div>
+                          <h3 className="text-2xl font-black text-gray-800 uppercase leading-none tracking-tight group-hover:text-indiaGreen transition-colors">
+                            {leader.name}
+                          </h3>
+                          <div className="inline-block px-3 py-1 bg-orange-50 text-saffron text-xs font-bold uppercase mt-2 rounded border border-orange-100">
+                            {leader.designation}
+                          </div>
+                        </div>
+                      </div>
+
+                      <p className="text-gray-600 mt-4 line-clamp-2 text-sm leading-relaxed font-medium">
+                        {leader.bio}
+                      </p>
+                    </div>
+
+                    <div className="mt-6 pt-4 border-t border-gray-100 flex justify-between items-center relative z-10">
+                      <div className="flex space-x-4">
+                        {leader.socialMedia?.twitter && (
+                          <a
+                            href={leader.socialMedia.twitter}
+                            className="text-gray-400 hover:text-[#1DA1F2] transition-colors transform hover:scale-110"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FaXTwitter size={18} />
+                          </a>
+                        )}
+                        {leader.socialMedia?.facebook && (
+                          <a
+                            href={leader.socialMedia.facebook}
+                            className="text-gray-400 hover:text-[#4267B2] transition-colors transform hover:scale-110"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FaFacebookF size={18} />
+                          </a>
+                        )}
+                      </div>
+                      <Link
+                        to={`/state-leader/${leader.id}`}
+                        className="text-xs font-bold text-gray-400 hover:text-saffron flex items-center gap-2 uppercase tracking-widest transition-colors group/link"
+                      >
+                        View Profile{' '}
+                        <ArrowRight
+                          size={14}
+                          className="group-hover/link:translate-x-1 transition-transform"
+                        />
+                      </Link>
+                    </div>
                   </div>
                 </article>
               ))}
             </div>
-          </div>
-        </section>
+          </section>
+        </div>
 
-        {/* Activities */}
-        <section id="activities" className="py-20 bg-white scroll-mt-24">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
-                <span>Movements</span>
-                <span className="block h-1 w-20 bg-saffron mt-2"></span>
-              </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-4 rounded-full"></div>
+        {/* ================= ACTIVITIES SECTION ================= */}
+        <section
+          id="activities"
+          className="py-24 bg-gray-900 text-white relative overflow-hidden"
+        >
+          {/* Background Texture */}
+          <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>
+
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-gray-700 pb-6">
+              <div>
+                <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-white">
+                  Ground Zero
+                </h2>
+                <p className="text-gray-400 mt-2 text-lg">
+                  Protests, Rallies, and Seva Campaigns
+                </p>
+              </div>
+              <div className="mt-4 md:mt-0">
+                <Link
+                  to="/activities"
+                  className="text-saffron font-bold uppercase tracking-wider flex items-center gap-2 hover:text-white transition-colors"
+                >
+                  View All Reports <ArrowRight size={20} />
+                </Link>
+              </div>
             </div>
 
-            <div className="space-y-12">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {(activities || []).slice(0, 3).map((activity, index) => (
                 <motion.article
                   key={activity.id}
-                  initial={{ opacity: 0, y: 8 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ ...transition, delay: index * 0.06 }}
+                  transition={{ ...transition, delay: index * 0.1 }}
                   viewport={{ once: true }}
-                  className={`flex flex-col ${
-                    index % 2 === 1 ? 'md:flex-row-reverse' : 'md:flex-row'
-                  } gap-8 items-center`}
-                  aria-labelledby={`activity-${activity.id}`}
+                  className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden group hover:border-saffron transition-all"
                 >
-                  <div className="w-full md:w-1/2">
-                    <div className="relative group overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition-shadow">
-                      <img
-                        src={activity.imageUrl}
-                        alt={activity.title}
-                        loading="lazy"
-                        className="w-full h-64 object-cover transform group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-indiaGreen shadow-sm">
-                        {activity.type}
-                      </div>
+                  <div className="h-60 relative overflow-hidden">
+                    <img
+                      src={activity.imageUrl}
+                      alt={activity.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"
+                    />
+                    <div className="absolute top-4 left-4 bg-saffron text-white text-xs font-bold px-3 py-1 rounded shadow-md uppercase tracking-wider">
+                      {activity.type}
                     </div>
                   </div>
 
-                  <div className="w-full md:w-1/2 space-y-4">
-                    <div className="flex items-center gap-2 text-saffron font-bold text-sm">
-                      <span>{activity.date}</span>
-                      <span className="w-1 h-1 bg-gray-400 rounded-full" />
-                      <span>{activity.location}</span>
+                  <div className="p-6">
+                    <div className="flex items-center gap-4 text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide">
+                      <span className="flex items-center gap-1">
+                        <Calendar size={12} /> {activity.date}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <MapPin size={12} /> {activity.location}
+                      </span>
                     </div>
-                    <h3
-                      id={`activity-${activity.id}`}
-                      className="text-2xl font-bold text-gray-800"
-                    >
+
+                    <h3 className="text-xl font-bold text-white mb-3 leading-snug group-hover:text-saffron transition-colors">
                       {activity.title}
                     </h3>
-                    <p className="text-gray-600 leading-relaxed">
+
+                    <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 mb-6">
                       {activity.description}
                     </p>
-                    <div className="flex gap-3 items-center">
+
+                    <div className="flex justify-between items-center border-t border-gray-700 pt-4">
                       <button
                         onClick={() => setSelectedActivity(activity)}
-                        className="flex items-center text-indiaGreen font-semibold hover:text-saffron transition-colors group focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
+                        className="text-white font-bold text-sm hover:text-saffron transition-colors flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-saffron rounded"
                         aria-label={`Open details for ${activity.title}`}
                       >
-                        View Campaign{' '}
-                        <ArrowRight
-                          size={16}
-                          className="ml-2 group-hover:translate-x-1 transition-transform"
-                        />
+                        FULL REPORT <ChevronRight size={16} />
                       </button>
 
                       <button
@@ -703,239 +686,166 @@ const PublicHome: React.FC = () => {
                               .catch(() => undefined);
                           else
                             navigator.clipboard
-                              ?.writeText(window.location.href)
+                              .writeText(window.location.href)
                               .then(() => alert('Link copied'));
                         }}
-                        className="px-3 py-1 bg-orange-50 rounded-full text-saffron text-sm font-semibold"
-                        aria-label={`Share ${activity.title}`}
+                        className="text-gray-500 hover:text-white transition-colors"
+                        aria-label="Share"
                       >
-                        <Share2 size={14} />
+                        <Share2 size={18} />
                       </button>
                     </div>
                   </div>
                 </motion.article>
               ))}
             </div>
-            {(activities || []).length > 3 && (
-              <div className="text-center mt-12">
-                <Link
-                  to="/activities"
-                  className="inline-block px-8 py-3 bg-saffron text-white rounded-full font-bold text-lg hover:bg-orange-600 transition-all shadow-lg hover:shadow-saffron/30 transform hover:-translate-y-1 hover:scale-102 focus:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                >
-                  More Activities
-                </Link>
-              </div>
-            )}
           </div>
         </section>
 
         <VideoSection />
 
-        {/* Gallery */}
-        <section id="gallery" className="py-20 bg-white scroll-mt-24">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
-                Gallery
+        {/* ================= NEWS TICKER SECTION ================= */}
+        <section className="py-20 bg-gray-50 border-t border-gray-200">
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-4 mb-10">
+              <div className="bg-red-600 text-white font-bold px-4 py-2 uppercase text-xs md:text-sm tracking-wider flex items-center gap-2 animate-pulse shadow-sm rounded-sm">
+                <Megaphone size={16} /> Press Releases
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800">
+                Latest Updates
               </h2>
-              <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <div
+              className="overflow-hidden w-full relative"
+              onMouseEnter={() => setIsHoveringNews(true)}
+              onMouseLeave={() => setIsHoveringNews(false)}
+            >
+              {/* Gradient Masks for edges */}
+              <div className="absolute -left-4 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-200 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute -right-4 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-200 to-transparent z-10 pointer-events-none"></div>
+
+              <motion.div className="flex gap-6" animate={newsControls}>
+                {[...news, ...news, ...news].map((n, idx) => (
+                  <div
+                    key={`${n.id}-${idx}`}
+                    className="w-[400px] flex-shrink-0"
+                  >
+                    <div
+                      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-5 border border-gray-200 flex gap-4 cursor-pointer h-full items-start"
+                      onClick={() => setSelectedNews(n)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === 'Enter' && setSelectedNews(n)}
+                    >
+                      <img
+                        src={n.imageUrl}
+                        alt={n.title}
+                        className="w-24 h-24 object-cover rounded bg-gray-100 flex-shrink-0"
+                      />
+                      <div className="flex flex-col justify-between h-full">
+                        <div>
+                          <span className="text-xs font-bold text-saffron uppercase mb-1 block">
+                            {n.date}
+                          </span>
+                          <h3 className="text-base font-bold text-gray-900 leading-snug line-clamp-2 mb-2">
+                            {n.title}
+                          </h3>
+                        </div>
+                        <div className="text-xs font-semibold text-gray-500 hover:text-indiaGreen flex items-center gap-1 mt-auto">
+                          Read Full Story <FileText size={12} />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* ================= GALLERY SECTION (Masonry & Modal) ================= */}
+        <section id="gallery" className="py-24 bg-white">
+          <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-black text-indiaGreen uppercase tracking-wide">
+                Media Gallery
+              </h2>
+              <div className="w-20 h-2 bg-saffron mx-auto mt-4"></div>
             </div>
 
             {standardGalleryItems.length === 0 ? (
-              <div className="grid place-items-center py-20">
-                <p className="text-gray-500">No gallery items yet.</p>
+              <div className="grid place-items-center py-20 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+                <p className="text-gray-500 font-bold">
+                  No gallery items uploaded.
+                </p>
               </div>
             ) : (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-fr grid-flow-dense">
+              // Masonry-ish Grid Layout
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 auto-rows-[200px]">
                 {standardGalleryItems.map((item, index) => (
                   <button
                     key={item.id}
                     onClick={() => setSelectedGalleryIndex(index)}
-                    className={`relative group overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-saffron transform transition-transform hover:scale-103`}
+                    className={`relative group overflow-hidden rounded-sm cursor-zoom-in focus:outline-none focus:ring-4 focus:ring-saffron focus:ring-opacity-50 ${
+                      // Make every 5th item large
+                      index % 5 === 0 ? 'md:col-span-2 md:row-span-2' : ''
+                    }`}
                     aria-label={`Open gallery image ${index + 1}`}
                   >
-                    <div className="aspect-[4/3] w-full bg-gray-100">
-                      <img
-                        src={item.thumbnailUrl || item.imageUrl}
-                        alt={item.alt || `Gallery image ${index + 1}`}
-                        loading="lazy"
-                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                      />
-                    </div>
-                    <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                      <span className="bg-white/90 text-indiaGreen text-xs font-bold px-3 py-1 rounded-full shadow-md transform translate-y-2 group-hover:translate-y-0 transition-transform">
-                        View
-                      </span>
+                    <img
+                      src={item.thumbnailUrl || item.imageUrl}
+                      alt={item.alt || `Gallery image ${index + 1}`}
+                      loading="lazy"
+                      // REMOVED: filter grayscale group-hover:grayscale-0
+                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <div className="bg-white text-gray-900 p-2 rounded-full shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform">
+                        <Share2 size={20} />
+                      </div>
                     </div>
                   </button>
                 ))}
               </div>
             )}
-          </div>
-        </section>
-
-        {/* News */}
-        <section className="py-20 bg-gray-50">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-end mb-12">
-              <div>
-                <h2 className="text-3xl font-bold text-indiaGreen uppercase tracking-wide">
-                  Press & Updates
-                </h2>
-                <div className="w-24 h-1 bg-gradient-to-r from-saffron via-white to-indiaGreen mt-4 rounded-full"></div>
-              </div>
-              <span className="hidden sm:inline-block text-saffron font-bold">
-                Latest Updates
-              </span>
-            </div>
-
-            <div
-              className="overflow-hidden w-full"
-              onMouseEnter={() => setIsHoveringNews(true)}
-              onMouseLeave={() => setIsHoveringNews(false)}
-            >
-              {news.length > 3 ? (
-                <motion.div className="flex gap-8" animate={newsControls}>
-                  {[...news, ...news].map((n, idx) => (
-                    <div key={`${n.id}-${idx}`} className="w-96 flex-shrink-0">
-                      <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full">
-                        <div className="h-48 overflow-hidden">
-                          <img
-                            src={n.imageUrl}
-                            alt={n.title}
-                            loading="lazy"
-                            className="w-full h-full object-cover transform transition-transform hover:scale-105"
-                          />
-                        </div>
-                        <div className="p-6 flex flex-col flex-grow">
-                          <span className="text-xs font-bold text-gray-400 mb-2 block">
-                            {n.date}
-                          </span>
-                          <h3 className="text-xl font-bold text-indiaGreen mb-3 line-clamp-2">
-                            {n.title}
-                          </h3>
-                          <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
-                            {n.description}
-                          </p>
-                          <div className="flex gap-2 items-center mt-auto">
-                            <button
-                              onClick={() => setSelectedNews(n)}
-                              className="text-saffron font-semibold text-sm hover:text-orange-600 flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
-                            >
-                              Read Full Story <FileText size={14} />
-                            </button>
-
-                            <div className="ml-auto flex gap-2 items-center">
-                              <button
-                                onClick={() => {
-                                  if ((navigator as any).share) {
-                                    (navigator as any)
-                                      .share({
-                                        title: n.title,
-                                        text: n.description,
-                                        url: window.location.href,
-                                      })
-                                      .catch(() => undefined);
-                                  } else {
-                                    navigator.clipboard
-                                      ?.writeText(window.location.href)
-                                      .then(() =>
-                                        alert('Link copied to clipboard')
-                                      );
-                                  }
-                                }}
-                                className="px-2 py-1 rounded-full bg-orange-50 text-saffron text-xs"
-                              >
-                                <Share2 size={14} />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                  {news.map((n, idx) => (
-                    <motion.article
-                      key={n.id}
-                      initial={{ opacity: 0, y: 8 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ ...transition, delay: idx * 0.04 }}
-                      viewport={{ once: true }}
-                      className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col h-full"
-                      aria-labelledby={`news-${n.id}`}
-                    >
-                      <div className="h-48 overflow-hidden">
-                        <img
-                          src={n.imageUrl}
-                          alt={n.title}
-                          loading="lazy"
-                          className="w-full h-full object-cover transform transition-transform hover:scale-105"
-                        />
-                      </div>
-                      <div className="p-6 flex flex-col flex-grow">
-                        <span className="text-xs font-bold text-gray-400 mb-2 block">
-                          {n.date}
-                        </span>
-                        <h3
-                          id={`news-${n.id}`}
-                          className="text-xl font-bold text-indiaGreen mb-3 line-clamp-2"
-                        >
-                          {n.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
-                          {n.description}
-                        </p>
-                        <div className="flex gap-2 items-center mt-auto">
-                          <button
-                            onClick={() => setSelectedNews(n)}
-                            className="text-saffron font-semibold text-sm hover:text-orange-600 flex items-center gap-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-saffron"
-                            aria-label={`Read full story: ${n.title}`}
-                          >
-                            Read Full Story <FileText size={14} />
-                          </button>
-
-                          <div className="ml-auto flex gap-2 items-center">
-                            <button
-                              onClick={() => {
-                                if ((navigator as any).share) {
-                                  (navigator as any)
-                                    .share({
-                                      title: n.title,
-                                      text: n.description,
-                                      url: window.location.href,
-                                    })
-                                    .catch(() => undefined);
-                                } else {
-                                  navigator.clipboard
-                                    ?.writeText(window.location.href)
-                                    .then(() =>
-                                      alert('Link copied to clipboard')
-                                    );
-                                }
-                              }}
-                              className="px-2 py-1 rounded-full bg-orange-50 text-saffron text-xs"
-                              aria-label={`Share ${n.title}`}
-                            >
-                              <Share2 size={14} />
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </motion.article>
-                  ))}
-                </div>
-              )}
+            <div className="text-center mt-12">
+              <a
+                href="/gallery"
+                className="px-8 py-3 border-2 border-gray-900 text-gray-900 font-bold uppercase hover:bg-gray-900 hover:text-white transition-colors inline-block"
+              >
+                Load More Photos
+              </a>
             </div>
           </div>
         </section>
+
+        {/* ================= FINAL CTA (Utilizing contact form state potentially) ================= 
+        <section className="bg-gradient-to-r from-saffron to-orange-600 py-16">
+          <div className="max-w-4xl mx-auto px-4 text-center text-white">
+            <h2 className="text-3xl md:text-5xl font-black mb-6 uppercase">
+              Democracy Needs You
+            </h2>
+            <p className="text-xl mb-8 font-medium opacity-90">
+              Don't just watch history happen. Be the one who writes it.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+              <a
+                href="#home"
+                className="px-8 py-4 bg-white text-saffron font-black uppercase rounded shadow-xl hover:bg-gray-100 transition-colors"
+              >
+                Join Membership
+              </a>
+            </div>
+          </div>
+        </section>*/}
 
         <Footer />
       </main>
 
-      {/* Gallery Modal */}
+      {/* ================= MODALS ================= */}
+
+      {/* Gallery Modal with Focus Trap */}
       <AnimatePresence>
         {selectedGalleryIndex !== null && (
           <motion.div
@@ -954,7 +864,7 @@ const PublicHome: React.FC = () => {
               data-gallery-focus
               ref={modalFirstRef}
               type="button"
-              className="absolute top-4 right-4 z-20 text-white/70 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+              className="absolute top-4 right-4 z-20 text-white/70 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors focus:ring-2 focus:ring-white focus:outline-none"
               onClick={() => setSelectedGalleryIndex(null)}
               aria-label="Close image viewer"
             >
@@ -964,7 +874,7 @@ const PublicHome: React.FC = () => {
             <button
               data-gallery-focus
               type="button"
-              className="absolute left-4 z-20 text-white/70 hover:text-white p-3 rounded-full hover:bg-white/10 transition-colors hidden sm:block"
+              className="absolute left-4 z-20 text-white/70 hover:text-white p-3 rounded-full hover:bg-white/10 transition-colors hidden sm:block focus:ring-2 focus:ring-white focus:outline-none"
               onClick={(e) => {
                 e.stopPropagation();
                 handlePrevImage();
@@ -977,7 +887,7 @@ const PublicHome: React.FC = () => {
             <button
               data-gallery-focus
               type="button"
-              className="absolute right-4 z-20 text-white/70 hover:text-white p-3 rounded-full hover:bg-white/10 transition-colors hidden sm:block"
+              className="absolute right-4 z-20 text-white/70 hover:text-white p-3 rounded-full hover:bg-white/10 transition-colors hidden sm:block focus:ring-2 focus:ring-white focus:outline-none"
               onClick={(e) => {
                 e.stopPropagation();
                 handleNextImage();
@@ -992,18 +902,20 @@ const PublicHome: React.FC = () => {
               onClick={(e) => e.stopPropagation()}
             >
               <motion.img
+                key={selectedGalleryIndex}
                 src={standardGalleryItems[selectedGalleryIndex].imageUrl}
                 alt={
                   standardGalleryItems[selectedGalleryIndex].alt ||
                   `Gallery image ${selectedGalleryIndex + 1}`
                 }
-                className="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-sm"
-                initial={{ scale: 0.98 }}
-                animate={{ scale: 1 }}
-                transition={{ duration: 0.35 }}
+                className="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-sm border-4 border-white"
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ duration: 0.3 }}
               />
             </div>
 
+            {/* Mobile Controls */}
             <div
               className="absolute bottom-8 left-0 w-full flex justify-center gap-12 sm:hidden z-20"
               onClick={(e) => e.stopPropagation()}

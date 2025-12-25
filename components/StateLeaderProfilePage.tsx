@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { useData } from '../context/DataContext';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const StateLeaderProfilePage: React.FC = () => {
   const { leaderId } = useParams<{ leaderId: string }>();
@@ -178,7 +179,7 @@ const StateLeaderProfilePage: React.FC = () => {
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        <FaTwitter />
+                        <FaXTwitter />
                       </a>
                     )}
                     {leader.socialMedia.facebook && (

@@ -5,11 +5,11 @@ import Footer from './Footer';
 import { useData } from '../context/DataContext';
 import {
   FaFacebookF,
-  FaTwitter,
   FaInstagram,
   FaHandPaper, // Changed to HandPaper (Palm) which resembles the INC symbol
   FaWhatsapp,
 } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 import {
   Loader2,
   MapPin,
@@ -71,7 +71,7 @@ const SocialMediaPage: React.FC = () => {
       platform: 'Voice',
       count: 'Real-time',
       label: 'Twitter (X)',
-      icon: FaTwitter,
+      icon: FaXTwitter,
       color: 'text-slate-800',
       bg: 'bg-slate-100',
       border: 'border-slate-800',
@@ -272,7 +272,7 @@ const SocialMediaPage: React.FC = () => {
                       />
                       <SocialButton
                         href={member.socialMedia.twitter}
-                        icon={FaTwitter}
+                        icon={FaXTwitter}
                         color="hover:bg-slate-900"
                       />
                       <SocialButton

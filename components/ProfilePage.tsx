@@ -4,7 +4,8 @@ import { useData } from '../context/DataContext';
 import { ExecutiveLeader } from '../types';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { FaFacebookF, FaTwitter, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaYoutube } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 const ProfilePage: React.FC = () => {
   const { leaderId } = useParams<{ leaderId: string }>();
@@ -60,7 +61,7 @@ const ProfilePage: React.FC = () => {
                         rel="noopener noreferrer"
                         className="text-gray-400 hover:text-blue-400 transition-colors"
                       >
-                        <FaTwitter size={24} />
+                        <FaXTwitter size={24} />
                       </a>
                     )}
                     {leader.socialMedia.facebook && (
@@ -83,7 +84,7 @@ const ProfilePage: React.FC = () => {
                         <FaInstagram size={24} />
                       </a>
                     )}
-                     {leader.socialMedia.youtube && (
+                    {leader.socialMedia.youtube && (
                       <a
                         href={leader.socialMedia.youtube}
                         target="_blank"

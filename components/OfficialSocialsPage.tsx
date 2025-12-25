@@ -14,7 +14,8 @@ import {
   Copy,
   Building2,
 } from 'lucide-react';
-import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram } from 'react-icons/fa';
+import { FaXTwitter } from 'react-icons/fa6';
 
 // --- TYPES ---
 type SocialAccount = {
@@ -144,7 +145,7 @@ const PLATFORM_DETAILS: Record<string, any> = {
     shadow: 'shadow-rose-500/10',
   },
   twitter: {
-    icon: FaTwitter,
+    icon: FaXTwitter,
     name: 'X (Twitter)',
     themeColor: 'gray',
     gradient: 'from-gray-800 to-black',

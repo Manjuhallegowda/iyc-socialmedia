@@ -334,92 +334,6 @@ const AboutIYCPage: React.FC = () => {
           </div>
         </section>
 
-        {/* --- PILLARS --- */}
-        <section className="py-24 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-6 lg:px-12">
-            <SectionHeader title="Our Core Pillars" subtitle={true} />
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {CORE_PILLARS.map((pillar, idx) => (
-                <motion.div
-                  key={pillar.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.2 }}
-                  className={`bg-white p-8 rounded-2xl shadow-lg border-t-4 ${
-                    pillar.color === 'text-orange-600'
-                      ? 'border-orange-500'
-                      : pillar.color === 'text-green-700'
-                      ? 'border-green-600'
-                      : 'border-blue-600'
-                  } hover:shadow-2xl transition-shadow duration-300`}
-                >
-                  <div
-                    className={`w-14 h-14 ${pillar.bg} ${pillar.color} rounded-full flex items-center justify-center mb-6`}
-                  >
-                    <pillar.icon size={28} />
-                  </div>
-                  <h3 className="text-xl font-bold mb-3">{pillar.title}</h3>
-                  <p className="text-gray-600">{pillar.description}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* --- HISTORY TIMELINE --- */}
-        <section className="py-24 bg-white relative overflow-hidden">
-          {/* Background Map Effect (Optional placeholder) */}
-          <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#138808_1px,transparent_1px)] [background-size:16px_16px]"></div>
-
-          <div className="max-w-5xl mx-auto px-6 lg:px-12 relative z-10">
-            <SectionHeader title="Our Legacy" subtitle={true} />
-
-            <div className="relative">
-              {/* Central Line */}
-              <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-200"></div>
-
-              <div className="space-y-12">
-                {HISTORY_TIMELINE.map((item, idx) => (
-                  <motion.div
-                    key={item.year}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: idx * 0.1 }}
-                    className={`flex flex-col md:flex-row items-center justify-between gap-8 ${
-                      idx % 2 === 0 ? 'md:flex-row-reverse' : ''
-                    }`}
-                  >
-                    {/* Text Side */}
-                    <div className="w-full md:w-[45%] bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:border-orange-200 transition-colors">
-                      <div className="text-3xl font-bold text-orange-600 mb-2">
-                        {item.year}
-                      </div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">
-                        {item.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">
-                        {item.text}
-                      </p>
-                    </div>
-
-                    {/* Dot */}
-                    <div className="w-4 h-4 bg-green-600 rounded-full border-4 border-white shadow-md z-10 hidden md:block relative">
-                      {/* Pulsing effect */}
-                      <div className="absolute inset-0 bg-green-600 rounded-full animate-ping opacity-20"></div>
-                    </div>
-
-                    {/* Empty Side for Balance */}
-                    <div className="w-full md:w-[45%] hidden md:block"></div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* --- LEADERSHIP VOICES --- */}
         <section className="py-24 bg-slate-900 text-white overflow-hidden">
           <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -479,6 +393,92 @@ const AboutIYCPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* --- HISTORY TIMELINE --- */}
+        <section className="py-24 bg-white relative overflow-hidden">
+          {/* Background Map Effect (Optional placeholder) */}
+          <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#138808_1px,transparent_1px)] [background-size:16px_16px]"></div>
+
+          <div className="max-w-5xl mx-auto px-6 lg:px-12 relative z-10">
+            <SectionHeader title="Our Legacy" subtitle={true} />
+
+            <div className="relative">
+              {/* Central Line */}
+              <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-200"></div>
+
+              <div className="space-y-12">
+                {HISTORY_TIMELINE.map((item, idx) => (
+                  <motion.div
+                    key={item.year}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: idx * 0.1 }}
+                    className={`flex flex-col md:flex-row items-center justify-between gap-8 ${
+                      idx % 2 === 0 ? 'md:flex-row-reverse' : ''
+                    }`}
+                  >
+                    {/* Text Side */}
+                    <div className="w-full md:w-[45%] bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:border-orange-200 transition-colors">
+                      <div className="text-3xl font-bold text-orange-600 mb-2">
+                        {item.year}
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-900 mb-2">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        {item.text}
+                      </p>
+                    </div>
+
+                    {/* Dot */}
+                    <div className="w-4 h-4 bg-green-600 rounded-full border-4 border-white shadow-md z-10 hidden md:block relative">
+                      {/* Pulsing effect */}
+                      <div className="absolute inset-0 bg-green-600 rounded-full animate-ping opacity-20"></div>
+                    </div>
+
+                    {/* Empty Side for Balance */}
+                    <div className="w-full md:w-[45%] hidden md:block"></div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* --- PILLARS --- */}
+        <section className="py-24 bg-gray-50">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12">
+            <SectionHeader title="Our Core Pillars" subtitle={true} />
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {CORE_PILLARS.map((pillar, idx) => (
+                <motion.div
+                  key={pillar.title}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.2 }}
+                  className={`bg-white p-8 rounded-2xl shadow-lg border-t-4 ${
+                    pillar.color === 'text-orange-600'
+                      ? 'border-orange-500'
+                      : pillar.color === 'text-green-700'
+                      ? 'border-green-600'
+                      : 'border-blue-600'
+                  } hover:shadow-2xl transition-shadow duration-300`}
+                >
+                  <div
+                    className={`w-14 h-14 ${pillar.bg} ${pillar.color} rounded-full flex items-center justify-center mb-6`}
+                  >
+                    <pillar.icon size={28} />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">{pillar.title}</h3>
+                  <p className="text-gray-600">{pillar.description}</p>
+                </motion.div>
               ))}
             </div>
           </div>

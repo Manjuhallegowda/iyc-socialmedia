@@ -190,7 +190,7 @@ export default function JoinForm() {
       }
 
       setSubmittedOk(true);
-      setServerMessage('Thanks — your details were submitted successfully.');
+      setServerMessage('Thanks - your details were submitted successfully.');
       // dispatch({ type: 'reset' }); // Removed reset on success to allow user to view successful message.
     } catch (err: any) {
       if (err?.name === 'AbortError') {
