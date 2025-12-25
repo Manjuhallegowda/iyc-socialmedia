@@ -89,8 +89,8 @@ CREATE TABLE IF NOT EXISTS state_leaders (
     bio TEXT,
     imageUrl TEXT,
     socialMedia TEXT,
-    activity TEXT NOT NULL DEFAULT '',
-    milestone TEXT NOT NULL DEFAULT ''
+    activities TEXT NOT NULL DEFAULT '[]',
+    milestones TEXT NOT NULL DEFAULT '[]'
 );
 
 CREATE TABLE IF NOT EXISTS social_media_team (

@@ -667,7 +667,7 @@ api.post('/upload', jwtMiddleware, async (c) => {
     const storedFilename = `${generateUUID()}-${safeFilename}`;
     const key = `images/${storedFilename}`;
 
-    await c.env.BUCKET.put(key, await file.arrayBuffer(), {
+    await c.env.BUCKET.put(key, file.stream(), {
       httpMetadata: { contentType: file.type || 'application/octet-stream' },
     });
 

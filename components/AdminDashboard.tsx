@@ -334,8 +334,8 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
           instagram: instagram || '',
           youtube: youtube || '',
         },
-        activities: activitiesArray,
-        milestones: milestonesArray,
+        activities: activitiesArray || [],
+        milestones: milestonesArray || [],
       };
       if (isEditing) await updateStateLeader(stateLeaderData as StateLeader);
       else await addStateLeader(stateLeaderData as StateLeader);
