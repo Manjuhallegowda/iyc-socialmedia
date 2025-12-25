@@ -147,6 +147,13 @@ const ExecutiveLeadershipSection: React.FC = () => {
                     )}
                   </div>
                 )}
+                <div className="absolute bottom-2 right-4 text-6xl opacity-80 pointer-events-none group-hover:text-indiaGreen/10 transition-colors">
+                  <img
+                    src="/assets/IYC_Logo.png"
+                    alt="Logo"
+                    className="w-10 h-10 object-contain"
+                  />
+                </div>
               </div>
             </motion.div>
           ))}
