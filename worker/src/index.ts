@@ -596,10 +596,14 @@ const stateLeaderTransforms: CrudOptions<StateLeader> = {
   beforeSave: (stateLeader) => ({
     ...stateLeader,
     socialMedia: JSON.stringify((stateLeader as any).socialMedia || {}),
+    activities: JSON.stringify((stateLeader as any).activities || []),
+    milestones: JSON.stringify((stateLeader as any).milestones || []),
   }),
   afterFetch: (stateLeader: any) => ({
     ...stateLeader,
     socialMedia: JSON.parse(stateLeader.socialMedia || '{}'),
+    activities: JSON.parse(stateLeader.activities || '[]'),
+    milestones: JSON.parse(stateLeader.milestones || '[]'),
   }),
 };
 
