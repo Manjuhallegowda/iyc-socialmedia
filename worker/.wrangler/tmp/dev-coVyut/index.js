@@ -2823,12 +2823,29 @@ var stateLeaderTransforms = {
     activities: JSON.stringify(stateLeader.activities || []),
     milestones: JSON.stringify(stateLeader.milestones || [])
   }), "beforeSave"),
-  afterFetch: /* @__PURE__ */ __name((stateLeader) => ({
-    ...stateLeader,
-    socialMedia: JSON.parse(stateLeader.socialMedia || "{}"),
-    activities: JSON.parse(stateLeader.activities || "[]"),
-    milestones: JSON.parse(stateLeader.milestones || "[]")
-  }), "afterFetch")
+  afterFetch: /* @__PURE__ */ __name((stateLeader) => {
+    let socialMedia = {};
+    try {
+      socialMedia = JSON.parse(stateLeader.socialMedia || "{}");
+    } catch (e) {
+    }
+    let activities = [];
+    try {
+      activities = JSON.parse(stateLeader.activities || "[]");
+    } catch (e) {
+    }
+    let milestones = [];
+    try {
+      milestones = JSON.parse(stateLeader.milestones || "[]");
+    } catch (e) {
+    }
+    return {
+      ...stateLeader,
+      socialMedia,
+      activities,
+      milestones
+    };
+  }, "afterFetch")
 };
 var activityTransforms = {
   beforeSave: /* @__PURE__ */ __name((activity) => ({

@@ -599,12 +599,32 @@ const stateLeaderTransforms: CrudOptions<StateLeader> = {
     activities: JSON.stringify((stateLeader as any).activities || []),
     milestones: JSON.stringify((stateLeader as any).milestones || []),
   }),
-  afterFetch: (stateLeader: any) => ({
-    ...stateLeader,
-    socialMedia: JSON.parse(stateLeader.socialMedia || '{}'),
-    activities: JSON.parse(stateLeader.activities || '[]'),
-    milestones: JSON.parse(stateLeader.milestones || '[]'),
-  }),
+  afterFetch: (stateLeader: any) => {
+    let socialMedia = {};
+    try {
+      socialMedia = JSON.parse(stateLeader.socialMedia || '{}');
+    } catch (e) {
+      // ignore
+    }
+    let activities = [];
+    try {
+      activities = JSON.parse(stateLeader.activities || '[]');
+    } catch (e) {
+      // ignore
+    }
+    let milestones = [];
+    try {
+      milestones = JSON.parse(stateLeader.milestones || '[]');
+    } catch (e) {
+      // ignore
+    }
+    return {
+      ...stateLeader,
+      socialMedia,
+      activities,
+      milestones,
+    };
+  },
 };
 
 const activityTransforms: CrudOptions<Activity> = {
