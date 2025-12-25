@@ -327,6 +327,7 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
 
       const stateLeaderData: Partial<StateLeader> = {
         ...rest,
+        imageUrl: formData.imageUrl || '',
         socialMedia: {
           twitter: twitter || '',
           facebook: facebook || '',
