@@ -284,7 +284,7 @@ const PublicHome: React.FC = () => {
             <img
               src="https://static.wixstatic.com/media/b34acd_88e53092a7034b25a80466040841ba96~mv2.png/v1/fit/w_2500,h_1330,al_c/b34acd_88e53092a7034b25a80466040841ba96~mv2.png"
               alt="IYC Logo"
-              className="w-8 h-8 object-contain opacity-60"
+              className="w-15 h-15 object-contain opacity-100"
             />
           </div>
         </div>
