@@ -582,6 +582,16 @@ const PublicHome: React.FC = () => {
                             <FaFacebookF size={18} />
                           </a>
                         )}
+                        {leader.socialMedia?.facebook && (
+                          <a
+                            href={leader.socialMedia.facebook}
+                            className="text-gray-400 hover:text-[#4267B2] transition-colors transform hover:scale-110"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <FaInstagram size={18} />
+                          </a>
+                        )}
                       </div>
                       <Link
                         to={`/state-leader/${leader.id}`}
