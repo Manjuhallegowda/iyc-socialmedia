@@ -278,12 +278,17 @@ const PublicHome: React.FC = () => {
       <div className="h-screen w-full flex flex-col items-center justify-center bg-white">
         <div className="relative">
           <div className="w-20 h-20 border-4 border-gray-100 border-t-saffron rounded-full animate-spin"></div>
+
+          {/* Center image instead of FaHandRock */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <span style={{ opacity: 0.4 }}>
-              <FaHandRock color="#218838" size="1.5rem" />
-            </span>
+            <img
+              src="https://static.wixstatic.com/media/b34acd_88e53092a7034b25a80466040841ba96~mv2.png/v1/fit/w_2500,h_1330,al_c/b34acd_88e53092a7034b25a80466040841ba96~mv2.png"
+              alt="IYC Logo"
+              className="w-8 h-8 object-contain opacity-60"
+            />
           </div>
         </div>
+
         <p className="mt-6 text-indiaGreen font-bold tracking-widest uppercase text-sm animate-pulse">
           Loading IYC Portal...
         </p>
