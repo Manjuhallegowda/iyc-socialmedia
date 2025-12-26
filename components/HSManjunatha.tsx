@@ -55,15 +55,14 @@ const HSManjunathaProfilePage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 overflow-x-hidden">
       <Navbar />
 
       <main>
-        {/* --- HERO SECTION: Immersive Editorial --- */}
-        <section className="relative w-full h-[85vh] flex items-center justify-center overflow-hidden">
-          {/* Background Image with Parallax-like fix */}
+        {/* --- HERO SECTION --- */}
+        <section className="relative w-full min-h-[85vh] flex items-center justify-center overflow-hidden">
+          {/* Background Image */}
           <div className="absolute inset-0 z-0">
-            {/* Replace src with your actual image path */}
             <img
               src="/assets/HSManjunath.jpeg"
               alt="HS Manjunatha Background"
@@ -74,25 +73,26 @@ const HSManjunathaProfilePage: React.FC = () => {
           </div>
 
           {/* Hero Content */}
-          <div className="relative z-10 container mx-auto px-6 text-center pt-20">
+          <div className="relative z-10 container mx-auto px-4 sm:px-6 text-center pt-20 pb-10">
             <motion.div
               initial="hidden"
               animate="visible"
               variants={fadeInUp}
               className="max-w-4xl mx-auto"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-orange-400 font-bold tracking-widest text-xs uppercase mb-6">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/20 bg-white/10 backdrop-blur-md text-orange-400 font-bold tracking-widest text-[10px] sm:text-xs uppercase mb-6">
                 <Flag className="w-3 h-3" /> Karnataka Youth Congress
               </div>
 
-              <h1 className="text-6xl md:text-8xl font-serif font-bold text-white mb-6 leading-tight tracking-tight">
+              {/* Responsive Heading Size */}
+              <h1 className="text-4xl sm:text-6xl md:text-8xl font-serif font-bold text-white mb-6 leading-tight tracking-tight">
                 H.S.{' '}
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-white to-green-400">
                   Manjunatha
                 </span>
               </h1>
 
-              <p className="text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed mb-10">
+              <p className="text-lg sm:text-xl md:text-2xl text-slate-300 max-w-2xl mx-auto font-light leading-relaxed mb-10 px-2">
                 The voice of the unheard. The architect of a new generation.
                 From the roots of{' '}
                 <span className="text-white font-semibold">Mandya</span> to the
@@ -103,19 +103,20 @@ const HSManjunathaProfilePage: React.FC = () => {
                 .
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <div className="px-8 py-4 bg-orange-600 text-white font-bold rounded hover:bg-orange-700 transition-all shadow-lg shadow-orange-900/50 flex items-center gap-2 group">
-                  Join the Movement{' '}
-                </div>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto">
+                <button className="w-full sm:w-auto px-8 py-4 bg-orange-600 text-white font-bold rounded hover:bg-orange-700 transition-all shadow-lg shadow-orange-900/50 flex items-center justify-center gap-2 group active:scale-95">
+                  Join the Movement
+                </button>
               </div>
             </motion.div>
           </div>
         </section>
 
         {/* --- FLOATING STATS STRIP --- */}
-        <div className="relative z-20 -mt-16 px-6">
-          <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-2xl border-t-3 border-orange-500 overflow-hidden">
-            <div className="grid grid-cols-2 md:grid-cols-3 divide-x divide-slate-100">
+        <div className="relative z-20 -mt-16 px-4 sm:px-6">
+          <div className="max-w-6xl mx-auto bg-white rounded-xl shadow-2xl border-t-4 border-orange-500 overflow-hidden">
+            {/* Grid Logic: Divide Y on mobile (stack), Divide X on desktop */}
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-100">
               {[
                 {
                   label: 'Native',
@@ -138,16 +139,24 @@ const HSManjunathaProfilePage: React.FC = () => {
               ].map((stat, idx) => (
                 <div
                   key={idx}
-                  className="p-6 md:p-8 text-center hover:bg-slate-50 transition-colors group"
+                  className="p-6 md:p-8 flex flex-row md:flex-col items-center justify-between md:justify-center text-left md:text-center hover:bg-slate-50 transition-colors group"
                 >
-                  <stat.icon
-                    className={`w-8 h-8 mx-auto mb-3 ${stat.color} opacity-80 group-hover:scale-110 transition-transform`}
-                  />
-                  <div className="text-2xl font-bold text-slate-900">
-                    {stat.value}
+                  <div className="flex items-center md:block gap-4">
+                    <stat.icon
+                      className={`w-8 h-8 md:mx-auto md:mb-3 ${stat.color} opacity-80 group-hover:scale-110 transition-transform shrink-0`}
+                    />
+                    <div className="md:hidden text-xs font-bold text-slate-400 uppercase tracking-wider">
+                      {stat.label}
+                    </div>
                   </div>
-                  <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">
-                    {stat.label}
+
+                  <div className="text-right md:text-center">
+                    <div className="text-xl sm:text-2xl font-bold text-slate-900">
+                      {stat.value}
+                    </div>
+                    <div className="hidden md:block text-xs font-bold text-slate-400 uppercase tracking-wider">
+                      {stat.label}
+                    </div>
                   </div>
                 </div>
               ))}
@@ -156,7 +165,7 @@ const HSManjunathaProfilePage: React.FC = () => {
         </div>
 
         {/* --- BIOGRAPHY & NARRATIVE --- */}
-        <section className="py-24 px-6 overflow-hidden">
+        <section className="py-16 md:py-24 px-4 sm:px-6 overflow-hidden">
           <div className="max-w-6xl mx-auto">
             <div className="grid lg:grid-cols-12 gap-12 items-start">
               {/* Left Column: Story */}
@@ -166,20 +175,21 @@ const HSManjunathaProfilePage: React.FC = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                 >
-                  <h3 className="text-orange-600 font-bold tracking-widest uppercase text-sm mb-2">
+                  <h3 className="text-orange-600 font-bold tracking-widest uppercase text-xs sm:text-sm mb-2">
                     The Journey
                   </h3>
-                  <h2 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 mb-8">
-                    Decades of Dedication <br />
+                  <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-slate-900 mb-8 leading-tight">
+                    Decades of Dedication <br className="hidden sm:block" />
                     to Student Rights.
                   </h2>
 
                   <div className="prose prose-lg text-slate-600">
                     <p>
+                      {/* Mobile Optimization: Image is block/centered on mobile, floats on Large screens */}
                       <img
-                        src="/assets/hsmanju.jpeg" // <-- change to your image path
+                        src="/assets/hsmanju.jpeg"
                         alt="H.S. Manjunatha"
-                        className="w-40 h-50 object-cover rounded-lg float-left mr-4 mt-[-4px] shadow-lg"
+                        className="w-full sm:w-64 h-64 sm:h-auto object-cover rounded-lg mb-6 sm:mb-4 sm:mr-6 lg:float-left shadow-lg mx-auto"
                       />
                       H.S. Manjunatha is not an overnight leader. His journey
                       began in the corridors of colleges, fighting for the basic
@@ -196,15 +206,15 @@ const HSManjunathaProfilePage: React.FC = () => {
                     </p>
                   </div>
 
-                  <div className="mt-8 p-8 bg-slate-900 rounded-2xl relative overflow-hidden">
-                    <Quote className="absolute top-4 right-4 text-slate-700 w-12 h-12" />
-                    <p className="relative z-10 text-xl text-white font-serif italic leading-relaxed">
+                  <div className="mt-8 p-6 sm:p-8 bg-slate-900 rounded-2xl relative overflow-hidden">
+                    <Quote className="absolute top-4 right-4 text-slate-700 w-8 h-8 sm:w-12 sm:h-12" />
+                    <p className="relative z-10 text-lg sm:text-xl text-white font-serif italic leading-relaxed">
                       "Leadership is not about the position you hold, but the
                       number of lives you empower. My office is always open to
                       every youth of Karnataka."
                     </p>
                     <div className="mt-4 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold">
+                      <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-bold text-sm">
                         HM
                       </div>
                       <div className="text-slate-400 text-sm font-medium">
@@ -216,8 +226,9 @@ const HSManjunathaProfilePage: React.FC = () => {
               </div>
 
               {/* Right Column: Timeline */}
-              <div className="lg:col-span-5 relative">
-                <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-slate-200"></div>
+              <div className="lg:col-span-5 relative mt-8 lg:mt-0">
+                {/* Line adjusted for mobile (left-4) vs desktop (left-8) */}
+                <div className="absolute left-4 lg:left-8 top-0 bottom-0 w-0.5 bg-slate-200"></div>
                 <div className="space-y-12 pl-0">
                   {milestones.map((item, index) => (
                     <motion.div
@@ -226,20 +237,20 @@ const HSManjunathaProfilePage: React.FC = () => {
                       whileInView={{ opacity: 1, x: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: index * 0.2 }}
-                      className="relative pl-16 group"
+                      className="relative pl-12 lg:pl-16 group"
                     >
-                      {/* Timeline Dot */}
-                      <div className="absolute left-[26px] top-1 w-4 h-4 rounded-full bg-white border-4 border-slate-300 group-hover:border-orange-500 transition-colors z-10"></div>
+                      {/* Timeline Dot adjusted */}
+                      <div className="absolute left-[10px] lg:left-[26px] top-1 w-3 h-3 lg:w-4 lg:h-4 rounded-full bg-white border-2 lg:border-4 border-slate-300 group-hover:border-orange-500 transition-colors z-10"></div>
 
-                      <span className="block text-5xl font-black text-slate-100 absolute -top-4 right-0 -z-10 group-hover:text-slate-200 transition-colors">
+                      <span className="block text-4xl lg:text-5xl font-black text-slate-100 absolute -top-4 right-0 -z-10 group-hover:text-slate-200 transition-colors select-none">
                         {item.year}
                       </span>
 
                       <div className="relative">
-                        <span className="text-sm font-bold text-orange-600 block mb-1">
+                        <span className="text-xs lg:text-sm font-bold text-orange-600 block mb-1">
                           {item.year}
                         </span>
-                        <h4 className="text-xl font-bold text-slate-900 mb-2">
+                        <h4 className="text-lg lg:text-xl font-bold text-slate-900 mb-2">
                           {item.role}
                         </h4>
                         <p className="text-slate-600 text-sm leading-relaxed">
@@ -254,24 +265,24 @@ const HSManjunathaProfilePage: React.FC = () => {
           </div>
         </section>
 
-        {/* --- AGENDA SECTION: Modern Cards --- */}
-        <section className="py-24 bg-slate-900 relative overflow-hidden">
+        {/* --- AGENDA SECTION --- */}
+        <section className="py-16 md:py-24 bg-slate-900 relative overflow-hidden">
           {/* Decorative Background Elements */}
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600 rounded-full blur-[120px] opacity-10"></div>
-          <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-orange-600 rounded-full blur-[120px] opacity-10"></div>
+          <div className="absolute top-0 right-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-blue-600 rounded-full blur-[80px] md:blur-[120px] opacity-10"></div>
+          <div className="absolute bottom-0 left-0 w-[300px] md:w-[500px] h-[300px] md:h-[500px] bg-orange-600 rounded-full blur-[80px] md:blur-[120px] opacity-10"></div>
 
-          <div className="container mx-auto px-6 relative z-10">
-            <div className="text-center max-w-3xl mx-auto mb-16">
+          <div className="container mx-auto px-4 sm:px-6 relative z-10">
+            <div className="text-center max-w-3xl mx-auto mb-10 md:mb-16">
               <h2 className="text-3xl md:text-5xl font-serif font-bold text-white mb-6">
                 The Vision for Tomorrow
               </h2>
-              <p className="text-slate-400 text-lg">
+              <p className="text-slate-400 text-base md:text-lg">
                 Prioritizing the needs of Karnataka's youth through concrete
                 policy changes and aggressive representation.
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               {[
                 {
                   title: 'Employment',
@@ -297,19 +308,19 @@ const HSManjunathaProfilePage: React.FC = () => {
               ].map((card, idx) => (
                 <div
                   key={idx}
-                  className={`group bg-slate-800/50 backdrop-blur-sm p-8 rounded-2xl border border-white/5 ${card.bg} transition-all duration-300 hover:-translate-y-2`}
+                  className={`group bg-slate-800/50 backdrop-blur-sm p-6 md:p-8 rounded-2xl border border-white/5 ${card.bg} transition-all duration-300 active:scale-95 md:active:scale-100 md:hover:-translate-y-2`}
                 >
                   <div
-                    className={`w-14 h-14 rounded-xl bg-slate-900 flex items-center justify-center mb-6 shadow-lg`}
+                    className={`w-12 h-12 md:w-14 md:h-14 rounded-xl bg-slate-900 flex items-center justify-center mb-6 shadow-lg`}
                   >
                     <card.icon
-                      className={`w-7 h-7 text-white transition-colors duration-300 ${card.color}`}
+                      className={`w-6 h-6 md:w-7 md:h-7 text-white transition-colors duration-300 ${card.color}`}
                     />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-4">
+                  <h3 className="text-xl md:text-2xl font-bold text-white mb-3 md:mb-4">
                     {card.title}
                   </h3>
-                  <p className="text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
+                  <p className="text-sm md:text-base text-slate-400 leading-relaxed group-hover:text-slate-300 transition-colors">
                     {card.desc}
                   </p>
                 </div>
