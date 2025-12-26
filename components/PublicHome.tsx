@@ -60,10 +60,120 @@ const staggerContainer = {
   },
 };
 
+const LEADER_QUOTES = [
+  {
+    name: 'Indira Gandhi',
+    role: 'Former Prime Minister',
+    quote:
+      'The power to question is the basis of all human progress. Youth must never stop questioning.',
+    color: 'from-orange-500 to-orange-600',
+    bgImage: '/assets/indra.png',
+  },
+  {
+    name: 'Rajiv Gandhi',
+    role: 'Former Prime Minister',
+    quote:
+      'Youth is not a question of age. It is a state of mind - the courage to dream and the strength to act.',
+    color: 'from-blue-200 to-indigo-700',
+    bgImage: '/assets/rajiv.png',
+  },
+  {
+    name: 'Sonia Gandhi',
+    role: 'Chairperson, AICC',
+    quote:
+      'The future of India depends on fearless young Indians who stand for truth, equality, and democracy.',
+    color: 'from-indigo-700 to-blue-200',
+    bgImage: '/assets/sonia.png',
+  },
+  {
+    name: 'Rahul Gandhi',
+    role: 'Opposition Leader, INC',
+    quote:
+      'We have unleashed the aspirations of youngsters. Democracy is not going to go backwards.',
+    color: 'from-indigo-700 to-blue-200',
+    bgImage: '/assets/rahul.png',
+  },
+  {
+    name: 'Mallikarjun Kharge',
+    role: 'President, AICC',
+    quote:
+      "India's youth is vying for change, dreaming about a better and secured life. Let's empower them to lead.",
+    color: 'from-green-600 to-green-700',
+    bgImage: '/assets/mallikarjun.png',
+  },
+];
+
+const LeaderQuotes: React.FC = () => {
+  const [[index, direction], setIndex] = React.useState<[number, number]>([
+    0, 0,
+  ]);
+
+  const next = React.useCallback(() => {
+    setIndex(([i]) => [(i + 1) % LEADER_QUOTES.length, 1]);
+  }, []);
+
+  const prev = React.useCallback(() => {
+    setIndex(([i]) => [
+      (i - 1 + LEADER_QUOTES.length) % LEADER_QUOTES.length,
+      -1,
+    ]);
+  }, []);
+
+  // Auto-slide
+  React.useEffect(() => {
+    const id = setInterval(next, 4000);
+    return () => clearInterval(id);
+  }, [next]);
+
+  return (
+    <div className="relative md:hidden overflow-hidden rounded-xl h-80 shadow-lg">
+      <AnimatePresence initial={false} custom={direction}>
+        <motion.div
+          key={index}
+          custom={direction}
+          initial={{ x: direction > 0 ? 300 : -300, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: direction > 0 ? -300 : 300, opacity: 0 }}
+          transition={{
+            x: { type: 'spring', stiffness: 300, damping: 30 },
+            opacity: { duration: 0.2 },
+          }}
+          className="absolute inset-0 w-full h-full text-white bg-gray-900"
+        >
+          {/* background image */}
+          <img
+            src={LEADER_QUOTES[index].bgImage}
+            alt={LEADER_QUOTES[index].name}
+            className="absolute inset-0 w-full h-full object-cover opacity-80"
+          />
+
+          {/* Stronger gradient for text readability on mobile */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
+
+          <div className="absolute bottom-0 left-0 w-full p-6 z-10">
+            <p className="font-semibold italic text-lg leading-snug mb-4 drop-shadow-md text-gray-100">
+              “{LEADER_QUOTES[index].quote}”
+            </p>
+
+            <div>
+              <h4 className="font-bold text-xl text-saffron">
+                {LEADER_QUOTES[index].name}
+              </h4>
+              <span className="text-sm text-gray-300 font-medium">
+                {LEADER_QUOTES[index].role}
+              </span>
+            </div>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const PublicHome: React.FC = () => {
   const { news, activities, galleryItems, loading, stateLeaders } = useData();
 
-  // --- STATE MANAGEMENT (Preserved) ---
+  // --- STATE MANAGEMENT ---
   const [contactSent, setContactSent] = useState(false);
   const [contactSending, setContactSending] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(
@@ -77,7 +187,7 @@ const PublicHome: React.FC = () => {
     number | null
   >(null);
 
-  // Form state (Logic preserved even if UI is removed from Hero)
+  // Form state
   const [contactForm, setContactForm] = useState({
     name: '',
     email: '',
@@ -121,7 +231,6 @@ const PublicHome: React.FC = () => {
     [galleryItems]
   );
 
-  // Select an about image from galleryItems (e.g., first with tag 'about')
   const aboutImage = useMemo(
     () => galleryItems.find((item) => item.tag === 'about'),
     [galleryItems]
@@ -215,7 +324,7 @@ const PublicHome: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [selectedGalleryIndex, handleNextImage, handlePrevImage]);
 
-  // --- FORM VALIDATION LOGIC (Preserved) ---
+  // --- FORM VALIDATION LOGIC ---
   const validateForm = () => {
     const errors: typeof formErrors = {};
     if (!contactForm.name.trim()) errors.name = 'Please enter your name.';
@@ -258,14 +367,16 @@ const PublicHome: React.FC = () => {
     if (isHoveringNews) {
       newsControls.stop();
     } else {
-      const itemWidth = 400;
+      // Logic adjusted for mobile responsiveness
+      const isMobile = window.innerWidth < 768;
+      const itemWidth = isMobile ? window.innerWidth * 0.85 + 24 : 424; // Width + gap
       const totalWidth = itemWidth * news.length;
 
       newsControls.start({
         x: [0, -totalWidth],
         transition: {
           ease: 'linear',
-          duration: news.length * 8,
+          duration: news.length * (isMobile ? 6 : 8), // Faster on mobile
           repeat: Infinity,
           repeatType: 'loop',
         },
@@ -278,8 +389,6 @@ const PublicHome: React.FC = () => {
       <div className="h-screen w-full flex flex-col items-center justify-center bg-white">
         <div className="relative">
           <div className="w-20 h-20 border-4 border-gray-100 border-t-saffron rounded-full animate-spin"></div>
-
-          {/* Center image instead of FaHandRock */}
           <div className="absolute inset-0 flex items-center justify-center">
             <img
               src="https://static.wixstatic.com/media/b34acd_88e53092a7034b25a80466040841ba96~mv2.png/v1/fit/w_2500,h_1330,al_c/b34acd_88e53092a7034b25a80466040841ba96~mv2.png"
@@ -288,7 +397,6 @@ const PublicHome: React.FC = () => {
             />
           </div>
         </div>
-
         <p className="mt-6 text-indiaGreen font-bold tracking-widest uppercase text-sm animate-pulse">
           Loading IYC Portal...
         </p>
@@ -307,13 +415,13 @@ const PublicHome: React.FC = () => {
 
       <Navbar />
 
-      <main id="main" className="pt-20">
-        {/* ================= HERO SECTION (Centered / No Form) ================= */}
+      <main id="main" className="pt-16 md:pt-20">
+        {/* ================= HERO SECTION ================= */}
         <section
           id="home"
-          className="relative h-[95vh] md:h-screen flex items-center justify-center bg-gray-900 overflow-hidden"
+          className="relative h-[90vh] md:h-screen flex items-center justify-center bg-gray-900 overflow-hidden"
         >
-          {/* Background Images with Zoom Effect */}
+          {/* Background Images */}
           <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden>
             <AnimatePresence mode="wait">
               {heroImages.length > 0 ? (
@@ -344,10 +452,10 @@ const PublicHome: React.FC = () => {
               initial="hidden"
               animate="visible"
               variants={staggerContainer}
-              className="max-w-5xl space-y-8"
+              className="max-w-5xl space-y-6 md:space-y-8"
             >
               <motion.div variants={fadeInUp} className="flex justify-center">
-                <div className="inline-flex items-center gap-2 px-4 py-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-xs md:text-sm font-bold tracking-widest uppercase shadow-lg">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 backdrop-blur-md border border-white/20 rounded-full text-white text-[10px] md:text-sm font-bold tracking-widest uppercase shadow-lg">
                   <span className="w-2 h-2 rounded-full bg-saffron animate-pulse"></span>
                   Official IYC Karnataka Portal
                 </div>
@@ -355,51 +463,26 @@ const PublicHome: React.FC = () => {
 
               <motion.h1
                 variants={fadeInUp}
-                className="text-5xl md:text-7xl lg:text-9xl font-black text-white leading-[0.9] tracking-tighter drop-shadow-2xl"
+                className="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-black text-white leading-[0.95] md:leading-[0.9] tracking-tighter drop-shadow-2xl"
               >
                 YOUTH <br className="md:hidden" />
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-saffron via-white to-green-500">
                   POWER
                 </span>{' '}
                 <br />
-                <span className="text-4xl md:text-6xl lg:text-7xl text-gray-300 font-extrabold block mt-2 tracking-normal">
+                <span className="text-2xl sm:text-3xl md:text-6xl lg:text-7xl text-gray-300 font-extrabold block mt-2 tracking-normal">
                   FOR THE NATION
                 </span>
               </motion.h1>
 
               <motion.p
                 variants={fadeInUp}
-                className="text-lg md:text-2xl text-gray-200 max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md"
+                className="text-sm md:text-2xl text-gray-200 max-w-lg md:max-w-2xl mx-auto font-light leading-relaxed drop-shadow-md px-2"
               >
                 The digital frontline of Karnataka's youth. We fight propaganda
                 with truth, empower voices, and drive the narrative for a
                 progressive India.
               </motion.p>
-
-              {/*<motion.div
-                variants={fadeInUp}
-                className="pt-8 flex flex-wrap justify-center gap-6"
-              >
-                <a
-                  href="#activities"
-                  className="px-10 py-4 bg-saffron text-white font-black uppercase tracking-wide rounded-sm shadow-[4px_4px_0px_0px_rgba(255,255,255,0.3)] hover:shadow-none hover:translate-x-[2px] hover:translate-y-[2px] transition-all flex items-center gap-2 text-lg"
-                >
-                  View Our Work <ArrowRight size={22} />
-                </a>
-
-                {/* Hero Play/Pause Control 
-                {heroImages.length > 1 && (
-                  <button
-                    onClick={() => setHeroPaused(!heroPaused)}
-                    className="px-4 py-4 rounded-sm bg-white/10 hover:bg-white/20 text-white transition-colors focus:outline-none focus:ring-2 focus:ring-saffron border border-white/30"
-                    aria-label={
-                      heroPaused ? 'Play slide show' : 'Pause slide show'
-                    }
-                  >
-                    {heroPaused ? <Play size={22} /> : <Pause size={22} />}
-                  </button>
-                )}
-              </motion.div>*/}
             </motion.div>
           </div>
 
@@ -415,16 +498,19 @@ const PublicHome: React.FC = () => {
         </section>
 
         {/* ================= ABOUT SECTION ================= */}
-        <section id="about-preview" className="py-24 relative bg-white">
+        <section
+          id="about-preview"
+          className="py-12 md:py-20 relative bg-white"
+        >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center"
+              className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center"
             >
               {/* Text */}
-              <div>
+              <div className="order-1 md:order-2">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-12 h-1 bg-saffron"></div>
                   <span className="text-sm font-black tracking-[0.2em] text-gray-500 uppercase">
@@ -432,19 +518,19 @@ const PublicHome: React.FC = () => {
                   </span>
                 </div>
 
-                <h2 className="text-4xl md:text-6xl font-black text-saffron leading-none mb-8">
+                <h2 className="text-3xl md:text-6xl font-black text-saffron leading-none mb-6 md:mb-8">
                   DEFENDING <br />
                   THE <span className="text-indiaGreen">IDEA OF INDIA</span>
                 </h2>
 
-                <p className="text-xl text-gray-800 font-medium leading-relaxed mb-6">
+                <p className="text-lg md:text-xl text-gray-800 font-medium leading-relaxed mb-4 md:mb-6">
                   Indian Youth Congress is not just an organization; it is a
                   movement. Committed to nurturing young leadership, defending
                   constitutional values, and empowering the youth to actively
                   participate in nation-building.
                 </p>
 
-                <p className="mt-4 text-gray-600 leading-relaxed mb-8">
+                <p className="mt-4 text-sm md:text-base text-gray-600 leading-relaxed mb-8">
                   From grassroots movements to digital advocacy, IYC stands at
                   the forefront of social justice, democracy, and inclusive
                   development - led by the energy, courage, and ideas of India’s
@@ -454,7 +540,7 @@ const PublicHome: React.FC = () => {
                 <div className="flex flex-wrap gap-4">
                   <Link
                     to="/about-iyc"
-                    className="inline-flex items-center px-8 py-3 bg-white border-2 border-gray-900 text-gray-900 rounded-full font-bold text-lg hover:bg-gray-900 hover:text-white transition-all duration-300"
+                    className="inline-flex items-center px-6 md:px-8 py-3 bg-white border-2 border-gray-900 text-gray-900 rounded-full font-bold text-base md:text-lg hover:bg-gray-900 hover:text-white transition-all duration-300 w-full md:w-auto justify-center"
                   >
                     Read Our History
                     <ArrowRight className="ml-3 w-5 h-5" />
@@ -462,27 +548,34 @@ const PublicHome: React.FC = () => {
                 </div>
               </div>
 
-              {/* Visual */}
+              {/* Visual - Mobile Optimized */}
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="relative"
+                className="relative order-1 md:order-2"
               >
                 {/* Decorative political frame */}
-                <div className="absolute inset-0 border-4 border-gray-100 transform translate-x-4 translate-y-4 rounded-lg"></div>
-                <div className="relative bg-white p-2 rounded-lg shadow-2xl border-t-4 border-saffron">
-                  {aboutImage ? (
-                    <img
-                      src={aboutImage.imageUrl}
-                      alt="About IYC"
-                      className="w-full h-auto rounded filter contrast-105"
-                    />
-                  ) : (
-                    <div className="h-64 bg-gray-200 rounded flex items-center justify-center text-gray-400">
-                      About Image
-                    </div>
-                  )}
+                <div className="hidden md:block absolute inset-0 border-4 border-gray-100 transform translate-x-4 translate-y-4 rounded-lg"></div>
+
+                <div className="relative bg-white rounded-lg md:p-2 md:shadow-2xl md:border-t-4 md:border-saffron">
+                  {/* MOBILE — show quotes */}
+                  <LeaderQuotes />
+
+                  {/* DESKTOP — keep your original image */}
+                  <div className="hidden md:block">
+                    {aboutImage ? (
+                      <img
+                        src={aboutImage.imageUrl}
+                        alt="About IYC"
+                        className="w-full h-auto rounded filter contrast-105"
+                      />
+                    ) : (
+                      <div className="h-64 bg-gray-200 rounded flex items-center justify-center text-gray-400">
+                        About Image
+                      </div>
+                    )}
+                  </div>
 
                   <div className="absolute -bottom-6 -left-6 hidden md:block bg-white p-6 rounded shadow-xl max-w-xs border-l-4 border-indiaGreen">
                     <p className="text-gray-800 font-bold italic text-lg leading-tight">
@@ -497,70 +590,67 @@ const PublicHome: React.FC = () => {
         </section>
 
         {/* ================= LEADERSHIP SECTION ================= */}
-        <div className="bg-gray-50 relative pt-12 pb-24 clip-path-slant">
-          {/* Executive Leadership Component */}
+        <div className="bg-gray-50 relative pt-12 pb-20 clip-path-slant">
           <ExecutiveLeadershipSection />
 
-          {/* State Leadership Grid */}
           <section
             id="leadership-profiles"
-            className="mt-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+            className="mt-12 md:mt-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
           >
             {/* Section Header */}
-            <div className="flex items-center justify-center gap-6 mb-16">
-              <div className="h-1 bg-gray-200 w-16 md:w-32 rounded-full"></div>
-              <h2 className="text-3xl md:text-4xl font-black text-gray-800 uppercase tracking-tight text-center">
+            <div className="flex items-center justify-center gap-4 md:gap-6 mb-12">
+              <div className="h-1 bg-gray-200 w-12 md:w-32 rounded-full"></div>
+              <h2 className="text-2xl md:text-4xl font-black text-gray-800 uppercase tracking-tight text-center">
                 State <span className="text-indiaGreen">Office Bearers</span>
               </h2>
-              <div className="h-1 bg-gray-200 w-16 md:w-32 rounded-full"></div>
+              <div className="h-1 bg-gray-200 w-12 md:w-32 rounded-full"></div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {stateLeaders.map((leader) => (
                 <article
                   key={leader.id}
-                  className="bg-white rounded-r-lg shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col sm:flex-row overflow-hidden border border-gray-100 border-l-8 border-l-saffron group"
+                  className="bg-white rounded-lg shadow-md hover:shadow-2xl transition-all duration-300 flex flex-col sm:flex-row overflow-hidden border border-gray-100 border-t-4 sm:border-t sm:border-l-8 border-saffron group"
                 >
                   {/* Image Section */}
                   <div className="w-full sm:w-1/3 h-64 sm:h-auto relative overflow-hidden bg-gray-200">
                     <img
                       src={leader.imageUrl}
                       alt={leader.name}
-                      // REMOVED: filter grayscale group-hover:grayscale-0
-                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                      className="w-full h-full object-cover object-top transform group-hover:scale-110 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent sm:bg-gradient-to-r sm:from-transparent sm:to-black/10 opacity-60"></div>
                   </div>
 
                   {/* Content Section */}
-                  <div className="w-full sm:w-2/3 p-6 flex flex-col justify-between relative bg-white">
+                  <div className="w-full sm:w-2/3 p-5 md:p-6 flex flex-col justify-between relative bg-white">
                     {/* Watermark Icon */}
-                    <div className="absolute top-4 right-4 text-6xl opacity-50 pointer-events-none group-hover:text-indiaGreen/10 transition-colors">
+                    <div className="absolute top-4 right-4 text-5xl md:text-6xl opacity-50 pointer-events-none group-hover:text-indiaGreen/10 transition-colors">
                       <img
                         src="/assets/IYC_Logo.png"
                         alt="Logo"
-                        className="w-16 h-16 object-contain"
+                        className="w-14 h-14 md:w-16 md:h-16 object-contain"
                       />
                     </div>
 
                     <div>
                       <div className="flex justify-between items-start relative z-10">
                         <div>
-                          <h3 className="text-2xl font-black text-gray-800 uppercase leading-none tracking-tight group-hover:text-indiaGreen transition-colors">
+                          <h3 className="text-xl md:text-2xl font-black text-gray-800 uppercase leading-none tracking-tight group-hover:text-indiaGreen transition-colors">
                             {leader.name}
                           </h3>
-                          <div className="inline-block px-3 py-1 bg-orange-50 text-saffron text-xs font-bold uppercase mt-2 rounded border border-orange-100">
+                          <div className="inline-block px-2 py-1 bg-orange-50 text-saffron text-[10px] md:text-xs font-bold uppercase mt-2 rounded border border-orange-100">
                             {leader.designation}
                           </div>
                         </div>
                       </div>
 
-                      <p className="text-gray-600 mt-4 line-clamp-2 text-sm leading-relaxed font-medium">
+                      <p className="text-gray-600 mt-3 md:mt-4 line-clamp-2 text-sm leading-relaxed font-medium">
                         {leader.bio}
                       </p>
                     </div>
 
-                    <div className="mt-6 pt-4 border-t border-gray-100 flex justify-between items-center relative z-10">
+                    <div className="mt-5 md:mt-6 pt-4 border-t border-gray-100 flex justify-between items-center relative z-10">
                       <div className="flex space-x-4">
                         {leader.socialMedia?.twitter && (
                           <a
@@ -569,7 +659,7 @@ const PublicHome: React.FC = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <FaXTwitter size={18} />
+                            <FaXTwitter size={16} />
                           </a>
                         )}
                         {leader.socialMedia?.facebook && (
@@ -579,7 +669,7 @@ const PublicHome: React.FC = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <FaFacebookF size={18} />
+                            <FaFacebookF size={16} />
                           </a>
                         )}
                         {leader.socialMedia?.facebook && (
@@ -589,17 +679,17 @@ const PublicHome: React.FC = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <FaInstagram size={18} />
+                            <FaInstagram size={16} />
                           </a>
                         )}
                       </div>
                       <Link
                         to={`/state-leader/${leader.id}`}
-                        className="text-xs font-bold text-gray-400 hover:text-saffron flex items-center gap-2 uppercase tracking-widest transition-colors group/link"
+                        className="text-xs font-bold text-gray-400 hover:text-saffron flex items-center gap-1 md:gap-2 uppercase tracking-widest transition-colors group/link"
                       >
-                        View Profile{' '}
+                        Profile{' '}
                         <ArrowRight
-                          size={14}
+                          size={12}
                           className="group-hover/link:translate-x-1 transition-transform"
                         />
                       </Link>
@@ -614,32 +704,32 @@ const PublicHome: React.FC = () => {
         {/* ================= ACTIVITIES SECTION ================= */}
         <section
           id="activities"
-          className="py-24 bg-gray-900 text-white relative overflow-hidden"
+          className="py-12 md:py-20 bg-gray-900 text-white relative overflow-hidden"
         >
           {/* Background Texture */}
           <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>
 
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-gray-700 pb-6">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16 border-b border-gray-700 pb-6">
               <div>
-                <h2 className="text-4xl md:text-5xl font-black uppercase tracking-tight text-white">
+                <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tight text-white">
                   Ground Zero
                 </h2>
-                <p className="text-gray-400 mt-2 text-lg">
+                <p className="text-gray-400 mt-2 text-base md:text-lg">
                   Protests, Rallies, and Seva Campaigns
                 </p>
               </div>
-              <div className="mt-4 md:mt-0">
+              <div className="mt-6 md:mt-0">
                 <Link
                   to="/activities"
-                  className="text-saffron font-bold uppercase tracking-wider flex items-center gap-2 hover:text-white transition-colors"
+                  className="text-saffron font-bold uppercase tracking-wider flex items-center gap-2 hover:text-white transition-colors text-sm md:text-base"
                 >
                   View All Reports <ArrowRight size={20} />
                 </Link>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               {(activities || []).slice(0, 3).map((activity, index) => (
                 <motion.article
                   key={activity.id}
@@ -649,20 +739,20 @@ const PublicHome: React.FC = () => {
                   viewport={{ once: true }}
                   className="bg-gray-800 border border-gray-700 rounded-xl overflow-hidden group hover:border-saffron transition-all"
                 >
-                  <div className="h-60 relative overflow-hidden">
+                  <div className="h-52 md:h-60 relative overflow-hidden">
                     <img
                       src={activity.imageUrl}
                       alt={activity.title}
                       loading="lazy"
                       className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100"
                     />
-                    <div className="absolute top-4 left-4 bg-saffron text-white text-xs font-bold px-3 py-1 rounded shadow-md uppercase tracking-wider">
+                    <div className="absolute top-4 left-4 bg-saffron text-white text-[10px] md:text-xs font-bold px-3 py-1 rounded shadow-md uppercase tracking-wider">
                       {activity.type}
                     </div>
                   </div>
 
-                  <div className="p-6">
-                    <div className="flex items-center gap-4 text-xs font-bold text-gray-500 mb-4 uppercase tracking-wide">
+                  <div className="p-5 md:p-6">
+                    <div className="flex items-center gap-4 text-xs font-bold text-gray-500 mb-3 md:mb-4 uppercase tracking-wide">
                       <span className="flex items-center gap-1">
                         <Calendar size={12} /> {activity.date}
                       </span>
@@ -671,18 +761,18 @@ const PublicHome: React.FC = () => {
                       </span>
                     </div>
 
-                    <h3 className="text-xl font-bold text-white mb-3 leading-snug group-hover:text-saffron transition-colors">
+                    <h3 className="text-lg md:text-xl font-bold text-white mb-3 leading-snug group-hover:text-saffron transition-colors">
                       {activity.title}
                     </h3>
 
-                    <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 mb-6">
+                    <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 mb-5 md:mb-6">
                       {activity.description}
                     </p>
 
                     <div className="flex justify-between items-center border-t border-gray-700 pt-4">
                       <button
                         onClick={() => setSelectedActivity(activity)}
-                        className="text-white font-bold text-sm hover:text-saffron transition-colors flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-saffron rounded"
+                        className="text-white font-bold text-xs md:text-sm hover:text-saffron transition-colors flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-saffron rounded"
                         aria-label={`Open details for ${activity.title}`}
                       >
                         FULL REPORT <ChevronRight size={16} />
@@ -720,13 +810,13 @@ const PublicHome: React.FC = () => {
         <VideoSection />
 
         {/* ================= NEWS TICKER SECTION ================= */}
-        <section className="py-20 bg-gray-50 border-t border-gray-200">
+        <section className="py-12 md:py-20 bg-gray-50 border-t border-gray-200 overflow-hidden">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-4 mb-10">
-              <div className="bg-red-600 text-white font-bold px-4 py-2 uppercase text-xs md:text-sm tracking-wider flex items-center gap-2 animate-pulse shadow-sm rounded-sm">
-                <Megaphone size={16} /> Press Releases
+            <div className="flex items-center gap-3 md:gap-4 mb-8 md:mb-10">
+              <div className="bg-red-600 text-white font-bold px-3 py-1.5 md:px-4 md:py-2 uppercase text-[10px] md:text-sm tracking-wider flex items-center gap-2 animate-pulse shadow-sm rounded-sm">
+                <Megaphone size={14} className="md:w-4 md:h-4" /> Press Releases
               </div>
-              <h2 className="text-2xl font-bold text-gray-800">
+              <h2 className="text-lg md:text-2xl font-bold text-gray-800">
                 Latest Updates
               </h2>
             </div>
@@ -737,17 +827,21 @@ const PublicHome: React.FC = () => {
               onMouseLeave={() => setIsHoveringNews(false)}
             >
               {/* Gradient Masks for edges */}
-              <div className="absolute -left-4 top-0 bottom-0 w-20 bg-gradient-to-r from-gray-200 to-transparent z-10 pointer-events-none"></div>
-              <div className="absolute -right-4 top-0 bottom-0 w-20 bg-gradient-to-l from-gray-200 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute -left-1 md:-left-4 top-0 bottom-0 w-8 md:w-20 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none"></div>
+              <div className="absolute -right-1 md:-right-4 top-0 bottom-0 w-8 md:w-20 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
 
-              <motion.div className="flex gap-6" animate={newsControls}>
+              <motion.div
+                className="flex gap-4 md:gap-6"
+                animate={newsControls}
+              >
                 {[...news, ...news, ...news].map((n, idx) => (
                   <div
                     key={`${n.id}-${idx}`}
-                    className="w-[400px] flex-shrink-0"
+                    // FIXED FOR MOBILE: w-[85vw] on mobile, w-[400px] on desktop
+                    className="w-[85vw] sm:w-[350px] md:w-[400px] flex-shrink-0"
                   >
                     <div
-                      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-5 border border-gray-200 flex gap-4 cursor-pointer h-full items-start"
+                      className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-4 md:p-5 border border-gray-200 flex gap-4 cursor-pointer h-full items-start"
                       onClick={() => setSelectedNews(n)}
                       role="button"
                       tabIndex={0}
@@ -756,18 +850,18 @@ const PublicHome: React.FC = () => {
                       <img
                         src={n.imageUrl}
                         alt={n.title}
-                        className="w-24 h-24 object-cover rounded bg-gray-100 flex-shrink-0"
+                        className="w-20 h-20 md:w-24 md:h-24 object-cover rounded bg-gray-100 flex-shrink-0"
                       />
                       <div className="flex flex-col justify-between h-full">
                         <div>
-                          <span className="text-xs font-bold text-saffron uppercase mb-1 block">
+                          <span className="text-[10px] md:text-xs font-bold text-saffron uppercase mb-1 block">
                             {n.date}
                           </span>
-                          <h3 className="text-base font-bold text-gray-900 leading-snug line-clamp-2 mb-2">
+                          <h3 className="text-sm md:text-base font-bold text-gray-900 leading-snug line-clamp-2 mb-2">
                             {n.title}
                           </h3>
                         </div>
-                        <div className="text-xs font-semibold text-gray-500 hover:text-indiaGreen flex items-center gap-1 mt-auto">
+                        <div className="text-[10px] md:text-xs font-semibold text-gray-500 hover:text-indiaGreen flex items-center gap-1 mt-auto">
                           Read Full Story <FileText size={12} />
                         </div>
                       </div>
@@ -779,14 +873,14 @@ const PublicHome: React.FC = () => {
           </div>
         </section>
 
-        {/* ================= GALLERY SECTION (Masonry & Modal) ================= */}
-        <section id="gallery" className="py-24 bg-white">
+        {/* ================= GALLERY SECTION ================= */}
+        <section id="gallery" className="py-12 md:py-20 bg-white">
           <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-black text-indiaGreen uppercase tracking-wide">
+            <div className="text-center mb-10 md:mb-16">
+              <h2 className="text-2xl md:text-4xl font-black text-indiaGreen uppercase tracking-wide">
                 Media Gallery
               </h2>
-              <div className="w-20 h-2 bg-saffron mx-auto mt-4"></div>
+              <div className="w-16 md:w-20 h-2 bg-saffron mx-auto mt-4"></div>
             </div>
 
             {standardGalleryItems.length === 0 ? (
@@ -797,14 +891,14 @@ const PublicHome: React.FC = () => {
               </div>
             ) : (
               // Masonry-ish Grid Layout
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 auto-rows-[200px]">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 auto-rows-[150px] md:auto-rows-[200px]">
                 {standardGalleryItems.map((item, index) => (
                   <button
                     key={item.id}
                     onClick={() => setSelectedGalleryIndex(index)}
-                    className={`relative group overflow-hidden rounded-sm cursor-zoom-in focus:outline-none focus:ring-4 focus:ring-saffron focus:ring-opacity-50 ${
+                    className={`relative group overflow-hidden rounded-md md:rounded-sm cursor-zoom-in focus:outline-none focus:ring-4 focus:ring-saffron focus:ring-opacity-50 ${
                       // Make every 5th item large
-                      index % 5 === 0 ? 'md:col-span-2 md:row-span-2' : ''
+                      index % 5 === 0 ? 'col-span-2 row-span-2' : ''
                     }`}
                     aria-label={`Open gallery image ${index + 1}`}
                   >
@@ -812,7 +906,6 @@ const PublicHome: React.FC = () => {
                       src={item.thumbnailUrl || item.imageUrl}
                       alt={item.alt || `Gallery image ${index + 1}`}
                       loading="lazy"
-                      // REMOVED: filter grayscale group-hover:grayscale-0
                       className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -824,10 +917,10 @@ const PublicHome: React.FC = () => {
                 ))}
               </div>
             )}
-            <div className="text-center mt-12">
+            <div className="text-center mt-10 md:mt-12">
               <a
                 href="/gallery"
-                className="px-8 py-3 border-2 border-gray-900 text-gray-900 font-bold uppercase hover:bg-gray-900 hover:text-white transition-colors inline-block"
+                className="px-6 py-3 border-2 border-gray-900 text-gray-900 font-bold uppercase hover:bg-gray-900 hover:text-white transition-colors inline-block text-sm md:text-base"
               >
                 Load More Photos
               </a>
@@ -835,32 +928,15 @@ const PublicHome: React.FC = () => {
           </div>
         </section>
 
-        {/* ================= FINAL CTA (Utilizing contact form state potentially) ================= 
-        <section className="bg-gradient-to-r from-saffron to-orange-600 py-16">
-          <div className="max-w-4xl mx-auto px-4 text-center text-white">
-            <h2 className="text-3xl md:text-5xl font-black mb-6 uppercase">
-              Democracy Needs You
-            </h2>
-            <p className="text-xl mb-8 font-medium opacity-90">
-              Don't just watch history happen. Be the one who writes it.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <a
-                href="#home"
-                className="px-8 py-4 bg-white text-saffron font-black uppercase rounded shadow-xl hover:bg-gray-100 transition-colors"
-              >
-                Join Membership
-              </a>
-            </div>
-          </div>
-        </section>*/}
+        {/* --- DIVIDER: Footer Top --- */}
+        <div className="h-2 bg-gradient-to-r from-saffron via-white to-indiaGreen"></div>
 
         <Footer />
       </main>
 
       {/* ================= MODALS ================= */}
 
-      {/* Gallery Modal with Focus Trap */}
+      {/* Gallery Modal */}
       <AnimatePresence>
         {selectedGalleryIndex !== null && (
           <motion.div
@@ -871,9 +947,6 @@ const PublicHome: React.FC = () => {
             onClick={() => setSelectedGalleryIndex(null)}
             role="dialog"
             aria-modal="true"
-            aria-label={`Image ${selectedGalleryIndex + 1} of ${
-              standardGalleryItems.length
-            }`}
           >
             <button
               data-gallery-focus
@@ -881,9 +954,8 @@ const PublicHome: React.FC = () => {
               type="button"
               className="absolute top-4 right-4 z-20 text-white/70 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors focus:ring-2 focus:ring-white focus:outline-none"
               onClick={() => setSelectedGalleryIndex(null)}
-              aria-label="Close image viewer"
             >
-              <X size={32} />
+              <X size={28} className="md:w-8 md:h-8" />
             </button>
 
             <button
@@ -894,7 +966,6 @@ const PublicHome: React.FC = () => {
                 e.stopPropagation();
                 handlePrevImage();
               }}
-              aria-label="Previous image"
             >
               <ChevronLeft size={48} />
             </button>
@@ -907,7 +978,6 @@ const PublicHome: React.FC = () => {
                 e.stopPropagation();
                 handleNextImage();
               }}
-              aria-label="Next image"
             >
               <ChevronRight size={48} />
             </button>
@@ -919,18 +989,15 @@ const PublicHome: React.FC = () => {
               <motion.img
                 key={selectedGalleryIndex}
                 src={standardGalleryItems[selectedGalleryIndex].imageUrl}
-                alt={
-                  standardGalleryItems[selectedGalleryIndex].alt ||
-                  `Gallery image ${selectedGalleryIndex + 1}`
-                }
-                className="max-w-full max-h-[85vh] object-contain shadow-2xl rounded-sm border-4 border-white"
+                alt="gallery"
+                className="max-w-full max-h-[70vh] md:max-h-[85vh] object-contain shadow-2xl rounded-sm border-2 md:border-4 border-white"
                 initial={{ scale: 0.95, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ duration: 0.3 }}
               />
             </div>
 
-            {/* Mobile Controls */}
+            {/* Mobile Controls (Larger touch targets) */}
             <div
               className="absolute bottom-8 left-0 w-full flex justify-center gap-12 sm:hidden z-20"
               onClick={(e) => e.stopPropagation()}
@@ -940,8 +1007,7 @@ const PublicHome: React.FC = () => {
                 ref={modalLastRef}
                 type="button"
                 onClick={handlePrevImage}
-                className="bg-white/10 backdrop-blur-md p-4 rounded-full text-white active:bg-white/20"
-                aria-label="Previous"
+                className="bg-white/20 backdrop-blur-md p-4 rounded-full text-white active:bg-white/30"
               >
                 <ChevronLeft size={28} />
               </button>
@@ -949,8 +1015,7 @@ const PublicHome: React.FC = () => {
                 data-gallery-focus
                 type="button"
                 onClick={handleNextImage}
-                className="bg-white/10 backdrop-blur-md p-4 rounded-full text-white active:bg-white/20"
-                aria-label="Next"
+                className="bg-white/20 backdrop-blur-md p-4 rounded-full text-white active:bg-white/30"
               >
                 <ChevronRight size={28} />
               </button>

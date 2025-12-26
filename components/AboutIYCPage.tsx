@@ -553,36 +553,6 @@ const AboutIYCPage: React.FC = () => {
             </div>
           </div>
         </section>
-
-        {/* --- CTA SECTION ---
-        <section className="bg-gradient-to-r from-orange-600 to-orange-500 py-20 text-center relative overflow-hidden">
-          {/* Abstract Pattern overlay
-          <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-
-          <div className="max-w-4xl mx-auto px-6 relative z-10">
-            <h2 className="text-4xl font-extrabold text-white mb-6">
-              Ready to Serve the Nation?
-            </h2>
-            <p className="text-orange-100 text-xl mb-8">
-              Join the movement that defines the future of India. Be the change
-              you wish to see.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                to="/join"
-                className="inline-flex items-center justify-center px-8 py-4 bg-white text-orange-700 font-bold rounded-full shadow-lg hover:shadow-xl hover:bg-gray-100 transition-all transform hover:-translate-y-1"
-              >
-                Become a Member <ArrowRight className="ml-2 w-5 h-5" />
-              </Link>
-              <Link
-                to="/donate"
-                className="inline-flex items-center justify-center px-8 py-4 bg-orange-700 border border-orange-400 text-white font-bold rounded-full shadow-lg hover:bg-orange-800 transition-all"
-              >
-                Contribute
-              </Link>
-            </div>
-          </div>
-        </section>*/}
       </main>
       <Footer />
     </div>

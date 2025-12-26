@@ -261,29 +261,6 @@ const SiddaramaiahProfilePage: React.FC = () => {
                 </div>
               </div>
             </div>
-
-            <div className="bg-gradient-to-br from-indigo-800 to-blue-900 p-8 rounded-xl text-white shadow-2xl relative overflow-hidden">
-              <div className="relative z-10">
-                <h3 className="text-2xl font-bold mb-2">
-                  Subscribe to CM Updates
-                </h3>
-                <p className="text-indigo-100 text-sm mb-6">
-                  Get the latest news on Cabinet decisions and state progress.
-                </p>
-                <div className="flex gap-2">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="flex-1 px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white"
-                  />
-                  <button className="bg-white text-indigo-900 px-6 py-3 rounded font-bold hover:bg-indigo-50 transition-colors">
-                    Subscribe
-                  </button>
-                </div>
-              </div>
-              {/* Decor */}
-              <Flag className="absolute -bottom-6 -right-6 h-40 w-40 text-black/10 rotate-12" />
-            </div>
           </div>
         </section>
       </main>
