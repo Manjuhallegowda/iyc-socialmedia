@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
       name: 'Manjunath Gowda',
       role1: 'State President',
       role2: 'IYC Karnataka',
-      img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLW4RHRvfmWY9Nw9cebeqJfH0954kKP7Xv6w&s',
+      img: 'https://scontent.fblr24-1.fna.fbcdn.net/v/t39.30808-6/476459119_1202341457927670_5557239319869858832_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_ohc=ivaj2SUXuhwQ7kNvwHIk9n3&_nc_oc=AdlYiF0gGQgmDyqOw_pCC23HrNN9JbE_zcUeRx_Kv33kW6FkPtyAMxrJnTX0oG6rN_FtVddhaTQDsB_xWdybbfKl&_nc_zt=23&_nc_ht=scontent.fblr24-1.fna&_nc_gid=MhnTjQuLkuzRp5TtuE_G_g&oh=00_Afn7K6yakChTZlLkdBp9j-wNDr2So0gs4R49cgC7guISew&oe=6954751D',
       href: '/hsmanjunatha',
     },
   ];
@@ -193,7 +193,7 @@ const Navbar: React.FC = () => {
                 <img
                   src={leader.img}
                   alt={leader.name}
-                  className="w-11 h-11 rounded-full border-2 border-transparent group-hover:border-orange-500 transition-all object-cover shadow-sm bg-gray-200"
+                  className="w-12 h-12 rounded-full border-2 border-transparent group-hover:border-orange-500 transition-all object-top shadow-sm bg-gray-200"
                 />
                 {/* Changed hidden 2xl:block to hidden lg:block so it shows on laptops */}
                 <div className="hidden lg:block leading-tight text-left">

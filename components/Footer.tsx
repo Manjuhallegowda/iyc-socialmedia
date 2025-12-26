@@ -103,50 +103,7 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold mb-3">Follow Us</h4>
-            <p className="text-gray-400 text-sm mb-3">
-              Stay connected - join us on social media for real-time updates.
-            </p>
-            <div className="flex items-center space-x-4 text-2xl text-gray-300">
-              {/* Replace '#' with real URLs */}
-              <a
-                href="https://www.facebook.com/IYCKar"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                className="hover:text-blue-500 transform hover:scale-110 transition"
-              >
-                <FaFacebookF />
-              </a>
-              <a
-                href="https://x.com/IYCKarnataka"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
-                className="hover:text-sky-400 transform hover:scale-110 transition"
-              >
-                <FaXTwitter />
-              </a>
-              <a
-                href="https://www.instagram.com/iyc.karnataka"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className="hover:text-pink-500 transform hover:scale-110 transition"
-              >
-                <FaInstagram />
-              </a>
-              <a
-                href="https://www.youtube.com/c/IndianYouthCongress"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="YouTube"
-                className="hover:text-red-600 transform hover:scale-110 transition"
-              >
-                <FaYoutube />
-              </a>
-            </div>
-
+            <h4 className="text-lg font-semibold mb-3">Contact Us</h4>
             <div className="mt-4 text-gray-400 text-sm">
               <div>MG Road, Bengaluru - 560001</div>
               <div>
@@ -163,43 +120,51 @@ const Footer: React.FC = () => {
           </div>
 
           <div>
-            <h4 className="text-lg font-semibold mb-3">Stay Updated</h4>
+            <h4 className="text-lg font-semibold mb-3">Follow Us</h4>
             <p className="text-gray-400 text-sm mb-3">
-              Subscribe to receive campaign updates, events and volunteer calls.
+              Stay connected join us on social media for real-time updates.
             </p>
 
-            <form
-              onSubmit={handleSubscribe}
-              className="flex flex-col sm:flex-row gap-2"
-              noValidate
-            >
-              <input
-                type="email"
-                value={email}
-                aria-label="Email address"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setEmail(e.target.value)
-                }
-                placeholder="Your email"
-                required
-                className="w-full px-3 py-2 rounded-md bg-gray-800 border border-gray-700 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
-              <button
-                type="submit"
-                className="px-4 py-2 rounded-md bg-indiaGreen hover:bg-green-700 text-white text-sm transition"
+            <div className="flex items-center space-x-4 text-2xl text-gray-300">
+              <a
+                href="https://www.facebook.com/IYCKar"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="hover:text-blue-500 transform hover:scale-110 transition"
               >
-                Subscribe
-              </button>
-            </form>
+                <FaFacebookF />
+              </a>
 
-            {/* helpful for screen-readers so they announce the message */}
-            <div aria-live="polite" className="min-h-[1.25rem]">
-              {error && <p className="text-xs text-red-400 mt-2">{error}</p>}
-              {subscribed && (
-                <p className="text-xs text-emerald-400 mt-2">
-                  Thanks for subscribing!
-                </p>
-              )}
+              <a
+                href="https://x.com/IYCKarnataka"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter"
+                className="hover:text-sky-400 transform hover:scale-110 transition"
+              >
+                <FaXTwitter />
+              </a>
+
+              <a
+                href="https://www.instagram.com/iyc.karnataka"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="hover:text-pink-500 transform hover:scale-110 transition"
+              >
+                <FaInstagram />
+              </a>
+
+              <a
+                href="https://www.youtube.com/c/IndianYouthCongress"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="YouTube"
+                className="hover:text-red-600 transform hover:scale-110 transition"
+              >
+                <FaYoutube />
+              </a>
             </div>
           </div>
         </div>

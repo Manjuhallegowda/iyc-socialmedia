@@ -21,7 +21,7 @@ const DKShivakumarPoliticalPage: React.FC = () => {
 
       <main className="flex-1">
         {/* HERO SECTION: Statesman Style */}
-        <section className="relative w-full overflow-hidden bg-stone-900 text-white">
+        <section className="relative w-full pt-20 md:pt-30 overflow-hidden bg-stone-900 text-white">
           {/* Background Gradient - Tricolor influence but deep and rich */}
           <div className="absolute inset-0 bg-gradient-to-br from-orange-900 via-stone-900 to-green-900 opacity-90" />
 
@@ -37,7 +37,11 @@ const DKShivakumarPoliticalPage: React.FC = () => {
               className="flex-1 text-center md:text-left space-y-6"
             >
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-orange-500/30 bg-orange-500/10 text-orange-300 text-sm font-medium tracking-wide uppercase">
-                <Flag className="h-4 w-4" />
+                <img
+                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Indian_National_Congress_Flag.svg/960px-Indian_National_Congress_Flag.svg.png" // <-- your image path here
+                  alt="Indian National Congress"
+                  className="h-6 w-6 object-contain"
+                />
                 Indian National Congress
               </div>
 
@@ -51,14 +55,14 @@ const DKShivakumarPoliticalPage: React.FC = () => {
                 President, Karnataka Pradesh Congress Committee
               </p>
 
-              <div className="pt-6 flex flex-wrap gap-4 justify-center md:justify-start">
+              {/*<div className="pt-6 flex flex-wrap gap-4 justify-center md:justify-start">
                 <button className="px-8 py-3 bg-orange-600 hover:bg-orange-700 text-white font-semibold rounded-sm transition-all shadow-lg shadow-orange-900/50 uppercase tracking-wider text-sm">
                   Join the Movement
                 </button>
                 <button className="px-8 py-3 bg-transparent border border-stone-600 hover:bg-stone-800 text-white font-semibold rounded-sm transition-all uppercase tracking-wider text-sm">
                   View Manifesto
                 </button>
-              </div>
+              </div>*/}
             </motion.div>
 
             {/* Leader Image - Portrait Style */}
@@ -171,12 +175,6 @@ const DKShivakumarPoliticalPage: React.FC = () => {
                   Building a Stronger Karnataka
                 </h2>
               </div>
-              <a
-                href="#"
-                className="hidden md:flex items-center gap-2 text-stone-600 hover:text-orange-600 font-medium transition-colors"
-              >
-                Read Full Agenda <ChevronRight className="h-4 w-4" />
-              </a>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -193,9 +191,6 @@ const DKShivakumarPoliticalPage: React.FC = () => {
                       while preserving our cultural heritage.
                     </p>
                   </div>
-                  <span className="text-green-700 font-bold text-sm uppercase tracking-wide group-hover:underline">
-                    Explore Initiatives &rarr;
-                  </span>
                 </div>
               </div>
 
@@ -227,9 +222,6 @@ const DKShivakumarPoliticalPage: React.FC = () => {
                       skill development, and job creation.
                     </p>
                   </div>
-                  <span className="text-orange-700 font-bold text-sm uppercase tracking-wide group-hover:underline">
-                    View Policy &rarr;
-                  </span>
                 </div>
               </div>
             </div>
@@ -250,13 +242,11 @@ const DKShivakumarPoliticalPage: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex items-center gap-4 p-4 bg-stone-800 rounded-lg border border-stone-700">
                   <Phone className="h-5 w-5 text-green-500" />
-                  <span className="font-mono text-lg">+91 XXXXX XXXXX</span>
+                  <span className="font-mono text-lg">080-23619000</span>
                 </div>
                 <div className="flex items-center gap-4 p-4 bg-stone-800 rounded-lg border border-stone-700">
                   <Mail className="h-5 w-5 text-orange-500" />
-                  <span className="font-mono text-lg">
-                    office@dkshivakumar.in
-                  </span>
+                  <span className="font-mono text-lg">dk@dkshivakumar.com</span>
                 </div>
               </div>
             </div>

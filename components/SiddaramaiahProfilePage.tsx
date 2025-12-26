@@ -22,7 +22,7 @@ const SiddaramaiahProfilePage: React.FC = () => {
 
       <main className="flex-1">
         {/* HERO SECTION: The Chief Minister */}
-        <section className="relative w-full overflow-hidden bg-stone-900 text-white">
+        <section className="relative w-full pt-20 md:pt-30 overflow-hidden bg-stone-900 text-white">
           {/* Background Gradient - Deep Indigo/Slate for calmness/authority */}
           <div className="absolute inset-0 bg-gradient-to-br from-stone-900 via-indigo-950 to-slate-900 opacity-90" />
 
@@ -54,12 +54,25 @@ const SiddaramaiahProfilePage: React.FC = () => {
               </p>
 
               <div className="pt-6 flex flex-wrap gap-4 justify-center md:justify-start">
-                <button className="px-8 py-3 bg-indigo-700 hover:bg-indigo-800 text-white font-semibold rounded-sm transition-all shadow-lg shadow-indigo-900/50 uppercase tracking-wider text-sm">
+                {/* Government Schemes — external site */}
+                <a
+                  href="https://cm.karnataka.gov.in/260/guarantee-schemes-guaranteed/en" // <-- replace with real URL
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-3 bg-indigo-700 hover:bg-indigo-800 text-white font-semibold rounded-sm transition-all shadow-lg shadow-indigo-900/50 uppercase tracking-wider text-sm"
+                >
                   Government Schemes
-                </button>
-                <button className="px-8 py-3 bg-transparent border border-stone-600 hover:bg-stone-800 text-white font-semibold rounded-sm transition-all uppercase tracking-wider text-sm">
+                </a>
+
+                {/* Biography — external site */}
+                <a
+                  href="https://en.wikipedia.org/wiki/Siddaramaiah" // <-- replace if different
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-8 py-3 bg-transparent border border-stone-600 hover:bg-stone-800 text-white font-semibold rounded-sm transition-all uppercase tracking-wider text-sm"
+                >
                   Biography
-                </button>
+                </a>
               </div>
             </motion.div>
 
@@ -142,9 +155,6 @@ const SiddaramaiahProfilePage: React.FC = () => {
                       and Dalits.
                     </p>
                   </div>
-                  <span className="text-yellow-700 font-bold text-sm uppercase tracking-wide group-hover:underline">
-                    Learn More &rarr;
-                  </span>
                 </div>
               </div>
 
@@ -176,9 +186,6 @@ const SiddaramaiahProfilePage: React.FC = () => {
                       travel for women, and food security for all.
                     </p>
                   </div>
-                  <span className="text-indigo-700 font-bold text-sm uppercase tracking-wide group-hover:underline">
-                    View Guarantees &rarr;
-                  </span>
                 </div>
               </div>
             </div>
@@ -253,7 +260,7 @@ const SiddaramaiahProfilePage: React.FC = () => {
               <div className="space-y-4">
                 <div className="flex items-center gap-4 p-4 bg-stone-800 rounded-lg border border-stone-700">
                   <Phone className="h-5 w-5 text-indigo-500" />
-                  <span className="font-mono text-lg">+91 XXXXX XXXXX</span>
+                  <span className="font-mono text-lg">080-22253414 </span>
                 </div>
                 <div className="flex items-center gap-4 p-4 bg-stone-800 rounded-lg border border-stone-700">
                   <Mail className="h-5 w-5 text-yellow-500" />
