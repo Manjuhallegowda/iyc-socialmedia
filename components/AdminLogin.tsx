@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Lock, User } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { apiLogin } from '../services/api';
 
 interface AdminLoginProps {
@@ -7,6 +8,7 @@ interface AdminLoginProps {
 }
 
 const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
+  const navigate = useNavigate();
   const [username, setUsername] = useState('admin');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -19,6 +21,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
     try {
       await apiLogin(username, password);
       onLogin();
+      navigate('/admin');
     } catch (err: any) {
       setError(err.message || 'Login failed. Please try again.');
     } finally {
@@ -34,39 +37,55 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
             <Lock className="text-white w-8 h-8" />
           </div>
         </div>
-        <h2 className="text-2xl font-bold text-center text-indiaGreen mb-2">Admin Portal</h2>
+        <h2 className="text-2xl font-bold text-center text-indiaGreen mb-2">
+          Admin Portal
+        </h2>
         <p className="text-center text-gray-500 mb-8">Karnataka Social Media</p>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-1">Username</label>
+            <label className="block text-sm font-bold text-gray-700 mb-1">
+              Username
+            </label>
             <div className="relative">
-                <input 
-                  type="text" 
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-saffron outline-none pl-10"
-                  placeholder="Enter username"
-                />
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-saffron outline-none pl-10"
+                placeholder="Enter username"
+              />
+              <User
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={18}
+              />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-bold text-gray-700 mb-1">Password</label>
+            <label className="block text-sm font-bold text-gray-700 mb-1">
+              Password
+            </label>
             <div className="relative">
-                <input 
-                  type="password" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-saffron outline-none pl-10"
-                  placeholder="Enter password"
-                />
-                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-saffron outline-none pl-10"
+                placeholder="Enter password"
+              />
+              <Lock
+                className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
+                size={18}
+              />
             </div>
           </div>
-          {error && <p className="text-red-500 text-sm text-center font-bold">{error}</p>}
-          <button 
-            type="submit" 
+          {error && (
+            <p className="text-red-500 text-sm text-center font-bold">
+              {error}
+            </p>
+          )}
+          <button
+            type="submit"
             className="w-full bg-indiaGreen text-white py-3 rounded-lg font-bold hover:bg-green-700 transition-colors disabled:opacity-50"
             disabled={loading}
           >
