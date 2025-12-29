@@ -664,7 +664,7 @@ const PublicHome: React.FC = () => {
                 x: ['0%', '-50%'],
               }}
               transition={{
-                duration: 520, // Slightly slower for better readability
+                duration: 150, // Slightly slower for better readability
                 ease: 'linear',
                 repeat: Infinity,
               }}
