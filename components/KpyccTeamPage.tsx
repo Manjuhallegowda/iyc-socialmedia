@@ -23,7 +23,8 @@ import {
 
 const KpyccTeamPage: React.FC = () => {
   const { district } = useParams<{ district: string }>();
-  const { getDistrictHierarchyData, kpyccTeam } = useData();
+  // Update 1: Destructure socialMediaTeam from useData
+  const { getDistrictHierarchyData, kpyccTeam, socialMediaTeam } = useData();
   const [activeTab, setActiveTab] = useState<
     'overview' | 'kpycc' | 'social' | 'legal'
   >('overview');
@@ -34,6 +35,24 @@ const KpyccTeamPage: React.FC = () => {
     () => (district ? getDistrictHierarchyData(district) : undefined),
     [district, getDistrictHierarchyData]
   );
+
+  // Update 2: Filter and map Social Media Team data for the current district
+  const districtSmTeam = useMemo(() => {
+    if (!socialMediaTeam || !district) return [];
+
+    // Filter by placeName matching the district (case-insensitive for safety)
+    return socialMediaTeam
+      .filter(
+        (member) => member.placeName?.toLowerCase() === district.toLowerCase()
+      )
+      .map((member) => ({
+        ...member,
+        // Map Admin 'position' to 'designation' for the UI component
+        designation: member.position,
+        // Map Admin 'socialMedia' object to 'social' for the UI component
+        social: member.socialMedia,
+      }));
+  }, [socialMediaTeam, district]);
 
   // --- Render Helpers ---
 
@@ -150,7 +169,26 @@ const KpyccTeamPage: React.FC = () => {
                       <ExternalLink className="w-5 h-5" />
                     </a>
                   )}
-                  {/* Add other social icons as needed */}
+                  {selectedProfile.social.instagram && (
+                    <a
+                      href={selectedProfile.social.instagram}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-gray-400 hover:text-pink-600 transition-colors"
+                    >
+                      <ExternalLink className="w-5 h-5" />
+                    </a>
+                  )}
+                  {selectedProfile.social.facebook && (
+                    <a
+                      href={selectedProfile.social.facebook}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="text-gray-400 hover:text-blue-600 transition-colors"
+                    >
+                      <ExternalLink className="w-5 h-5" />
+                    </a>
+                  )}
                 </div>
               )}
             </div>
@@ -318,7 +356,8 @@ const KpyccTeamPage: React.FC = () => {
 
   // 3. Card Renderer for Lists (KPYCC, Social, Legal)
   const renderTeamGrid = (
-    members: KpyccTeamMember[],
+    // Updated type definition to handle mapped SM members which are compatible with KpyccTeamMember structure
+    members: any[],
     type: 'kpycc' | 'social' | 'legal'
   ) => {
     if (!members || members.length === 0) {
@@ -501,8 +540,8 @@ const KpyccTeamPage: React.FC = () => {
               'kpycc'
             )}
 
-          {activeTab === 'social' &&
-            renderTeamGrid(districtData?.smTeamMembers || [], 'social')}
+          {/* Update 3: Use the filtered districtSmTeam instead of districtData */}
+          {activeTab === 'social' && renderTeamGrid(districtSmTeam, 'social')}
 
           {activeTab === 'legal' &&
             renderTeamGrid(districtData?.legalTeamMembers || [], 'legal')}

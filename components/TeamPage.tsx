@@ -19,28 +19,37 @@ import {
 // All Karnataka districts (comprehensive list)
 const KARNATAKA_DISTRICTS = [
   'Bagalkot',
+  'Bangalore Central',
+  'Bangalore East',
+  'Bangalore North',
   'Bangalore Rural',
-  'Bangalore Urban',
-  'Belgaum',
-  'Bellary',
+  'Bangalore South',
+  'Bangalore West',
+  'Belgaum City',
+  'Belgaum Rural',
+  'Bellary City',
+  'Bellary Rural',
   'Bidar',
+  'Bijapur',
+  'Chamarajanagar',
   'Chikkaballapur',
-  'Chikkamagaluru',
+  'Chikkamagalore',
+  'Chikkodi',
   'Chitradurga',
   'Dakshina Kannada',
   'Davanagere',
+  'Dharwad Rural',
   'Gadag',
   'Gulbarga',
   'Hassan',
   'Haveri',
-  'Hubli-Dharwad',
-  'Kalaburagi',
-  'Karnataka',
-  'Karwar',
+  'Hubli-Dharwad City',
+  'Kodagu',
   'Kolar',
   'Koppal',
   'Mandya',
-  'Mysore',
+  'Mysore City',
+  'Mysore Rural',
   'Raichur',
   'Ramanagara',
   'Shimoga',
@@ -100,7 +109,7 @@ const TeamPage: React.FC = () => {
                 KPYCC Leadership Network
               </h1>
               <p className="text-lg text-gray-500 max-w-2xl">
-                A transparent hierarchical view of our leadership across all 31
+                A transparent hierarchical view of our leadership across all 40
                 districts of Karnataka.
               </p>
             </div>

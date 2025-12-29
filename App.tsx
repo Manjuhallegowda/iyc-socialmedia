@@ -24,12 +24,14 @@ import DKShivakumarProfilePage from './components/DKShivakumarProfilePage';
 import HSManjunatha from './components/HSManjunatha';
 import OfficialSocialsPage from './components/OfficialSocialsPage';
 import GalleryPage from './components/GalleryPage';
+import SmBearersPage from './components/SmBearersPage';
+// Import the new Profile Page
+import SidduHalleygowdaProfilePage from './components/SidduHalleygowdaProfilePage';
 
 const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem('authToken')
   );
-
 
   const login = useCallback(() => {
     setIsAuthenticated(true);
@@ -84,6 +86,14 @@ const App: React.FC = () => {
             element={<DKShivakumarProfilePage />}
           />
           <Route path="/hsmanjunatha" element={<HSManjunatha />} />
+
+          {/* New Route for Siddu Halleygowda */}
+          <Route
+            path="/siddu-halleygowda"
+            element={<SidduHalleygowdaProfilePage />}
+          />
+
+          <Route path="/sm-bearers" element={<SmBearersPage />} />
 
           {/* Admin Route - Protected */}
           <Route
