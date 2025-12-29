@@ -35,7 +35,7 @@ const StateLevelPage: React.FC = () => {
   const filterCategories = [
     'All',
     'State President',
-    'State Chairperson',
+    'KPYCC Chairman',
     'State Vice President',
     'State Secretary',
   ];
