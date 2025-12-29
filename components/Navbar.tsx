@@ -66,7 +66,8 @@ const Navbar: React.FC = () => {
         {
           name: 'Office Bearers',
           children: [
-            { name: 'KPYCC State Bearers', href: '/team' },
+            { name: 'KPYCC State Bearers', href: '/state' },
+            { name: 'KPYCC District Bearers', href: '/team' },
             { name: 'Social Media Bearers', href: '/sm-bearers' },
           ],
         },

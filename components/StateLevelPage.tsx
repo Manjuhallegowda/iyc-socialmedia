@@ -6,12 +6,13 @@ import Footer from './Footer';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Search,
-  Instagram,
+  Twitter,
   Facebook,
+  Instagram,
   Mail,
   Phone,
   Calendar,
-  X, // New X Logo
+  X, // X Logo
   Shield,
   Filter,
   Users,
@@ -23,33 +24,18 @@ const StateLevelPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
 
-  // 1. Filter for State level members AND Parse Social Data
-  const stateLevelMembers = useMemo(() => {
-    return kpyccTeam
-      .filter((member: KpyccTeamMember) => member.level === 'State')
-      .map((member) => {
-        // FIX: Admin Dashboard saves 'social' as a JSON string. We must parse it.
-        let parsedSocial = {};
-        try {
-          parsedSocial =
-            typeof member.social === 'string'
-              ? JSON.parse(member.social)
-              : member.social || {};
-        } catch (error) {
-          console.error('Error parsing social links for', member.name);
-        }
+  // 1. Filter for State level members
+  const stateLevelMembers = useMemo(
+    () =>
+      kpyccTeam.filter((member: KpyccTeamMember) => member.level === 'State'),
+    [kpyccTeam]
+  );
 
-        return {
-          ...member,
-          social: parsedSocial, // Now this is an object we can use (e.g. social.twitter)
-        };
-      });
-  }, [kpyccTeam]);
-
-  // 2. Extract unique Designations for Filter Chips
+  // 2. Extract unique Designations for Filter Chips (Simplified)
   const filterCategories = [
     'All',
     'President',
+    'Chairperson',
     'Vice President',
     'General Secretary',
     'Secretary',
@@ -75,7 +61,7 @@ const StateLevelPage: React.FC = () => {
       <main className="pt-24 pb-20">
         {/* --- PREMIUM HERO SECTION --- */}
         <section className="relative mb-16 pt-10 pb-20 overflow-hidden">
-          {/* Background Mesh */}
+          {/* Background Mesh (Tricolor Theme) */}
           <div className="absolute inset-0 bg-[linear-gradient(120deg,#fff7ed_0%,#ffffff_50%,#f0fdf4_100%)]" />
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/10 rounded-full blur-[100px] pointer-events-none translate-x-1/3 -translate-y-1/3" />
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[100px] pointer-events-none -translate-x-1/3 translate-y-1/3" />
@@ -146,7 +132,7 @@ const StateLevelPage: React.FC = () => {
           </div>
         </section>
 
-        {/* --- SEARCH & FILTERS --- */}
+        {/* --- SEARCH & FILTERS CONTAINER --- */}
         <div className="sticky top-20 z-30 bg-slate-50/95 backdrop-blur-sm py-4 border-b border-slate-200 mb-12">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
@@ -272,53 +258,32 @@ const StateLevelPage: React.FC = () => {
                           )}
                         </div>
 
-                        {/* Social Media Links */}
                         <div className="flex gap-2">
-                          {/* Twitter / X */}
                           {member.social?.twitter && (
                             <a
                               href={member.social.twitter}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="p-1.5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-black transition-colors"
-                              title="X (Twitter)"
                             >
                               <X className="w-4 h-4" />
                             </a>
                           )}
-
-                          {/* Instagram */}
                           {member.social?.instagram && (
                             <a
                               href={member.social.instagram}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="p-1.5 rounded-md hover:bg-pink-50 text-slate-400 hover:text-pink-600 transition-colors"
-                              title="Instagram"
                             >
                               <Instagram className="w-4 h-4" />
                             </a>
                           )}
-
-                          {/* Facebook */}
-                          {member.social?.facebook && (
-                            <a
-                              href={member.social.facebook}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="p-1.5 rounded-md hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-colors"
-                              title="Facebook"
-                            >
-                              <Facebook className="w-4 h-4" />
-                            </a>
-                          )}
-
-                          {/* Phone Call (if available) */}
+                          {/* Call Button if phone exists */}
                           {member.phone && (
                             <a
                               href={`tel:${member.phone}`}
                               className="p-1.5 rounded-md hover:bg-green-50 text-slate-400 hover:text-green-600 transition-colors"
-                              title="Call"
                             >
                               <Phone className="w-4 h-4" />
                             </a>

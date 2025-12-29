@@ -25,6 +25,7 @@ import HSManjunatha from './components/HSManjunatha';
 import OfficialSocialsPage from './components/OfficialSocialsPage';
 import GalleryPage from './components/GalleryPage';
 import SmBearersPage from './components/SmBearersPage';
+import StateLevelPage from './components/StateLevelPage';
 // Import the new Profile Page
 import SidduHalleygowdaProfilePage from './components/SidduHalleygowdaProfilePage';
 
@@ -93,6 +94,7 @@ const App: React.FC = () => {
             element={<SidduHalleygowdaProfilePage />}
           />
 
+          <Route path="/state" element={<StateLevelPage />} />
           <Route path="/sm-bearers" element={<SmBearersPage />} />
 
           {/* Admin Route - Protected */}
