@@ -34,11 +34,10 @@ const StateLevelPage: React.FC = () => {
   // 2. Extract unique Designations for Filter Chips (Simplified)
   const filterCategories = [
     'All',
-    'President',
-    'Chairperson',
-    'Vice President',
-    'General Secretary',
-    'Secretary',
+    'State President',
+    'State Chairperson',
+    'State Vice President',
+    'State Secretary',
   ];
 
   // 3. Apply Search & Category Filter
