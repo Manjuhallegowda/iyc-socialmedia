@@ -51,7 +51,7 @@ const Navbar: React.FC = () => {
       name: 'Manjunath Gowda',
       role1: 'State President',
       role2: 'IYC Karnataka',
-      img: 'https://scontent.fblr24-1.fna.fbcdn.net/v/t39.30808-6/476459119_1202341457927670_5557239319869858832_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_ohc=ivaj2SUXuhwQ7kNvwHIk9n3&_nc_oc=AdlYiF0gGQgmDyqOw_pCC23HrNN9JbE_zcUeRx_Kv33kW6FkPtyAMxrJnTX0oG6rN_FtVddhaTQDsB_xWdybbfKl&_nc_zt=23&_nc_ht=scontent.fblr24-1.fna&_nc_gid=MhnTjQuLkuzRp5TtuE_G_g&oh=00_Afn7K6yakChTZlLkdBp9j-wNDr2So0gs4R49cgC7guISew&oe=6954751D',
+      img: '/assets/manju.png',
       href: '/hsmanjunatha',
     },
   ];

@@ -60,6 +60,49 @@ const staggerContainer = {
   },
 };
 
+// --- WORKING PRESIDENTS DATA ---
+const WORKING_PRESIDENTS = [
+  {
+    id: 1,
+    name: 'Tanveer Sait',
+    role1: 'MLA - Narasimharaja',
+    role2: 'Former Minister',
+    image: 'https://andolana.in/wp-content/uploads/2024/04/tanveer-sait.jpg', // Replace with real image path
+  },
+  {
+    id: 2,
+    name: 'G C Chandrashekhar',
+    role1: 'MP - Rajya Sabha',
+    role2: 'Former Minister',
+    image:
+      'https://upload.wikimedia.org/wikipedia/commons/7/79/GC_Chandrashekhar.jpg', // Replace with real image path
+  },
+  {
+    id: 3,
+    name: 'Vinay Kulkarni',
+    role1: 'MLA - Dharwad',
+    role2: 'Former Minister',
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIRRV-bJvh9IdVWbv9iyn1_A1vAXzHn6yn-g&s', // Replace with real image path
+  },
+  {
+    id: 4,
+    name: 'Manjunath Bhandary',
+    role1: 'MLC - DK & Udupi',
+    role2: 'Former Minister',
+    image:
+      'https://www.sahyadri.edu.in/_next/image?url=%2Fimages%2Fchairman%2Fchairman.jpg&w=3840&q=75', // Replace with real image path
+  },
+  {
+    id: 5,
+    name: 'Vasanth Kumar ',
+    role1: 'MLC - Karnataka',
+    role2: 'Former Minister',
+    image:
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGD7ud711RCYtf0lb_ma2EyQWPFDmR_wreGA&s', // Replace with real image path
+  },
+];
+
 const LEADER_QUOTES = [
   {
     name: 'Indira Gandhi',
@@ -585,6 +628,113 @@ const PublicHome: React.FC = () => {
                   </div>
                 </div>
               </motion.div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ================= WORKING PRESIDENTS LOOP (REDESIGNED) ================= */}
+        <section className="py-16 bg-slate-50 border-t border-gray-200 overflow-hidden relative">
+          {/* Background Decorative Pattern */}
+          <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#ff9933_1px,transparent_1px)] [background-size:20px_20px]"></div>
+
+          <div className="container mx-auto px-4 mb-10 relative z-10">
+            <div className="flex flex-col items-center justify-center">
+              <span className="inline-block py-1 px-3 rounded-full bg-orange-100 text-saffron text-xs font-bold tracking-widest uppercase mb-3 border border-orange-200">
+                Leadership
+              </span>
+              <h3 className="text-center text-3xl md:text-4xl font-black text-gray-900 uppercase tracking-tight">
+                KPCC{' '}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-saffron to-orange-600">
+                  Working Presidents
+                </span>
+              </h3>
+              <div className="w-24 h-1.5 bg-gradient-to-r from-saffron via-white to-indiaGreen mt-4 rounded-full shadow-sm"></div>
+            </div>
+          </div>
+
+          {/* Gradient Masks (Wider for better fade) */}
+          <div className="absolute left-0 top-0 bottom-0 w-24 md:w-48 z-20 bg-gradient-to-r from-slate-50 via-slate-50/80 to-transparent pointer-events-none"></div>
+          <div className="absolute right-0 top-0 bottom-0 w-24 md:w-48 z-20 bg-gradient-to-l from-slate-50 via-slate-50/80 to-transparent pointer-events-none"></div>
+
+          <div className="flex overflow-hidden relative z-10">
+            <motion.div
+              className="flex gap-6 items-center pl-6"
+              // Loop Animation
+              animate={{
+                x: ['0%', '-50%'],
+              }}
+              transition={{
+                duration: 520, // Slightly slower for better readability
+                ease: 'linear',
+                repeat: Infinity,
+              }}
+              style={{ width: 'fit-content', display: 'flex' }}
+            >
+              {/* Render List Twice for seamless Loop */}
+              {[
+                ...WORKING_PRESIDENTS,
+                ...WORKING_PRESIDENTS,
+                ...WORKING_PRESIDENTS,
+                ...WORKING_PRESIDENTS, // Added one more repetition to ensure smoothness on large screens
+              ].map((leader, index) => (
+                <div
+                  key={`${leader.id}-${index}`}
+                  className="relative group w-80 flex-shrink-0"
+                >
+                  <div className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform group-hover:-translate-y-1 overflow-hidden border border-gray-100 h-full">
+                    <div className="flex p-5 gap-5 items-center">
+                      {/* Larger Square Image */}
+                      <div className="relative w-24 h-24 rounded-xl overflow-hidden shadow-inner flex-shrink-0 bg-gray-100">
+                        <img
+                          src={leader.image}
+                          alt={leader.name}
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src =
+                              'https://via.placeholder.com/150?text=INC';
+                          }}
+                        />
+                      </div>
+
+                      {/* Text Content */}
+                      <div className="flex flex-col justify-center">
+                        <h4 className="font-black text-gray-800 text-lg leading-tight group-hover:text-saffron transition-colors line-clamp-2">
+                          {leader.name}
+                        </h4>
+
+                        <div className="h-px w-12 bg-gray-200 my-2 group-hover:w-full transition-all duration-500"></div>
+
+                        <div className="space-y-0.5">
+                          {/* Role 1 */}
+                          {leader.role1 && (
+                            <p className="text-[11px] text-gray-500 font-bold uppercase tracking-wider flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-saffron"></span>
+                              {leader.role1}
+                            </p>
+                          )}
+                          {/* Role 2 (Optional check) */}
+                          {leader.role2 ? (
+                            <p className="text-[11px] text-gray-500 font-bold uppercase tracking-wider flex items-center gap-1">
+                              <span className="w-1.5 h-1.5 rounded-full bg-indiaGreen"></span>
+                              {leader.role2}
+                            </p>
+                          ) : (
+                            // Fallback if role2 doesn't exist in data, just show standard role text or nothing
+                            <span className="hidden"></span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tricolor Bottom Bar */}
+                    <div className="h-1.5 w-full flex">
+                      <div className="h-full w-1/3 bg-saffron"></div>
+                      <div className="h-full w-1/3 bg-white border-t border-b border-gray-100"></div>
+                      <div className="h-full w-1/3 bg-indiaGreen"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </motion.div>
           </div>
         </section>

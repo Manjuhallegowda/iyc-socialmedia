@@ -21,6 +21,8 @@ import {
   ArrowRight,
   MapPin,
   ChevronRight,
+  Quote,
+  Activity,
 } from 'lucide-react';
 
 const SmBearersPage: React.FC = () => {
@@ -48,143 +50,182 @@ const SmBearersPage: React.FC = () => {
   // --- MODAL COMPONENT ---
   const renderProfileModal = () => {
     if (!selectedProfile) return null;
+
     return (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        {/* Dark Glass Backdrop */}
+
         <div
-          className="absolute inset-0 bg-gray-900/80 backdrop-blur-md transition-all"
+          className="absolute inset-0 bg-slate-900/60 backdrop-blur-xl transition-all duration-500"
           onClick={() => setSelectedProfile(null)}
         />
 
-        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-xl relative z-10 overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-300">
-          {/* Official Header */}
-          <div className="h-36 bg-gradient-to-r from-orange-600 via-orange-500 to-orange-400 relative">
-            <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-            <button
-              className="absolute top-4 right-4 bg-black/20 hover:bg-black/40 text-white rounded-full p-2 transition-colors"
-              onClick={() => setSelectedProfile(null)}
-            >
-              <X className="w-5 h-5" />
-            </button>
-            <div className="absolute bottom-0 left-0 w-full h-16 bg-gradient-to-t from-black/50 to-transparent"></div>
-          </div>
+        <div className="relative w-full max-w-4xl bg-white/90 backdrop-blur-md rounded-[2rem] shadow-2xl overflow-hidden flex flex-col md:flex-row animate-in fade-in zoom-in-95 duration-300 border border-white/50">
+          {/* Close Button */}
 
-          <div className="px-8 pb-8 -mt-16 overflow-y-auto">
-            <div className="flex justify-between items-end mb-6">
-              <div className="relative">
+          <button
+            className="absolute top-4 right-4 z-20 p-2 bg-slate-100/50 hover:bg-slate-200 rounded-full transition-colors"
+            onClick={() => setSelectedProfile(null)}
+          >
+            <X size={20} className="text-slate-600" />
+          </button>
+
+          {/* Left: Image & Socials (Dark Sidebar) */}
+
+          <div className="w-full md:w-1/3 bg-slate-900 text-white relative overflow-hidden p-8 flex flex-col items-center justify-center text-center">
+            {/* Decorative Background Mesh */}
+
+            <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-orange-600/20 to-transparent"></div>
+
+            <div className="absolute -bottom-20 -left-20 w-60 h-60 bg-blue-600/20 rounded-full blur-[80px]"></div>
+
+            <div className="relative z-10">
+              <div className="relative inline-block">
+                <div className="absolute inset-0 bg-gradient-to-tr from-orange-500 to-yellow-500 rounded-full blur-lg opacity-40"></div>
+
                 <img
                   src={
                     selectedProfile.imageUrl ||
                     'https://via.placeholder.com/150'
                   }
                   alt={selectedProfile.name}
-                  className="w-32 h-32 rounded-2xl object-cover border-4 border-white shadow-lg bg-gray-200"
+                  className="relative w-40 h-40 rounded-full object-cover border-[6px] border-slate-800 shadow-2xl"
                 />
-                <div className="absolute -bottom-2 -right-2 bg-blue-600 text-white p-1.5 rounded-full border-2 border-white">
+
+                <div className="absolute bottom-2 right-2 bg-blue-500 text-white p-1.5 rounded-full ring-4 ring-slate-900">
                   <CheckCircle2 size={16} />
                 </div>
               </div>
-              <div className="mb-1 flex gap-2">
-                {/* Social Quick Links */}
+
+              <h3 className="mt-6 text-2xl font-serif font-medium tracking-wide">
+                {selectedProfile.name}
+              </h3>
+
+              <p className="text-orange-400 text-xs font-bold uppercase tracking-widest mt-2 opacity-90">
+                {selectedProfile.position}
+              </p>
+
+              <div className="flex gap-4 mt-8 justify-center">
                 {selectedProfile.socialMedia?.twitter && (
                   <a
                     href={selectedProfile.socialMedia.twitter}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-500 transition"
+                    className="text-slate-400 hover:text-white transition-colors"
                   >
-                    <Twitter size={18} />
+                    <Twitter size={20} />
                   </a>
                 )}
+
                 {selectedProfile.socialMedia?.instagram && (
                   <a
                     href={selectedProfile.socialMedia.instagram}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-pink-50 hover:text-pink-600 transition"
+                    className="text-slate-400 hover:text-white transition-colors"
                   >
-                    <Instagram size={18} />
+                    <Instagram size={20} />
                   </a>
                 )}
+
                 {selectedProfile.socialMedia?.facebook && (
                   <a
                     href={selectedProfile.socialMedia.facebook}
                     target="_blank"
                     rel="noreferrer"
-                    className="p-2 bg-gray-100 rounded-full text-gray-600 hover:bg-blue-50 hover:text-blue-700 transition"
+                    className="text-slate-400 hover:text-white transition-colors"
                   >
-                    <Facebook size={18} />
+                    <Facebook size={20} />
                   </a>
                 )}
               </div>
             </div>
+          </div>
 
-            <div>
-              <h2 className="text-3xl font-bold text-gray-900 leading-tight">
-                {selectedProfile.name}
+          {/* Right: Content (Light Area) */}
+
+          <div className="flex-1 p-8 md:p-12 overflow-y-auto max-h-[60vh] md:max-h-[80vh]">
+            <div className="flex items-center gap-2 mb-6">
+              <span className="w-2 h-8 bg-orange-500 rounded-full"></span>
+
+              <h2 className="text-sm font-bold text-slate-400 uppercase tracking-widest">
+                Official Record
               </h2>
-              <div className="flex flex-col mt-1 mb-6">
-                <span className="text-orange-600 font-bold uppercase tracking-wide text-sm">
-                  {selectedProfile.position}
-                </span>
-                <span className="text-gray-400 text-xs uppercase font-semibold">
-                  {selectedProfile.level}{' '}
-                  {selectedProfile.placeName
-                    ? `• ${selectedProfile.placeName}`
-                    : ''}
-                </span>
+            </div>
+
+            <div className="space-y-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                  <div className="flex items-center gap-3 mb-2">
+                    <MapPin className="text-orange-500" size={18} />
+
+                    <span className="text-xs font-bold text-slate-500 uppercase">
+                      Jurisdiction
+                    </span>
+                  </div>
+
+                  <p className="text-slate-900 font-semibold">
+                    {selectedProfile.placeName || 'Karnataka'}
+                  </p>
+
+                  <p className="text-slate-400 text-sm">
+                    {selectedProfile.level}
+                  </p>
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                  <div className="flex items-center gap-3 mb-2">
+                    <Activity className="text-green-500" size={18} />
+
+                    <span className="text-xs font-bold text-slate-500 uppercase">
+                      Status
+                    </span>
+                  </div>
+
+                  <p className="text-slate-900 font-semibold">Active Member</p>
+
+                  <p className="text-slate-400 text-sm">Verified Profile</p>
+                </div>
               </div>
 
-              <div className="space-y-6">
-                {selectedProfile.bio ? (
-                  <div className="prose prose-sm text-gray-600">
-                    <p>{selectedProfile.bio}</p>
+              <div>
+                <h4 className="font-serif text-xl text-slate-900 mb-3 flex items-center gap-2">
+                  <Quote size={16} className="text-slate-300" /> Biography
+                </h4>
+
+                <p className="text-slate-600 leading-relaxed text-sm md:text-base">
+                  {selectedProfile.bio ||
+                    'Dedicated member of the Indian Youth Congress social media team, working towards digital empowerment and grassroots connectivity.'}
+                </p>
+              </div>
+
+              <div className="space-y-3 pt-4 border-t border-slate-100">
+                {(selectedProfile as any).email && (
+                  <div className="flex items-center gap-4 text-sm">
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center text-blue-600">
+                      <Mail size={16} />
+                    </div>
+
+                    <span className="text-slate-600 font-medium">
+                      {(selectedProfile as any).email}
+                    </span>
                   </div>
-                ) : (
-                  <p className="text-gray-400 italic">
-                    No biography available.
-                  </p>
                 )}
 
-                {(selectedProfile as any).email ||
-                (selectedProfile as any).phone ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {(selectedProfile as any).email && (
-                      <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
-                        <div className="p-2 bg-white rounded-lg shadow-sm text-blue-600">
-                          <Mail size={20} />
-                        </div>
-                        <div>
-                          <p className="text-xs text-gray-400 font-semibold uppercase">
-                            Email
-                          </p>
-                          <p className="text-sm font-medium text-gray-900 truncate">
-                            {(selectedProfile as any).email}
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                    {(selectedProfile as any).phone && (
-                      <div className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl border border-gray-100">
-                        <div className="p-2 bg-white rounded-lg shadow-sm text-green-600">
-                          <Phone size={20} />
-                        </div>
-                        <div>
-                          <p className="text-xs text-gray-400 font-semibold uppercase">
-                            Phone
-                          </p>
-                          <p className="text-sm font-medium text-gray-900">
-                            {(selectedProfile as any).phone}
-                          </p>
-                        </div>
-                      </div>
-                    )}
+                {(selectedProfile as any).phone && (
+                  <div className="flex items-center gap-4 text-sm">
+                    <div className="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center text-green-600">
+                      <Phone size={16} />
+                    </div>
+
+                    <span className="text-slate-600 font-medium">
+                      {(selectedProfile as any).phone}
+                    </span>
                   </div>
-                ) : null}
+                )}
               </div>
             </div>
           </div>
-
-          <div className="h-2 bg-gradient-to-r from-orange-500 via-white to-green-600 w-full mt-auto"></div>
         </div>
       </div>
     );
