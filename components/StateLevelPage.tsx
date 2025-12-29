@@ -37,6 +37,7 @@ const StateLevelPage: React.FC = () => {
     'State President',
     'KPYCC Chairman',
     'State Vice President',
+    'State General Secretary',
     'State Secretary',
   ];
 
