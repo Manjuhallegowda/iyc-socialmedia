@@ -1845,6 +1845,8 @@ const AdminDashboard: React.FC<{ onLogout: () => void }> = ({ onLogout }) => {
                     Select Level
                   </option>
 
+                  <option value="State">State</option>
+
                   <option value="District">District</option>
 
                   <option value="Assembly">Assembly</option>
