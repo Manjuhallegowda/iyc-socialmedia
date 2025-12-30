@@ -41,18 +41,38 @@ const StateLevelPage: React.FC = () => {
     'State Secretary',
   ];
 
-  // 3. Apply Search & Category Filter
-  const filteredMembers = stateLevelMembers.filter((member) => {
-    const matchesSearch =
-      member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      member.designation.toLowerCase().includes(searchTerm.toLowerCase());
+  // PRIORITY ORDER ADDED HERE
+  const priorityOrder = [
+    'State President',
+    'KPYCC Chairman',
+    'State Vice President',
+    'State General Secretary',
+    'State Secretary',
+  ];
 
-    const matchesCategory =
-      activeFilter === 'All' ||
-      member.designation.toLowerCase().includes(activeFilter.toLowerCase());
+  // 3. Apply Search & Category Filter + SORT
+  const filteredMembers = stateLevelMembers
+    .filter((member) => {
+      const matchesSearch =
+        member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        member.designation.toLowerCase().includes(searchTerm.toLowerCase());
 
-    return matchesSearch && matchesCategory;
-  });
+      const matchesCategory =
+        activeFilter === 'All' ||
+        member.designation.toLowerCase().includes(activeFilter.toLowerCase());
+
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      const aIndex = priorityOrder.indexOf(a.designation);
+      const bIndex = priorityOrder.indexOf(b.designation);
+
+      if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+      if (aIndex !== -1) return -1;
+      if (bIndex !== -1) return 1;
+
+      return a.name.localeCompare(b.name);
+    });
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 selection:bg-orange-100 selection:text-orange-900 overflow-x-hidden">
@@ -61,7 +81,6 @@ const StateLevelPage: React.FC = () => {
       <main className="pt-24 pb-20">
         {/* --- PREMIUM HERO SECTION --- */}
         <section className="relative mb-16 pt-10 pb-20 overflow-hidden">
-          {/* Background Mesh (Tricolor Theme) */}
           <div className="absolute inset-0 bg-[linear-gradient(120deg,#fff7ed_0%,#ffffff_50%,#f0fdf4_100%)]" />
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-500/10 rounded-full blur-[100px] pointer-events-none translate-x-1/3 -translate-y-1/3" />
           <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-green-500/10 rounded-full blur-[100px] pointer-events-none -translate-x-1/3 translate-y-1/3" />
@@ -97,7 +116,6 @@ const StateLevelPage: React.FC = () => {
               dedicated to service, progress, and democratic values.
             </motion.p>
 
-            {/* Quick Stats Row */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -117,6 +135,7 @@ const StateLevelPage: React.FC = () => {
                   </div>
                 </div>
               </div>
+
               <div className="bg-white/80 backdrop-blur-md px-6 py-3 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
                 <div className="p-2 bg-orange-50 text-orange-600 rounded-lg">
                   <Award className="w-5 h-5" />
@@ -136,7 +155,6 @@ const StateLevelPage: React.FC = () => {
         <div className="sticky top-20 z-30 bg-slate-50/95 backdrop-blur-sm py-4 border-b border-slate-200 mb-12">
           <div className="container mx-auto px-4">
             <div className="flex flex-col md:flex-row gap-4 justify-between items-center">
-              {/* Filter Chips */}
               <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto custom-scrollbar">
                 {filterCategories.map((cat) => (
                   <button
@@ -153,7 +171,6 @@ const StateLevelPage: React.FC = () => {
                 ))}
               </div>
 
-              {/* Search Bar */}
               <div className="relative w-full md:w-80">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                 <input
@@ -211,11 +228,9 @@ const StateLevelPage: React.FC = () => {
                     transition={{ duration: 0.3 }}
                     className="group bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col"
                   >
-                    {/* Top Accent Line */}
                     <div className="h-1.5 w-full bg-gradient-to-r from-orange-500 via-white to-green-600" />
 
                     <div className="p-6 flex flex-col flex-1 relative">
-                      {/* Profile Header */}
                       <div className="flex items-start gap-4 mb-4">
                         <div className="relative">
                           <img
@@ -241,13 +256,11 @@ const StateLevelPage: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* Bio */}
                       <p className="text-slate-500 text-sm leading-relaxed mb-6 line-clamp-3 flex-1">
                         {member.bio ||
                           'Dedicated to strengthening the organization and serving the people of Karnataka.'}
                       </p>
 
-                      {/* Info & Socials */}
                       <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
                         <div className="text-xs text-slate-400 font-medium flex items-center gap-1">
                           {member.startYear > 0 && (
@@ -279,7 +292,6 @@ const StateLevelPage: React.FC = () => {
                               <Instagram className="w-4 h-4" />
                             </a>
                           )}
-                          {/* Call Button if phone exists */}
                           {member.phone && (
                             <a
                               href={`tel:${member.phone}`}
