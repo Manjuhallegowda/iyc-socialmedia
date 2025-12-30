@@ -343,7 +343,7 @@ const StateLevelPage: React.FC = () => {
                         }}
                       />
                       {/* Gradient Overlay at bottom of image for text contrast */}
-                      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-white via-white/80 to-transparent" />
+                      <div className="absolute bottom-0 left-0 w-full h-28 bg-gradient-to-t from-white via-white/20 to-transparent" />
                       {/* Floating Action Badge */}
                       <div className="absolute top-6 right-6 z-10">
                         <div className="bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-lg border border-white/50 group-hover:rotate-12 transition-transform duration-300">
