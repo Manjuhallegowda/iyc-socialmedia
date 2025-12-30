@@ -44,7 +44,7 @@ const StateLevelPage: React.FC = () => {
   // PRIORITY ORDER ADDED HERE
   const priorityOrder = [
     'State President',
-    'KPYCC Chairman',
+    'KPYCC Chairman (Social Media)',
     'State Vice President',
     'State General Secretary',
     'State Secretary',

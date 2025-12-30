@@ -66,14 +66,14 @@ const WORKING_PRESIDENTS = [
     id: 1,
     name: 'Tanveer Sait',
     role1: 'MLA - Narasimharaja',
-    role2: 'Former Minister',
+    role2: 'Working President',
     image: 'https://andolana.in/wp-content/uploads/2024/04/tanveer-sait.jpg', // Replace with real image path
   },
   {
     id: 2,
     name: 'G C Chandrashekhar',
     role1: 'MP - Rajya Sabha',
-    role2: 'Former Minister',
+    role2: 'Working President',
     image:
       'https://upload.wikimedia.org/wikipedia/commons/7/79/GC_Chandrashekhar.jpg', // Replace with real image path
   },
@@ -81,7 +81,7 @@ const WORKING_PRESIDENTS = [
     id: 3,
     name: 'Vinay Kulkarni',
     role1: 'MLA - Dharwad',
-    role2: 'Former Minister',
+    role2: 'Working President',
     image:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIRRV-bJvh9IdVWbv9iyn1_A1vAXzHn6yn-g&s', // Replace with real image path
   },
@@ -89,7 +89,7 @@ const WORKING_PRESIDENTS = [
     id: 4,
     name: 'Manjunath Bhandary',
     role1: 'MLC - DK & Udupi',
-    role2: 'Former Minister',
+    role2: 'Working President',
     image:
       'https://www.sahyadri.edu.in/_next/image?url=%2Fimages%2Fchairman%2Fchairman.jpg&w=3840&q=75', // Replace with real image path
   },
@@ -97,7 +97,7 @@ const WORKING_PRESIDENTS = [
     id: 5,
     name: 'Vasanth Kumar ',
     role1: 'MLC - Karnataka',
-    role2: 'Former Minister',
+    role2: 'Working President',
     image:
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGD7ud711RCYtf0lb_ma2EyQWPFDmR_wreGA&s', // Replace with real image path
   },

@@ -105,7 +105,10 @@ const Footer: React.FC = () => {
           <div>
             <h4 className="text-lg font-semibold mb-3">Contact Us</h4>
             <div className="mt-4 text-gray-400 text-sm">
-              <div>MG Road, Bengaluru - 560001</div>
+              <div>
+                Indira Gandhi Bhavan,<br></br> Queens Road, Bengaluru, <br></br>
+                Karnataka - 560001
+              </div>
               <div>
                 Email:{' '}
                 <a

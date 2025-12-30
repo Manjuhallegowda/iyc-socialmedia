@@ -249,7 +249,7 @@ const Navbar: React.FC = () => {
             </div>
           </div>
 
-          {/* LEADERS STRIP */}
+          {/* LEADERS STRIP (Desktop Only) */}
           <div className="hidden md:flex items-center gap-4 mr-6">
             {prominentLeaders.map((leader) => (
               <Link
@@ -298,7 +298,9 @@ const Navbar: React.FC = () => {
             exit={{ opacity: 0, x: '100%' }}
             className="fixed inset-0 z-40 bg-white pt-24 px-6 md:hidden overflow-y-auto"
           >
-            <div className="flex flex-col space-y-4">
+            <div className="flex flex-col space-y-4 pb-20">
+              {' '}
+              {/* added pb-20 for extra scroll space */}
               {navLinks.map((link) => (
                 <div key={link.name} className="border-b border-slate-100 pb-2">
                   {link.dropdown ? (
@@ -384,6 +386,39 @@ const Navbar: React.FC = () => {
                   )}
                 </div>
               ))}
+              {/* ⭐ ADDED: Mobile Leaders Section */}
+              <div className="mt-4 pt-4 border-t border-slate-100">
+                <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">
+                  Leadership
+                </h3>
+                <div className="flex flex-col gap-4">
+                  {prominentLeaders.map((leader) => (
+                    <Link
+                      key={leader.name}
+                      to={leader.href}
+                      onClick={() => setIsOpen(false)}
+                      className="flex items-center gap-3 p-2 rounded-xl bg-slate-50 border border-slate-100"
+                    >
+                      <img
+                        src={leader.img}
+                        alt={leader.name}
+                        className="w-12 h-12 rounded-full border-2 border-white shadow-sm object-top object-cover"
+                      />
+                      <div className="leading-tight">
+                        <div className="text-sm font-bold text-gray-800">
+                          {leader.name}
+                        </div>
+                        <div className="text-[11px] text-gray-500 font-medium">
+                          {leader.role1}
+                        </div>
+                        <div className="text-[10px] text-gray-400">
+                          {leader.role2}
+                        </div>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
             </div>
           </motion.div>
         )}
