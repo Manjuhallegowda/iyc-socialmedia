@@ -78,7 +78,7 @@ const DKShivakumarPoliticalPage: React.FC = () => {
 
               <div className="relative h-full w-full rounded-full overflow-hidden border-4 border-stone-800 shadow-2xl bg-stone-800">
                 <img
-                  src="https://ipcmedia.in/public/uploads/profile/1756048100_12.jpg"
+                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6bAjtTJBypww4RcZUtq7QW8QMhqs4rtTUqw&s"
                   alt="D. K. Shivakumar"
                   className="h-full w-full object-cover transform hover:scale-105 transition-transform duration-700"
                 />

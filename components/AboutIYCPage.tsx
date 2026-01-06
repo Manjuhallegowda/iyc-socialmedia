@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import {
   ArrowLeft,
-  ArrowRight,
-  Zap,
   Users,
   BookOpen,
   Mic,
@@ -14,12 +12,9 @@ import {
   Heart,
   MapPin,
   Calendar,
-  Target,
-  Briefcase,
-  MessageSquare,
-  TrendingUp,
-  CheckCircle,
   Flag,
+  CheckCircle,
+  TrendingUp,
 } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -28,10 +23,10 @@ import { useData } from '../context/DataContext';
 // --- 1. Constants & Data ---
 
 const THEME = {
-  saffron: '#FF9933', // Official Flag Saffron
+  saffron: '#FF9933',
   white: '#FFFFFF',
-  green: '#138808', // Official Flag Green
-  navy: '#000080', // Ashok Chakra Navy
+  green: '#138808',
+  navy: '#000080',
 };
 
 const HISTORY_TIMELINE = [
@@ -64,7 +59,6 @@ const LEADER_QUOTES = [
     quote:
       'The power to question is the basis of all human progress. Youth must never stop questioning.',
     color: 'from-orange-500 to-orange-600',
-    // CHANGE THIS PATH to your actual image
     bgImage: '/assets/indra.png',
   },
   {
@@ -73,7 +67,6 @@ const LEADER_QUOTES = [
     quote:
       'Youth is not a question of age. It is a state of mind — the courage to dream and the strength to act.',
     color: 'from-blue-200 to-indigo-700',
-    // CHANGE THIS PATH to your actual image
     bgImage: '/assets/rajiv.png',
   },
   {
@@ -82,7 +75,6 @@ const LEADER_QUOTES = [
     quote:
       'The future of India depends on fearless young Indians who stand for truth, equality, and democracy.',
     color: 'from-indigo-700 to-blue-200',
-    // CHANGE THIS PATH to your actual image
     bgImage: '/assets/sonia.png',
   },
   {
@@ -91,8 +83,35 @@ const LEADER_QUOTES = [
     quote:
       "India's youth is vying for change, dreaming about a better and secured life. Let's empower them to lead.",
     color: 'from-green-600 to-green-700',
-    // CHANGE THIS PATH to your actual image
     bgImage: '/assets/mallikarjun.png',
+  },
+];
+
+const FORMER_PRESIDENTS = [
+  {
+    name: 'D. K. Shivakumar',
+    tenure: 'Former President',
+    image: '/assets/dks.png', // Replace with your actual image path
+  },
+  {
+    name: 'Krishna Byre Gowda',
+    tenure: 'Former President',
+    image: '/assets/kbg.png', // Replace with your actual image path
+  },
+  {
+    name: 'Rizwan Arshad',
+    tenure: 'Former President',
+    image: '/assets/rizwan.png', // Replace with your actual image path
+  },
+  {
+    name: 'Raksha Ramaiah',
+    tenure: 'Former President',
+    image: '/assets/raksha.png', // Replace with your actual image path
+  },
+  {
+    name: 'SSSSSS',
+    tenure: 'Former President',
+    image: '/assets/raksha.png', // Replace with your actual image path
   },
 ];
 
@@ -129,25 +148,7 @@ const KEY_STATS = [
   { number: '100+', label: 'Campaigns', icon: Flag },
 ];
 
-const IMPACT_POINTS = [
-  {
-    title: 'Grassroots Mobilisation',
-    text: 'Movements on unemployment & education.',
-    icon: Users,
-  },
-  {
-    title: 'Leadership Development',
-    text: 'Training future leaders via fellowships.',
-    icon: BookOpen,
-  },
-  {
-    title: 'Ideological Defence',
-    text: 'Defending constitutional values.',
-    icon: Shield,
-  },
-];
-
-// --- 2. Sub-Components for Cleanliness ---
+// --- 2. Sub-Components ---
 
 const SectionHeader = ({
   title,
@@ -175,8 +176,6 @@ const SectionHeader = ({
 
 const AboutIYCPage: React.FC = () => {
   const { galleryItems } = useData();
-
-  // Parallax scroll hook
   const { scrollYProgress } = useScroll();
   const yRange = useTransform(scrollYProgress, [0, 1], [0, 100]);
 
@@ -197,7 +196,6 @@ const AboutIYCPage: React.FC = () => {
       <main className="pt-20">
         {/* --- HERO SECTION --- */}
         <div className="relative bg-white overflow-hidden">
-          {/* Abstract Background Decoration */}
           <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-orange-100 blur-3xl opacity-50"></div>
           <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-96 h-96 rounded-full bg-green-100 blur-3xl opacity-50"></div>
 
@@ -231,9 +229,7 @@ const AboutIYCPage: React.FC = () => {
 
         {/* --- STATS STRIP --- */}
         <div className="bg-gray-900 text-white py-12 relative overflow-hidden shadow-2xl">
-          {/* Subtle Tricolor border at top */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-white to-green-600"></div>
-
           <div className="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-2 md:grid-cols-4 gap-8">
             {KEY_STATS.map((stat, idx) => (
               <motion.div
@@ -254,7 +250,7 @@ const AboutIYCPage: React.FC = () => {
           </div>
         </div>
 
-        {/* --- MISSION SECTION (Split Layout) --- */}
+        {/* --- MISSION SECTION --- */}
         <section className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-6 lg:px-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -345,19 +341,14 @@ const AboutIYCPage: React.FC = () => {
 
           <div
             className="[mask-image:linear-gradient(to-right,transparent,white_20%,white_80%,transparent)] group"
-            style={
-              {
-                '--animation-duration': '80s',
-              } as React.CSSProperties
-            }
+            style={{ '--animation-duration': '60s' } as React.CSSProperties}
           >
-            <div className="flex w-max flex-nowrap gap-8 animate-scroll">
+            <div className="flex w-max flex-nowrap gap-8 animate-scroll hover:[animation-play-state:paused]">
               {[...LEADER_QUOTES, ...LEADER_QUOTES].map((leader, idx) => (
                 <div
                   key={`${leader.name}-${idx}`}
-                  className="relative rounded-2xl p-8 overflow-hidden group shadow-xl h-full flex flex-col justify-between w-full max-w-sm flex-shrink-0"
+                  className="relative rounded-2xl p-8 overflow-hidden group shadow-xl h-full flex flex-col justify-between w-[320px] md:w-[400px] flex-shrink-0"
                 >
-                  {/* 1. BACKGROUND IMAGE LAYER */}
                   <div
                     className="absolute inset-0 z-0 transition-transform duration-700 group-hover:scale-110"
                     style={{
@@ -366,30 +357,20 @@ const AboutIYCPage: React.FC = () => {
                       backgroundPosition: 'center top',
                     }}
                   />
-
-                  {/* 2. DARK OVERLAY (Gradient makes text readable) */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/60 z-10 transition-opacity group-hover:opacity-90"></div>
-
-                  {/* 3. COLOR STRIP AT TOP */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/60 z-10"></div>
                   <div
                     className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${leader.color} z-20`}
                   ></div>
-
-                  {/* 4. CONTENT (Relative z-20 ensures it sits on top) */}
-                  <div className="relative z-20">
+                  <div className="relative z-20 h-full flex flex-col">
                     <Mic className="w-8 h-8 text-white/60 mb-6" />
-
                     <p className="text-lg text-white italic mb-8 leading-relaxed font-medium">
                       "{leader.quote}"
                     </p>
-
-                    <div className="flex items-center gap-4 mt-auto border-t border-white/10 pt-4">
-                      <div>
-                        <h4 className="font-bold text-white text-lg">
-                          {leader.name}
-                        </h4>
-                        <p className="text-sm text-gray-300">{leader.role}</p>
-                      </div>
+                    <div className="mt-auto">
+                      <h4 className="font-bold text-white text-lg">
+                        {leader.name}
+                      </h4>
+                      <p className="text-sm text-gray-300">{leader.role}</p>
                     </div>
                   </div>
                 </div>
@@ -400,16 +381,11 @@ const AboutIYCPage: React.FC = () => {
 
         {/* --- HISTORY TIMELINE --- */}
         <section className="py-24 bg-white relative overflow-hidden">
-          {/* Background Map Effect (Optional placeholder) */}
           <div className="absolute inset-0 opacity-[0.03] bg-[radial-gradient(#138808_1px,transparent_1px)] [background-size:16px_16px]"></div>
-
           <div className="max-w-5xl mx-auto px-6 lg:px-12 relative z-10">
             <SectionHeader title="Our Legacy" subtitle={true} />
-
             <div className="relative">
-              {/* Central Line */}
               <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 h-full w-1 bg-gray-200"></div>
-
               <div className="space-y-12">
                 {HISTORY_TIMELINE.map((item, idx) => (
                   <motion.div
@@ -422,7 +398,6 @@ const AboutIYCPage: React.FC = () => {
                       idx % 2 === 0 ? 'md:flex-row-reverse' : ''
                     }`}
                   >
-                    {/* Text Side */}
                     <div className="w-full md:w-[45%] bg-white p-6 rounded-xl shadow-md border border-gray-100 hover:border-orange-200 transition-colors">
                       <div className="text-3xl font-bold text-orange-600 mb-2">
                         {item.year}
@@ -434,18 +409,66 @@ const AboutIYCPage: React.FC = () => {
                         {item.text}
                       </p>
                     </div>
-
-                    {/* Dot */}
-                    <div className="w-4 h-4 bg-green-600 rounded-full border-4 border-white shadow-md z-10 hidden md:block relative">
-                      {/* Pulsing effect */}
-                      <div className="absolute inset-0 bg-green-600 rounded-full animate-ping opacity-20"></div>
-                    </div>
-
-                    {/* Empty Side for Balance */}
+                    <div className="w-4 h-4 bg-green-600 rounded-full border-4 border-white shadow-md z-10 hidden md:block relative"></div>
                     <div className="w-full md:w-[45%] hidden md:block"></div>
                   </motion.div>
                 ))}
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* --- [NEW] FORMER KPYCC PRESIDENTS LOOP --- */}
+        <section className="py-20 bg-orange-50/50 border-y border-orange-100 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 lg:px-12 mb-12 text-center">
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-3">
+              KPYCC Former State Presidents
+            </h2>
+            <div className="h-1 w-24 mx-auto bg-orange-400 rounded-full"></div>
+          </div>
+
+          <div
+            className="[mask-image:linear-gradient(to-right,transparent,white_20%,white_80%,transparent)]"
+            style={{ '--animation-duration': '30s' } as React.CSSProperties}
+          >
+            <div className="flex w-max gap-8 animate-scroll hover:[animation-play-state:paused] py-4">
+              {/* Loop duplicated 4 times to ensure smooth infinite scroll */}
+              {[
+                ...FORMER_PRESIDENTS,
+                ...FORMER_PRESIDENTS,
+                ...FORMER_PRESIDENTS,
+                ...FORMER_PRESIDENTS,
+              ].map((pres, idx) => (
+                <div
+                  key={`pres-${idx}`}
+                  className="w-64 flex-shrink-0 bg-white p-4 rounded-xl shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+                >
+                  <div className="w-full h-56 bg-gray-200 rounded-lg mb-4 overflow-hidden relative">
+                    {/* Placeholder Logic if image fails or is temp */}
+                    {pres.image ? (
+                      <img
+                        src={pres.image}
+                        alt={pres.name}
+                        className="w-full h-full object-cover object-top"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
+                        <Users size={40} />
+                      </div>
+                    )}
+                    {/* Tricolor Bottom Strip */}
+                    <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-white to-green-600"></div>
+                  </div>
+                  <div className="text-center">
+                    <h3 className="text-lg font-bold text-gray-900 leading-tight">
+                      {pres.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 font-medium mt-1 uppercase tracking-wide">
+                      {pres.tenure}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -488,9 +511,7 @@ const AboutIYCPage: React.FC = () => {
         <section className="py-24 bg-gray-50">
           <div className="max-w-7xl mx-auto px-6 lg:px-12">
             <div className="bg-white rounded-3xl p-8 md:p-12 shadow-2xl border border-gray-100 flex flex-col md:flex-row items-center gap-12 overflow-hidden relative">
-              {/* Decorative Circle */}
               <div className="absolute top-0 right-0 w-64 h-64 bg-orange-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 -mr-16 -mt-16"></div>
-
               <div className="flex-1 z-10">
                 <div className="flex items-center gap-2 mb-4">
                   <TrendingUp className="text-green-600" />
@@ -533,19 +554,14 @@ const AboutIYCPage: React.FC = () => {
                       Join the digital army. Follow us for real-time updates.
                     </p>
                     <div className="flex gap-4">
-                      {/* Social placeholders */}
-                      <div className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer transition-colors">
-                        X
-                      </div>
-                      <div className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer transition-colors">
-                        Fb
-                      </div>
-                      <div className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer transition-colors">
-                        In
-                      </div>
-                      <div className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer transition-colors">
-                        Yt
-                      </div>
+                      {['X', 'Fb', 'In', 'Yt'].map((social) => (
+                        <div
+                          key={social}
+                          className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer transition-colors"
+                        >
+                          {social}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
