@@ -301,6 +301,11 @@ users.get('/', async (c) => {
 // POST (create) a new user
 users.post('/', async (c) => {
   try {
+    if (!c.env.DB) {
+       console.error('Server configuration error: DB binding is missing during user creation.');
+       return c.json({ error: 'Server configuration error: DB binding missing' }, 500);
+    }
+
     const { username, password } = await c.req.json<{
       username: string;
       password: string;
@@ -709,8 +714,15 @@ app.get('/images/:filename', async (c) => {
     const filename = c.req.param('filename');
     if (!filename) return c.json({ error: 'Filename required' }, 400);
 
+    if (!c.env.BUCKET) {
+      const msg = 'Server configuration error: BUCKET binding is missing.';
+      console.error(msg);
+      return c.json({ error: msg }, 500);
+    }
+
     const object = await c.env.BUCKET.get(`images/${filename}`);
     if (!object) {
+      console.warn(`Image not found in R2: images/${filename}`);
       return c.json({ error: 'Image not found' }, 404);
     }
 
@@ -722,8 +734,9 @@ app.get('/images/:filename', async (c) => {
       headers,
     });
   } catch (e: any) {
-    console.error('Error serving image:', e);
-    return c.json({ error: e.message || 'Failed to serve image' }, 500);
+    console.error(`Error serving image (filename: ${c.req.param('filename')}):`, e);
+    // Return detailed error for debugging (remove stack in prod if sensitive, but helpful now)
+    return c.json({ error: e.message || 'Failed to serve image', stack: e.stack }, 500);
   }
 });
 
@@ -759,13 +772,14 @@ app.get('/map-data/karnataka-districts.json', async (c) => {
 app.get('/', (c) => c.text('IYC Portfolio API is running!'));
 
 app.onError((err, c) => {
-  console.error(`${err}`);
+  console.error(`Global Error Handler: ${err}`);
   if (err instanceof HTTPException) {
     // Use the status from the HTTP exception, but return a JSON response
     return c.json({ error: err.message }, err.status as any);
   }
   // For all other errors, it's a true 500
-  return c.json({ error: 'Internal Server Error' }, 500);
+  // Return detailed error for debugging
+  return c.json({ error: 'Internal Server Error', details: err.message || String(err), stack: err.stack }, 500);
 });
 
 export default app;
