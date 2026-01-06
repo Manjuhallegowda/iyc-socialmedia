@@ -37,7 +37,7 @@ const Navbar: React.FC = () => {
       name: 'D.K. Shivakumar',
       role1: 'KPCC President',
       role2: 'Deputy CM',
-      img: 'https://ipcmedia.in/public/uploads/profile/1756048100_12.jpg',
+      img: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6bAjtTJBypww4RcZUtq7QW8QMhqs4rtTUqw&s',
       href: '/dk-shivakumar-profile',
     },
     {
