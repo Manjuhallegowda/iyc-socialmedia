@@ -834,7 +834,7 @@ const PublicHome: React.FC = () => {
                         )}
                       </div>
                       <Link
-                        to={`/state-leader/${leader.id}`}
+                        to="/hsmanjunatha"
                         className="text-xs font-bold text-gray-400 hover:text-saffron flex items-center gap-1 md:gap-2 uppercase tracking-widest transition-colors group/link"
                       >
                         Profile{' '}
